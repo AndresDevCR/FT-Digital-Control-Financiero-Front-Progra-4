@@ -5,6 +5,7 @@ function path(root, sublink) {
 }
 
 const ROOTS_DASHBOARD = '/dashboard';
+const ROOTS_INVOICE = '/facturas';
 
 // ----------------------------------------------------------------------
 
@@ -23,4 +24,9 @@ export const PATH_DASHBOARD = {
     five: path(ROOTS_DASHBOARD, '/user/five'),
     six: path(ROOTS_DASHBOARD, '/user/six'),
   },
+};
+
+export const FACTURAS = {
+  root: ROOTS_INVOICE,
+  facturas: path(ROOTS_INVOICE, '/invoice'),
 };

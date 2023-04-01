@@ -1,5 +1,7 @@
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
+
+import { FACTURAS } from '../../../routes/paths';
 // components
 import SvgColor from '../../../components/svg-color';
 
@@ -45,6 +47,24 @@ const navConfig = [
       },
     ],
   },
+
+  // Facturas
+  // -----------------------------------------------------------------------
+  {
+    subheader: 'Facturas',
+    items: [
+      {
+        title: 'Facturas',
+        path: FACTURAS.root,
+        icon: ICONS.user,
+        children: [
+          { title: 'Agregar Facturas', path: FACTURAS.facturas },
+        ],
+      },
+    ],
+  },
+
+
 ];
 
 export default navConfig;
