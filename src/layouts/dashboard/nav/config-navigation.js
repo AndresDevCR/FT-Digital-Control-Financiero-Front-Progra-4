@@ -1,7 +1,7 @@
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 
-import { FACTURAS } from '../../../routes/paths';
+import { INVOICE } from '../../../routes/paths';
 // components
 import SvgColor from '../../../components/svg-color';
 
@@ -19,17 +19,6 @@ const ICONS = {
 };
 
 const navConfig = [
-  // GENERAL
-  // ----------------------------------------------------------------------
-  {
-    subheader: 'general v4.1.0',
-    items: [
-      { title: 'One', path: PATH_DASHBOARD.one, icon: ICONS.dashboard },
-      { title: 'Two', path: PATH_DASHBOARD.two, icon: ICONS.ecommerce },
-      { title: 'Three', path: PATH_DASHBOARD.three, icon: ICONS.analytics },
-    ],
-  },
-
   // MANAGEMENT
   // ----------------------------------------------------------------------
   {
@@ -55,10 +44,11 @@ const navConfig = [
     items: [
       {
         title: 'Facturas',
-        path: FACTURAS.root,
+        path: INVOICE.root,
         icon: ICONS.user,
         children: [
-          { title: 'Agregar Facturas', path: FACTURAS.facturas },
+          { title: 'Agregar Facturas', path: INVOICE.invoice},
+          { title: 'Lista de Facturas', path: INVOICE.list},
         ],
       },
     ],

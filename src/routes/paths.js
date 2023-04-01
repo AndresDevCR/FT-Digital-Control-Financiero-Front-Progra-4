@@ -5,7 +5,7 @@ function path(root, sublink) {
 }
 
 const ROOTS_DASHBOARD = '/dashboard';
-const ROOTS_INVOICE = '/facturas';
+const ROOTS_INVOICE = '/invoice';
 
 // ----------------------------------------------------------------------
 
@@ -26,7 +26,8 @@ export const PATH_DASHBOARD = {
   },
 };
 
-export const FACTURAS = {
+export const INVOICE = {
   root: ROOTS_INVOICE,
-  facturas: path(ROOTS_INVOICE, '/invoice'),
+  invoice: path(ROOTS_INVOICE, '/add'),
+  list: path(ROOTS_INVOICE, '/list'),
 };
