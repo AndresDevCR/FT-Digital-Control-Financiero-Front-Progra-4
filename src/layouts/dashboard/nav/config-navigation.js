@@ -24,10 +24,10 @@ const navConfig = [
   // MANAGEMENT
   // ----------------------------------------------------------------------
   {
-    subheader: 'management',
+    subheader: 'ADMINISTRACIÓN',
     items: [
       {
-        title: 'user',
+        title: 'Control de Usuarios',
         path: PATH_DASHBOARD.user.root,
         icon: ICONS.user,
         children: [
