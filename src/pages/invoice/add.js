@@ -2,6 +2,8 @@
 import Head from 'next/head';
 import { Container, Typography, Box, Grid, TextField, Button } from '@mui/material';
 // layouts
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import DashboardLayout from '../../layouts/dashboard';
 // components
 import { useSettingsContext } from '../../components/settings';
@@ -13,6 +15,11 @@ Invoice.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function Invoice() {
     const { themeStretch } = useSettingsContext();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        toast.success('Factura agregada correctamente');
+    };
 
     return (
         <>
@@ -26,6 +33,8 @@ export default function Invoice() {
                 </Typography>
             </Container>
 
+            <ToastContainer />
+
             {/* formulario de agregar factura */}
             <Container maxWidth={themeStretch ? false : 'xl'}>
                 <Box
@@ -33,6 +42,7 @@ export default function Invoice() {
                     noValidate
                     autoComplete="off"
                     sx={{ mt: 3 }}
+                    onSubmit={handleSubmit}
                 >
                     <Grid container spacing={3}>
                         <Grid item xs={12} md={6}>
@@ -121,6 +131,7 @@ export default function Invoice() {
                                 size="large"
                                 type="submit"
                                 variant="contained"
+                                onClick={handleSubmit}
                             >
                                 Guardar
                             </Button>

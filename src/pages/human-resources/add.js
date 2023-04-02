@@ -1,6 +1,8 @@
 // next
 import Head from 'next/head';
 import { Container, Typography, Box, Grid, TextField, Button } from '@mui/material';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // layouts
 import DashboardLayout from '../../layouts/dashboard';
 // components
@@ -14,6 +16,11 @@ HrAdd.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function HrAdd() {
     const { themeStretch } = useSettingsContext();
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        toast.success('Empleado agregado correctamente');
+    };
+
     return (
         <>
             <Head>
@@ -26,6 +33,8 @@ export default function HrAdd() {
                 </Typography>
             </Container>
 
+            <ToastContainer />
+
             {/* formulario de agregar factura */}
             <Container maxWidth={themeStretch ? false : 'xl'}>
                 <Box
@@ -33,6 +42,7 @@ export default function HrAdd() {
                     noValidate
                     autoComplete="off"
                     sx={{ mt: 3 }}
+                    onSubmit={handleSubmit}
                 >
                     <Grid container spacing={3}>
                         <Grid item xs={12} md={6}>
@@ -136,6 +146,7 @@ export default function HrAdd() {
                                 size="large"
                                 type="submit"
                                 variant="contained"
+                                onClick={handleSubmit}
                             >
                                 Guardar
                             </Button>
