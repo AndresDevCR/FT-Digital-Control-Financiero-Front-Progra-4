@@ -210,7 +210,7 @@ function MyTable() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {invoices.map((invoice) => (
+                            {invoices.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((invoice) => (
                                 <TableRow key={invoice.id}>
                                     <TableCell>{invoice.customerName}</TableCell>
                                     <TableCell>{invoice.address}</TableCell>
