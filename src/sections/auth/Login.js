@@ -38,7 +38,7 @@ export default function Login() {
             component="img"
             alt={method}
             src={`/assets/illustrations/FT-Digital.png`} // eslint-disable-line
-            sx={{ width: 550, height: 100, position: 'absolute', right: 0, bottom: 75 }}
+            sx={{ width: 550, height: 95, position: 'absolute', right: 0, bottom: 100 }}
           />
         </Tooltip>
       </Stack>
