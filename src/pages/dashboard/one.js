@@ -20,12 +20,12 @@ export default function PageOne() {
   return (
     <>
       <Head>
-        <title> Page One | Minimal UI</title>
+        <title> Control Financiero | Dashboard</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Typography variant="h3" component="h1" paragraph>
-          FT Control Financiero
+          Control Financiero
         </Typography>
 
         <PieChart data={fakeData} />
