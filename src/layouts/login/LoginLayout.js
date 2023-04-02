@@ -28,16 +28,27 @@ export default function LoginLayout({ children, illustration, title }) {
       />
 
       <StyledSection>
-        <Typography variant="h3" sx={{ mb: 10, maxWidth: 480, textAlign: 'center' }}>
+        {/* <Typography variant="h3" sx={{ mb: 10, maxWidth: 480, textAlign: 'center' }}>
           {title || 'Hi, Welcome back'}
-        </Typography>
+        </Typography> */}
 
         <Image
           disabledEffect
           visibleByDefault
-          alt="auth"
-          src={illustration || '/assets/illustrations/illustration_dashboard.png'}
-          sx={{ maxWidth: 720 }}
+          alt="FT"
+          src={illustration || '/assets/illustrations/FT-Control.jpg'}
+          sx={{
+            width: { xs: 1, md: 'auto' },
+            height: { xs: 1, md: 'auto' },
+            maxWidth: { xs: '100%', md: '100%' },
+            maxHeight: { xs: '100%', md: '100%' },
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            margin: 'auto',
+          }}
         />
 
         <StyledSectionBg />
