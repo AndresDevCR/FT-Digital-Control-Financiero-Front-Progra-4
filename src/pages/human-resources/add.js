@@ -7,22 +7,22 @@ import DashboardLayout from '../../layouts/dashboard';
 import { useSettingsContext } from '../../components/settings';
 // ----------------------------------------------------------------------
 
-Invoice.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+HrAdd.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-export default function Invoice() {
+export default function HrAdd() {
     const { themeStretch } = useSettingsContext();
 
     return (
         <>
             <Head>
-                <title> Agregar Factura | FT Control Financiero</title>
+                <title> Agregar Empleado | FT Control Financiero</title>
             </Head>
 
             <Container maxWidth={themeStretch ? false : 'xl'}>
                 <Typography variant="h3" component="h1" paragraph>
-                    Agregar Factura
+                    Agregar Empleado
                 </Typography>
             </Container>
 
@@ -38,22 +38,13 @@ export default function Invoice() {
                         <Grid item xs={12} md={6}>
                             <TextField
                                 fullWidth
-                                label="Nombre del cliente"
+                                label="Nombre del empleado"
                                 name="name"
                             // value={name}
                             // onChange={handleChange}
                             />
                         </Grid>
 
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                fullWidth
-                                label="Dirección"
-                                name="address"
-                            // value={address}
-                            // onChange={handleChange}
-                            />
-                        </Grid>
 
                         <Grid item xs={12} md={6}>
                             <TextField
@@ -77,39 +68,63 @@ export default function Invoice() {
                         <Grid item xs={12} md={6}>
                             <TextField
                                 fullWidth
-                                label="Fecha de emisión"
+                                label="Fecha de ingreso"
                                 name="date"
                             // value={date}
                             // onChange={handleChange}
                             />
                         </Grid>
-
                         <Grid item xs={12} md={6}>
                             <TextField
                                 fullWidth
-                                label="Fecha de vencimiento"
-                                name="dueDate"
-                            // value={dueDate}
+                                label="Salario"
+                                name="salary"
+                            // value={salary}
                             // onChange={handleChange}
                             />
                         </Grid>
-
                         <Grid item xs={12} md={6}>
                             <TextField
                                 fullWidth
-                                label="Número de factura"
-                                name="invoiceNumber"
-                            // value={invoiceNumber}
+                                label="Cargo"
+                                name="position"
+                            // value={position}
                             // onChange={handleChange}
                             />
                         </Grid>
-
                         <Grid item xs={12} md={6}>
                             <TextField
                                 fullWidth
-                                label="Número de orden"
-                                name="orderNumber"
-                            // value={orderNumber}
+                                label="Departamento"
+                                name="department"
+                            // value={department}
+                            // onChange={handleChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                fullWidth
+                                label="Horario"
+                                name="schedule"
+                            // value={schedule}
+                            // onChange={handleChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                fullWidth
+                                label="Días de descanso"
+                                name="restDays"
+                            // value={restDays}
+                            // onChange={handleChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                fullWidth
+                                label="Días de vacaciones"
+                                name="vacationDays"
+                            // value={vacationDays}
                             // onChange={handleChange}
                             />
                         </Grid>

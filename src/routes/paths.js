@@ -6,7 +6,7 @@ function path(root, sublink) {
 
 const ROOTS_DASHBOARD = '/dashboard';
 const ROOTS_INVOICE = '/invoice';
-
+const ROOTS_HR = '/human-resources';
 // ----------------------------------------------------------------------
 
 export const PATH_AUTH = {
@@ -31,3 +31,9 @@ export const INVOICE = {
   invoice: path(ROOTS_INVOICE, '/add'),
   list: path(ROOTS_INVOICE, '/list'),
 };
+
+export const HR = {
+  root: ROOTS_HR,
+  hradd: path(ROOTS_HR, '/add'),
+  hrlist: path(ROOTS_HR, '/list'),
+}; 

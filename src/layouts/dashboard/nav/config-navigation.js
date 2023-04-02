@@ -2,6 +2,8 @@
 import { PATH_DASHBOARD } from '../../../routes/paths';
 
 import { INVOICE } from '../../../routes/paths';
+
+import { HR } from '../../../routes/paths';
 // components
 import SvgColor from '../../../components/svg-color';
 
@@ -47,12 +49,30 @@ const navConfig = [
         path: INVOICE.root,
         icon: ICONS.user,
         children: [
-          { title: 'Agregar Facturas', path: INVOICE.invoice},
-          { title: 'Lista de Facturas', path: INVOICE.list},
+          { title: 'Agregar Facturas', path: INVOICE.invoice },
+          { title: 'Lista de Facturas', path: INVOICE.list },
         ],
       },
     ],
   },
+
+  // Recursos Humanos
+  // -----------------------------------------------------------------------
+  {
+    subheader: 'Recursos Humanos',
+    items: [
+      {
+        title: 'Recursos Humanos',
+        path: HR.root,
+        icon: ICONS.user,
+        children: [
+          { title: 'Agregar Empleado', path: HR.hradd },
+          { title: 'Lista de Empleados', path: HR.hrlist },
+        ],
+      },
+    ],
+  },
+
 
 
 ];

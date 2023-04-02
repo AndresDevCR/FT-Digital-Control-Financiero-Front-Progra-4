@@ -7,8 +7,8 @@ export default function Index() {
   const router = useRouter();
 
   useEffect(() => {
-    if (router.pathname === '/invoice') {
-      router.push('/invoice/list');
+    if (router.pathname === '/facturas') {
+      router.push('/facturas/invoice');
     }
   });
 
