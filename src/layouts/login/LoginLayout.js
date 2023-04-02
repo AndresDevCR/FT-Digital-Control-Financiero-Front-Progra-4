@@ -49,6 +49,9 @@ export default function LoginLayout({ children, illustration, title }) {
             bottom: 0,
             margin: 'auto',
           }}
+          xs={{ width: 1, height: 1 }}
+          md={{ width: 'auto', height: 'auto' }}
+          
         />
 
         <StyledSectionBg />

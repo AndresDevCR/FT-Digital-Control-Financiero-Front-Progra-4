@@ -16,7 +16,7 @@ export default function Login() {
   return (
     <LoginLayout>
       
-      <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
+      <Stack spacing={2} sx={{ mb: 5, position: 'relative', marginTop: 5 }}>
         <Typography variant="h4">Control Financiero</Typography>
 
         <Stack direction="row" spacing={0.5}>
@@ -38,7 +38,7 @@ export default function Login() {
             component="img"
             alt={method}
             src={`/assets/illustrations/FT-Digital.png`} // eslint-disable-line
-            sx={{ width: 550, height: 100, position: 'absolute', center: 0, bottom: 100, left: 0, right: 0, margin: 'auto' }}
+            sx={{ width: 550, height: 100, position: 'absolute', right: 0, bottom: 75 }}
           />
         </Tooltip>
       </Stack>
