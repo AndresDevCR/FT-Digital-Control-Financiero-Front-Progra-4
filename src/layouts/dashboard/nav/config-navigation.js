@@ -47,7 +47,7 @@ const navConfig = [
       {
         title: 'Facturas',
         path: INVOICE.root,
-        icon: ICONS.user,
+        icon: ICONS.analytics,
         children: [
           { title: 'Agregar Facturas', path: INVOICE.invoice },
           { title: 'Lista de Facturas', path: INVOICE.list },
@@ -64,7 +64,7 @@ const navConfig = [
       {
         title: 'Recursos Humanos',
         path: HR.root,
-        icon: ICONS.user,
+        icon: ICONS.analytics,
         children: [
           { title: 'Agregar Empleado', path: HR.hradd },
           { title: 'Lista de Empleados', path: HR.hrlist },
