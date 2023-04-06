@@ -7,6 +7,8 @@ function path(root, sublink) {
 const ROOTS_DASHBOARD = '/dashboard';
 const ROOTS_INVOICE = '/invoice';
 const ROOTS_HR = '/human-resources';
+const ROOTS_INVENTORY = '/inventory';
+const ROOTS_VACATIONS = '/vacations';
 // ----------------------------------------------------------------------
 
 export const PATH_AUTH = {
@@ -36,4 +38,18 @@ export const HR = {
   root: ROOTS_HR,
   hradd: path(ROOTS_HR, '/add'),
   hrlist: path(ROOTS_HR, '/list'),
+}; 
+
+export const INVENTORY = {
+  root: ROOTS_INVENTORY,
+  inventoryadd: path(ROOTS_INVENTORY, '/add'),
+  inventorylist: path(ROOTS_INVENTORY, '/list'),
+  inventoryedit: path(ROOTS_INVENTORY, '/edit'),
+}; 
+
+export const VACATIONS = {
+  root: ROOTS_VACATIONS,
+  vacationsadd: path(ROOTS_VACATIONS, '/add'),
+  vacationslist: path(ROOTS_VACATIONS, '/list'),
+  vacationsedit: path(ROOTS_VACATIONS, '/edit'),
 }; 

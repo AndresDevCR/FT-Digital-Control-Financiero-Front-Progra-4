@@ -1,9 +1,6 @@
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { PATH_DASHBOARD, INVOICE, HR, INVENTORY, VACATIONS } from '../../../routes/paths';
 
-import { INVOICE } from '../../../routes/paths';
-
-import { HR } from '../../../routes/paths';
 // components
 import SvgColor from '../../../components/svg-color';
 
@@ -68,6 +65,40 @@ const navConfig = [
         children: [
           { title: 'Agregar Empleado', path: HR.hradd },
           { title: 'Lista de Empleados', path: HR.hrlist },
+        ],
+      },
+    ],
+  },
+
+  // Inventario
+  // -----------------------------------------------------------------------
+  {
+    subheader: 'Inventario',
+    items: [
+      {
+        title: 'Inventario',
+        path: INVENTORY.root,
+        icon: ICONS.analytics,
+        children: [
+          { title: 'Agregar inventario', path: INVENTORY.inventoryadd },
+          { title: 'Lista de inventario', path: INVENTORY.inventorylist },
+        ],
+      },
+    ],
+  },
+
+  // Vacaciones
+  // -----------------------------------------------------------------------
+  {
+    subheader: 'Vacaciones',
+    items: [
+      {
+        title: 'Vacaciones',
+        path: VACATIONS.root,
+        icon: ICONS.analytics,
+        children: [
+          { title: 'Solicitar Vacaciones', path: VACATIONS.vacationsadd },
+          { title: 'Lista de Vacaciones', path: VACATIONS.vacationslist },
         ],
       },
     ],

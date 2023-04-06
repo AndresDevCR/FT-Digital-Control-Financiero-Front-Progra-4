@@ -36,7 +36,7 @@ export default function LoginLayout({ children, illustration, title }) {
           disabledEffect
           visibleByDefault
           alt="FT"
-          src={illustration || '/assets/illustrations/FT-wa.jpeg'}
+          src={illustration || '/assets/illustrations/FT-Control.jpg'}
           sx={{
             width: { xs: 1, md: 'auto' },
             height: { xs: 1, md: 'auto' },
