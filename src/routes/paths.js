@@ -9,6 +9,7 @@ const ROOTS_INVOICE = '/invoice';
 const ROOTS_HR = '/human-resources';
 const ROOTS_INVENTORY = '/inventory';
 const ROOTS_VACATIONS = '/vacations';
+const ROOTS_QUOTES = '/quotes';
 // ----------------------------------------------------------------------
 
 export const PATH_AUTH = {
@@ -52,4 +53,11 @@ export const VACATIONS = {
   vacationsadd: path(ROOTS_VACATIONS, '/add'),
   vacationslist: path(ROOTS_VACATIONS, '/list'),
   vacationsedit: path(ROOTS_VACATIONS, '/edit'),
+}; 
+
+export const QUOTES = {
+  root: ROOTS_QUOTES,
+  quotesadd: path(ROOTS_QUOTES, '/add'),
+  quoteslist: path(ROOTS_QUOTES, '/list'),
+  quotesedit: path(ROOTS_QUOTES, '/edit'),
 }; 

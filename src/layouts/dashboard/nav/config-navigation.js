@@ -1,5 +1,5 @@
 // routes
-import { PATH_DASHBOARD, INVOICE, HR, INVENTORY, VACATIONS } from '../../../routes/paths';
+import { PATH_DASHBOARD, INVOICE, HR, INVENTORY, VACATIONS, QUOTES } from '../../../routes/paths';
 
 // components
 import SvgColor from '../../../components/svg-color';
@@ -99,6 +99,22 @@ const navConfig = [
         children: [
           { title: 'Solicitar Vacaciones', path: VACATIONS.vacationsadd },
           { title: 'Lista de Vacaciones', path: VACATIONS.vacationslist },
+        ],
+      },
+    ],
+  },
+
+// Cotizaciones
+  {
+    subheader: 'Cotizaciones',
+    items: [
+      {
+        title: 'Cotizaciones',
+        path: QUOTES.root,
+        icon: ICONS.analytics,
+        children: [
+          { title: 'Agregar cotizacion', path: QUOTES.quotesadd },
+          { title: 'Lista de Cotizaciones', path: QUOTES.quoteslist },
         ],
       },
     ],
