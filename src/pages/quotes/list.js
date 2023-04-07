@@ -111,8 +111,8 @@ function MyTable() {
                                 <TableCell>Cliente</TableCell>
                                 <TableCell>Producto/Servicio</TableCell>
                                 <TableCell>Fecha</TableCell>
-                                <TableCell align="right">Total</TableCell>
-                                <TableCell></TableCell>
+                                <TableCell align="center">Total</TableCell>                          
+                                <TableCell>Acciones</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -123,7 +123,7 @@ function MyTable() {
                                     <TableCell>{row.client}</TableCell>
                                     <TableCell>{row.product}</TableCell>
                                     <TableCell>{row.date}</TableCell>
-                                    <TableCell align="right">{row.total}</TableCell>
+                                    <TableCell align="center">{row.total}</TableCell>
                                
                                     <TableCell>
                                         <div>

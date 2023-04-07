@@ -23,9 +23,9 @@ export const PATH_DASHBOARD = {
   three: path(ROOTS_DASHBOARD, '/three'),
   user: {
     root: path(ROOTS_DASHBOARD, '/user'),
-    four: path(ROOTS_DASHBOARD, '/user/four'),
-    five: path(ROOTS_DASHBOARD, '/user/five'),
-    six: path(ROOTS_DASHBOARD, '/user/six'),
+    useradd: path(ROOTS_DASHBOARD, '/user/add'),
+    userlist: path(ROOTS_DASHBOARD, '/user/list'),
+    useredit: path(ROOTS_DASHBOARD, '/user/edit'),    
   },
 };
 

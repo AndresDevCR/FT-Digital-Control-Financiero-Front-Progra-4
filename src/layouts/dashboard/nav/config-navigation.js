@@ -28,9 +28,8 @@ const navConfig = [
         path: PATH_DASHBOARD.user.root,
         icon: ICONS.user,
         children: [
-          { title: 'Four', path: PATH_DASHBOARD.user.four },
-          { title: 'Five', path: PATH_DASHBOARD.user.five },
-          { title: 'Six', path: PATH_DASHBOARD.user.six },
+          { title: 'Agregar Usuario', path: PATH_DASHBOARD.user.useradd },
+          { title: 'Lista de Usuarios', path: PATH_DASHBOARD.user.userlist },
         ],
       },
     ],
