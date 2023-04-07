@@ -55,6 +55,9 @@ export default function Invoice() {
                         <Grid item xs={12} md={6}>
                             <TextField fullWidth label="Correo Electrónico" name="userEmail" type="email" />
                         </Grid>
+                         <Grid item xs={12} md={6}>
+                            <TextField fullWidth label="Contraseña" name="userPassword" type="password" />
+                        </Grid>
                         <Grid item xs={12} md={6}>
                             <TextField fullWidth label="Teléfono" name="userNumber" type="tel" />
                         </Grid>

@@ -56,6 +56,9 @@ export default function Invoice() {
                             <TextField fullWidth label="Correo Electrónico" name="userEmail" type="email"  defaultValue="dcardenas90058@ufide.ac.cr" />
                         </Grid>
                         <Grid item xs={12} md={6}>
+                            <TextField fullWidth label="Contraseña" name="userPassword" type="password" defaultValue="1234"/>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
                             <TextField fullWidth label="Teléfono" name="userNumber" type="tel"  defaultValue="72554567" />
                         </Grid>
                         <Grid item xs={12} md={6}>
