@@ -43,7 +43,7 @@ const navConfig = [
       {
         title: 'Facturas',
         path: INVOICE.root,
-        icon: ICONS.analytics,
+        icon: ICONS.dashboard,
         children: [
           { title: 'Agregar Facturas', path: INVOICE.invoice },
           { title: 'Lista de Facturas', path: INVOICE.list },
@@ -60,7 +60,7 @@ const navConfig = [
       {
         title: 'Recursos Humanos',
         path: HR.root,
-        icon: ICONS.analytics,
+        icon: ICONS.user,
         children: [
           { title: 'Agregar Empleado', path: HR.hradd },
           { title: 'Lista de Empleados', path: HR.hrlist },
@@ -77,7 +77,7 @@ const navConfig = [
       {
         title: 'Inventario',
         path: INVENTORY.root,
-        icon: ICONS.analytics,
+        icon: ICONS.ecommerce,
         children: [
           { title: 'Agregar inventario', path: INVENTORY.inventoryadd },
           { title: 'Lista de inventario', path: INVENTORY.inventorylist },
@@ -94,7 +94,7 @@ const navConfig = [
       {
         title: 'Vacaciones',
         path: VACATIONS.root,
-        icon: ICONS.analytics,
+        icon: ICONS.user,
         children: [
           { title: 'Solicitar Vacaciones', path: VACATIONS.vacationsadd },
           { title: 'Lista de Vacaciones', path: VACATIONS.vacationslist },
@@ -110,7 +110,7 @@ const navConfig = [
       {
         title: 'Cotizaciones',
         path: QUOTES.root,
-        icon: ICONS.analytics,
+        icon: ICONS.ecommerce,
         children: [
           { title: 'Agregar cotizacion', path: QUOTES.quotesadd },
           { title: 'Lista de Cotizaciones', path: QUOTES.quoteslist },
