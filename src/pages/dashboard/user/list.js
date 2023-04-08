@@ -144,13 +144,13 @@ function MyTable() {
             <Table stickyHeader>
               <TableHead>
                 <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Phone Number</TableCell>
-                  <TableCell>Identification</TableCell>
-                  <TableCell>Job Title</TableCell>
-                  <TableCell>Role</TableCell>
-                  <TableCell>Status</TableCell>
+                  <TableCell>Nombre</TableCell>
+                  <TableCell>Correo Electrónico</TableCell>
+                  <TableCell>Teléfono</TableCell>
+                  <TableCell>Identificación</TableCell>
+                  <TableCell>Puesto</TableCell>
+                  <TableCell>Rol</TableCell>
+                  <TableCell>Estado</TableCell>
                   <TableCell>Acciones</TableCell>
                 </TableRow>
               </TableHead>
