@@ -1,5 +1,5 @@
 // routes
-import { PATH_DASHBOARD, INVOICE, HR, INVENTORY, VACATIONS, QUOTES } from '../../../routes/paths';
+import { PATH_DASHBOARD, INVOICE, HR, INVENTORY, VACATIONS, QUOTES, UPLOAD } from '../../../routes/paths';
 
 // components
 import SvgColor from '../../../components/svg-color';
@@ -117,7 +117,26 @@ const navConfig = [
         ],
       },
     ],
+  }, 
+
+  // Subir Archivos
+  {
+    subheader: ' Archivos',
+    items: [
+      {
+        title: 'Subir Archivos',
+
+        path: UPLOAD.root,
+        icon: ICONS.ecommerce,
+        children: [
+          { title: 'Agregar Archivos', path: UPLOAD.upload },
+          
+        ],
+      },
+    ],
   },
+
+
 
 
 

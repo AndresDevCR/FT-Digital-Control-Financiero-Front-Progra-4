@@ -10,6 +10,7 @@ const ROOTS_HR = '/human-resources';
 const ROOTS_INVENTORY = '/inventory';
 const ROOTS_VACATIONS = '/vacations';
 const ROOTS_QUOTES = '/quotes';
+const ROOTS_UPLOAD = '/upload-files';
 // ----------------------------------------------------------------------
 
 export const PATH_AUTH = {
@@ -60,4 +61,10 @@ export const QUOTES = {
   quotesadd: path(ROOTS_QUOTES, '/add'),
   quoteslist: path(ROOTS_QUOTES, '/list'),
   quotesedit: path(ROOTS_QUOTES, '/edit'),
+
 }; 
+
+export const UPLOAD = {  
+  root: ROOTS_UPLOAD,
+  upload: path(ROOTS_UPLOAD, '/file-upload'),
+};
