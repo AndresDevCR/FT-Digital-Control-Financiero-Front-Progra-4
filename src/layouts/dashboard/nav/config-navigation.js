@@ -47,6 +47,8 @@ const navConfig = [
         children: [
           { title: 'Agregar Facturas', path: INVOICE.invoice },
           { title: 'Lista de Facturas', path: INVOICE.list },
+          { title: 'Editar Facturas', path: INVOICE.edit },
+
         ],
       },
     ],

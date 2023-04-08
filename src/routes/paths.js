@@ -34,6 +34,7 @@ export const INVOICE = {
   root: ROOTS_INVOICE,
   invoice: path(ROOTS_INVOICE, '/add'),
   list: path(ROOTS_INVOICE, '/list'),
+  edit: path(ROOTS_INVOICE, '/edit'),
 };
 
 export const HR = {
