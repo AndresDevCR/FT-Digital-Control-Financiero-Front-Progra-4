@@ -124,32 +124,6 @@ export default function Invoice() {
                             />
                         </Grid>
 
-                        <Grid item xs={12} md={6}>
-                            <Typography variant="h5" component="h2" paragraph>
-                                Subtotal
-                            </Typography>
-                        </Grid>
-
-                        <Grid item xs={12} md={6}>
-                            <Typography variant="h5" component="h2" paragraph>
-                                {/* Subtotal de la cotización (cálculo a partir de los campos anteriores) */}
-                                $13,500.00
-                            </Typography>
-                        </Grid>
-
-                        <Grid item xs={12} md={6}>
-                            <Typography variant="h5" component="h2" paragraph>
-                                Total
-                            </Typography>
-                        </Grid>
-
-                        <Grid item xs={12} md={6}>
-                            <Typography variant="h5" component="h2" paragraph>
-                                {/* Total de la cotización (cálculo a partir de los campos anteriores) */}
-                                $15,606.00
-                            </Typography>
-                        </Grid>
-
                         {/* Botón del formulario */}
                         <Grid item xs={12} md={12}>
                             <Button
