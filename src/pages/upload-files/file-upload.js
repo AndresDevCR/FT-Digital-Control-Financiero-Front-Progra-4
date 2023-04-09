@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import DashboardLayout from '../../layouts/dashboard';
 // components
 import { useSettingsContext } from '../../components/settings';
-import DropZone from 'src/components/drop-zone/DropZone';
+import DropZone from '../../components/drop-zone/DropZone';
 
 // ----------------------------------------------------------------------
 
@@ -19,7 +19,7 @@ FileUpload.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function FileUpload() {
     const { themeStretch } = useSettingsContext();
 
-    
+
     return (
         <>
             <Head>
@@ -34,17 +34,15 @@ export default function FileUpload() {
 
             <ToastContainer />
 
-      
+
             <Container maxWidth={themeStretch ? false : 'xl'}>
-                <Box
-                 
-                >
+                <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', border: '1px solid #ccc', padding: '20px', borderRadius: '10px' }}>
                     <DropZone />
                 </Box>
-              <Button variant="contained" color="primary" sx={{ mt: 3, ml: 1 }}>
-               Subir Archivo
+                <Button variant="contained" color="primary" style={{ marginTop: '20px' }}>
+                    Subir Archivo
                 </Button>
-                
+
 
             </Container>
 
