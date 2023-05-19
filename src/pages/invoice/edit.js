@@ -50,7 +50,7 @@ export default function Invoice() {
                                 fullWidth
                                 label="Nombre del cliente"
                                 name="name"
-                                value={'Nallely Alfaro'}
+                                value="Nallely Alfaro"
                             // onChange={handleChange}
                             />
                         </Grid>
@@ -61,7 +61,7 @@ export default function Invoice() {
                                 label="Dirección"
                                 name="address"
                                 
-                            value={'Av. de los Insurgentes 1234, Col. Insurgentes, CDMX, México'}
+                            value="Av. de los Insurgentes 1234, Col. Insurgentes, CDMX, México"
                            
                             // onChange={handleChange}
                             />
@@ -72,7 +72,7 @@ export default function Invoice() {
                                 fullWidth
                                 label="Teléfono"
                                 name="phone"
-                             value={'+52 55 1234 5678'}
+                             value="+52 55 1234 5678"
                             // onChange={handleChange}
                             />
                         </Grid>
@@ -82,7 +82,7 @@ export default function Invoice() {
                                 fullWidth
                                 label="Correo electrónico"
                                 name="email"
-                            value={'nallealfaro889@empresa.com'}
+                            value="nallealfaro889@empresa.com"
                             // onChange={handleChange}
                             />
                         </Grid>
@@ -91,7 +91,7 @@ export default function Invoice() {
                                 fullWidth
                                 label="Fecha de emisión"
                                 name="date"
-                            value={'2021-10-10'}
+                            value="2021-10-10"
                             // onChange={handleChange}
                             />
                         </Grid>
@@ -101,7 +101,7 @@ export default function Invoice() {
                                 fullWidth
                                 label="Fecha de vencimiento"
                                 name="dueDate"
-                             value={'2021-10-10'}
+                             value="2021-10-10"
                             // onChange={handleChange}
                             />
                         </Grid>
@@ -111,7 +111,7 @@ export default function Invoice() {
                                 fullWidth
                                 label="Número de factura"
                                 name="invoiceNumber"
-                             value={'1234'}
+                             value="1234"
                             // onChange={handleChange}
                             />
                         </Grid>
@@ -121,7 +121,7 @@ export default function Invoice() {
                                 fullWidth
                                 label="Número de orden"
                                 name="orderNumber"
-                             value={'1234'}
+                             value="1234"
                             // onChange={handleChange}
                             />
                         </Grid>

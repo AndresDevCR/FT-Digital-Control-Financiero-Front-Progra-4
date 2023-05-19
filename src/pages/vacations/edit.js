@@ -49,7 +49,7 @@ export default function Invoice() {
                             <TextField
                                 fullWidth
                                 name="vacationsName"
-                                value={'Juan Perez'}
+                                value="Juan Perez"
                                 label="Nombre"
                                 InputLabelProps={{ shrink: true }} 
                             // value={name}
@@ -61,7 +61,7 @@ export default function Invoice() {
                             <TextField
                                 fullWidth
                                 name="inventoryQty"
-                                value={'8'}
+                                value="8"
                                 label="Cantidad disponible"
                                 InputLabelProps={{ shrink: true }} 
                             // value={name}
@@ -74,7 +74,7 @@ export default function Invoice() {
                                 fullWidth
                                 label="Fecha de inicio"
                                 name="vacationsStartDate"
-                                value={'2023-04-03'}
+                                value="2023-04-03"
                                 InputLabelProps={{ shrink: true }} 
                             // value={address}
                             // onChange={handleChange}
@@ -86,7 +86,7 @@ export default function Invoice() {
                                 fullWidth
                                 label="Fecha de reingreso"
                                 name="vacationsEndDate"
-                                value={'2023-04-05'}
+                                value="2023-04-05"
                                 InputLabelProps={{ shrink: true }} 
                             // value={date}
                             // onChange={handleChange}

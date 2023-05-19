@@ -1,7 +1,7 @@
 // next
 import Head from 'next/head';
 // layouts
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Typography, Box, Grid, TextField, Button, TablePagination } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Typography, TextField, Button, TablePagination } from '@mui/material';
 import { useState } from 'react';
 import Link from 'next/link';
 import DashboardLayout from '../../layouts/dashboard';
@@ -34,7 +34,7 @@ function MyTable() {
         setPage(0);
     };
 
-    const [hr, setHR] = useState([
+    const [hr] = useState([
         {
             id: 1,
             name: 'Juan Perez',

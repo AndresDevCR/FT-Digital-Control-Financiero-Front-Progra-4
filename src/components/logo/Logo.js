@@ -3,19 +3,19 @@ import { forwardRef } from 'react';
 // next
 import NextLink from 'next/link';
 // @mui
-import { useTheme } from '@mui/material/styles';
+// import { useTheme } from '@mui/material/styles';
 import { Box, Link } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
 const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
-  const theme = useTheme();
+  // const theme = useTheme();
 
-  const PRIMARY_LIGHT = theme.palette.primary.light;
+  // const PRIMARY_LIGHT = theme.palette.primary.light;
 
-  const PRIMARY_MAIN = theme.palette.primary.main;
+  // const PRIMARY_MAIN = theme.palette.primary.main;
 
-  const PRIMARY_DARK = theme.palette.primary.dark;
+  // const PRIMARY_DARK = theme.palette.primary.dark;
 
   // OR using local (public folder)
   // -------------------------------------------------------

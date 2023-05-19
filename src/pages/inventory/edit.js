@@ -49,7 +49,7 @@ export default function Invoice() {
                             <TextField
                                 fullWidth
                                 name="inventoryName"
-                                value={'Computadora Macbook'}
+                                value="Computadora Macbook"
                                 label="Nombre"
                                 InputLabelProps={{ shrink: true }} 
                             // value={name}
@@ -61,7 +61,7 @@ export default function Invoice() {
                             <TextField
                                 fullWidth
                                 name="inventoryQty"
-                                value={'4'}
+                                value="4"
                                 label="Cantidad disponible"
                                 InputLabelProps={{ shrink: true }} 
                             // value={name}
@@ -74,7 +74,7 @@ export default function Invoice() {
                                 fullWidth
                                 label="Descripcion"
                                 name="inventoryDescription"
-                                value={'Laptop Macbook para empleados'}
+                                value="Laptop Macbook para empleados"
                                 InputLabelProps={{ shrink: true }} 
                             // value={address}
                             // onChange={handleChange}
@@ -86,7 +86,7 @@ export default function Invoice() {
                                 fullWidth
                                 label="Fecha de ingreso"
                                 name="inventoryDate"
-                                value={'2022-12-15'}
+                                value="2022-12-15"
                                 InputLabelProps={{ shrink: true }} 
                             // value={date}
                             // onChange={handleChange}

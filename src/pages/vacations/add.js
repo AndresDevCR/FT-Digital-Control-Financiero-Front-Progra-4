@@ -49,7 +49,7 @@ export default function Invoice() {
                             <TextField
                                 fullWidth
                                 name="vacationsName"
-                                value={'Juan Perez'}
+                                value="Juan Perez"
                                 InputProps={{
                                     readOnly: true,
                                 }}
@@ -65,7 +65,7 @@ export default function Invoice() {
                             <TextField
                                 fullWidth
                                 name="vacationsQty"
-                                value={'6'}
+                                value="6"
                                 InputProps={{
                                     readOnly: true,
                                 }}

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // next
 import Head from 'next/head';
 // layouts
@@ -34,7 +35,7 @@ function MyTable() {
         setPage(0);
     };
 
-    const [invoices, setInvoices] = useState([
+    const [invoices] = useState([
         {
             id: 1,
             inventoryName: 'Computadora Macbook',
@@ -131,7 +132,7 @@ function MyTable() {
                                 <TableCell>Cantidad disponible</TableCell>
                                 <TableCell>Descripción</TableCell>
                                 <TableCell>Fecha de ingreso</TableCell>
-                                <TableCell></TableCell>
+                                <TableCell />
                             </TableRow>
                         </TableHead>
                         <TableBody>

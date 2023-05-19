@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 // @mui
-import { Typography, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 // components
 import Logo from '../../components/logo';
 import Image from '../../components/image';

@@ -14,7 +14,7 @@ MyTable.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 function MyTable() {
   const { themeStretch } = useSettingsContext();
-  const [users, setUsers] = useState([
+  const [users] = useState([
     {
       userName: 'David Cardenas Orozco',
       userEmail: 'dcardenas90058@ufide.ac.cr',
@@ -97,11 +97,9 @@ function MyTable() {
     setPage(0);
   };
 
-  const filteredUsers = users.filter((user) => {
-    return Object.values(user).some(
+  const filteredUsers = users.filter((user) => Object.values(user).some(
       (value) => value.toLowerCase().includes(searchTerm)
-    );
-  });
+    ));
 
   return (
     <>

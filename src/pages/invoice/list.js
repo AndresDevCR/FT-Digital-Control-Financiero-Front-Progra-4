@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // next
 import Head from 'next/head';
 // layouts
