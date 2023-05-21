@@ -3,7 +3,8 @@
 import Head from 'next/head';
 // layouts
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Typography, Box, Grid, TextField, Button, TablePagination } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import Link from 'next/link';
 import DashboardLayout from '../../layouts/dashboard';
 // components
@@ -22,6 +23,7 @@ function MyTable() {
         setPage(newPage);
     };
 
+
     const handleSearch = (event) => {
         const searchTerm = event.target.value.toLowerCase();
         const filteredRows = rows.filter((row) =>
@@ -35,63 +37,30 @@ function MyTable() {
         setPage(0);
     };
 
-    const [invoices] = useState([
-        {
-            id: 1,
-            inventoryName: 'Computadora Macbook',
-            inventoryQty: '4',
-            inventoryDescription: 'Laptop Macbook para empleados',
-            inventoryDate: '2022-12-15',
-        },
-        {
-            id: 2,
-            inventoryName: 'Monitor Aoc',
-            inventoryQty: '8',
-            inventoryDescription: 'Monitor de 24 pulgadas',
-            inventoryDate: '2023-01-10',
-        },
-        {
-            id: 3,
-            inventoryName: 'Teclado Logitech',
-            inventoryQty: '5',
-            inventoryDescription: 'teclado USB',
-            inventoryDate: '2022-11-11',
-        },
-        {
-            id: 4,
-            inventoryName: 'Headset Microsoft',
-            inventoryQty: '7',
-            inventoryDescription: 'Audifonos de diadema con microfono USB',
-            inventoryDate: '2022-11-11',
-        },
-        {
-            id: 5,
-            inventoryName: 'Mouse Logitech',
-            inventoryQty: '3',
-            inventoryDescription: 'Mouse USB',
-            inventoryDate: '2023-02-25',
-        },
-        {
-            id: 6,
-            inventoryName: 'Desarrollo de página web',
-            inventoryQty: '2',
-            inventoryDescription: 'Desarrollo de una página web para un negocio E-Commerce',
-            inventoryDate: '2022-10-08',
-        },
-        {
-            id: 7,
-            inventoryName: 'Desarrollo de base de datos',
-            inventoryQty: '1',
-            inventoryDescription: 'Desarrollo de una base de datos para un negoocio E-Commerce',
-            inventoryDate: '2022-11-03',
-        },
-    ]);
+    const [invoices, setInvoices] = useState([]);
 
+    useEffect(() => {
+        axios.get('http://localhost:3011/api/v1/inventory')
+            .then((response) => {
+                setInvoices(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
 
-
+    const handleDelete = (id) => {
+        axios.delete(`http://localhost:3011/api/v1/inventory/${id}`)
+            .then((response) => {
+                const filteredInvoices = invoices.filter((invoice) => invoice.id !== id);
+                setInvoices(filteredInvoices);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
     return (
-
         <>
             <Head>
                 <title> Lista de Inventario | FT Control Financiero </title>
@@ -123,7 +92,6 @@ function MyTable() {
                 />
 
                 {/* tabla de inventario */}
-
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
@@ -138,35 +106,34 @@ function MyTable() {
                         <TableBody>
                             {invoices.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((invoice) => (
                                 <TableRow key={invoice.id}>
-                                    <TableCell>{invoice.inventoryName}</TableCell>
-                                    <TableCell>{invoice.inventoryQty}</TableCell>
-                                    <TableCell>{invoice.inventoryDescription}</TableCell>
-                                    <TableCell>{invoice.inventoryDate}</TableCell>
-                                    <TableCell style={{margin: 1}}>
-                                    <div>
-                                        <Button
-                                            color="secondary"
-                                            component={Link}
-                                            href="/inventory/edit"
-                                            size="small"
-                                            sx={{ mb: 2 }}
-                                            variant="contained"                                           
-                                        >
-                                            Editar
-                                        </Button>
-                                    </div>
-                                    <div>
-                                        <Button
-                                            color="primary"
-                                            component={Link}
-                                            href="/inventory/list"
-                                            size="small"
-                                            sx={{ mb: 2 }}
-                                            variant="contained"
-                                        >
-                                            Eliminar
-                                        </Button>
-                                    </div>
+                                    <TableCell>{invoice.productName}</TableCell>
+                                    <TableCell>{invoice.availableQuantity}</TableCell>
+                                    <TableCell>{invoice.description}</TableCell>
+                                    <TableCell>{invoice.entryDate}</TableCell>
+                                    <TableCell style={{ margin: 1 }}>
+                                        <div>
+                                            <Button
+                                                color="secondary"
+                                                component={Link}
+                                                href={`/inventory/edit?id=${invoice.id}`}
+                                                size="small"
+                                                sx={{ mb: 2 }}
+                                                variant="contained"
+                                            >
+                                                Editar
+                                            </Button>
+                                        </div>
+                                        <div>
+                                            <Button
+                                                color="primary"
+                                                size="small"
+                                                sx={{ mb: 2 }}
+                                                variant="contained"
+                                                onClick={() => handleDelete(invoice.id)}
+                                            >
+                                                Eliminar
+                                            </Button>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -175,7 +142,7 @@ function MyTable() {
                     <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
-                        count={rows.length}
+                        count={invoices.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
@@ -183,7 +150,6 @@ function MyTable() {
                     />
                 </TableContainer>
             </Container>
-
         </>
     );
 }

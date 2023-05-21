@@ -3,8 +3,9 @@
 import Head from 'next/head';
 // layouts
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Typography, Box, Grid, TextField, Button, TablePagination } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import axios from 'axios';
 import DashboardLayout from '../../layouts/dashboard';
 // components
 import { useSettingsContext } from '../../components/settings';
@@ -22,6 +23,16 @@ function MyTable() {
         setPage(newPage);
     };
 
+    useEffect(() => {
+        axios.get('http://localhost:3000/api/v1/invoices')
+            .then((response) => {
+                setRows(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
     const handleSearch = (event) => {
         const searchTerm = event.target.value.toLowerCase();
         const filteredRows = rows.filter((row) =>
@@ -35,129 +46,7 @@ function MyTable() {
         setPage(0);
     };
 
-    const [invoices, setInvoices] = useState([
-        {
-            id: 1,
-            customerName: 'Juan Perez',
-            address: 'Calle 123, Ciudad',
-            phone: '555-1234',
-            email: 'juan.perez@gmail.com',
-            date: '2022-03-15',
-            dueDate: '2022-04-15',
-            invoiceNumber: 'INV-001',
-            orderNumber: 'ORD-001',
-        },
-        {
-            id: 2,
-            customerName: 'Maria Rodriguez',
-            address: 'Avenida 456, Ciudad',
-            phone: '555-5678',
-            email: 'maria.rodriguez@gmail.com',
-            date: '2022-03-20',
-            dueDate: '2022-04-20',
-            invoiceNumber: 'INV-002',
-            orderNumber: 'ORD-002',
-        },
-        {
-            id: 3,
-            customerName: 'Pedro Gomez',
-            address: 'Calle 789, Ciudad',
-            phone: '555-9012',
-            email: 'pedro.gomez@gmail.com',
-            date: '2022-03-25',
-            dueDate: '2022-04-25',
-            invoiceNumber: 'INV-003',
-            orderNumber: 'ORD-003',
-        },
-        {
-            id: 4,
-            customerName: 'Luisa Lopez',
-            address: 'Avenida 101, Ciudad',
-            phone: '555-3456',
-            email: 'matthew.thomas567@yahoo.com',
-            date: '2022-03-30',
-            dueDate: '2022-04-30',
-            invoiceNumber: 'INV-004',
-            orderNumber: 'ORD-004',
-        },
-        {
-            id: 5,
-            customerName: 'Jose Martinez',
-            address: 'Calle 112, Ciudad',
-            phone: '555-7890',
-            email: 'jason.robinson123@yahoo.com',
-            date: '2022-04-05',
-            dueDate: '2022-05-05',
-            invoiceNumber: 'INV-005',
-            orderNumber: 'ORD-005',
-        },
-        {
-            id: 6,
-            customerName: 'Carlos Sanchez',
-            address: 'Avenida 131, Ciudad',
-            phone: '555-1212',
-            email: 'kate.wilson456@outlook.com',
-            date: '2022-04-10',
-            dueDate: '2022-05-10',
-            invoiceNumber: 'INV-006',
-            orderNumber: 'ORD-006',
-        },
-        {
-            id: 7,
-            customerName: 'Maria Garcia',
-            address: 'Calle 151, Ciudad',
-            phone: '555-5656',
-            email: 'andrew.scott234@gmail.com',
-            date: '2022-04-15',
-            dueDate: '2022-05-15',
-            invoiceNumber: 'INV-007',
-            orderNumber: 'ORD-007',
-        },
-        {
-            id: 8,
-            customerName: 'Luisa Lopez',
-            address: 'Avenida 101, Ciudad',
-            phone: '555-3456',
-            email: 'sarah.green234@outlook.com',
-            date: '2022-03-30',
-            dueDate: '2022-04-30',
-            invoiceNumber: 'INV-004',
-            orderNumber: 'ORD-004',
-        },
-        {
-            id: 9,
-            customerName: 'Jose Martinez',
-            address: 'Calle 112, Ciudad',
-            phone: '555-7890',
-            email: 'jenny.smith567@hotmail.com',
-            date: '2022-04-05',
-            dueDate: '2022-05-05',
-            invoiceNumber: 'INV-005',
-            orderNumber: 'ORD-005',
-        },
-        {
-            id: 10,
-            customerName: 'Carlos Sanchez',
-            address: 'Avenida 131, Ciudad',
-            phone: '555-1212',
-            email: 'patito.thomas567@yahoo.com',
-            date: '2022-04-10',
-            dueDate: '2022-05-10',
-            invoiceNumber: 'INV-006',
-            orderNumber: 'ORD-006',
-        },
-        {
-            id: 11,
-            customerName: 'Maria Garcia',
-            address: 'Calle 151, Ciudad',
-            phone: '555-5656',
-            email: 'john.doe123@gmail.com',
-            date: '2022-04-15',
-            dueDate: '2022-05-15',
-            invoiceNumber: 'INV-007',
-            orderNumber: 'ORD-007',
-        },
-    ]);
+    const [invoices, setInvoices] = useState([]);
 
 
 
