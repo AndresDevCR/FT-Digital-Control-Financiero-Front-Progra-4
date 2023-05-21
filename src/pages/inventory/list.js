@@ -115,7 +115,7 @@ function MyTable() {
                                             <Button
                                                 color="secondary"
                                                 component={Link}
-                                                href={`/inventory/edit?id=${invoice.id}`}
+                                                href={`/inventory/edit/${invoice.id}`}
                                                 size="small"
                                                 sx={{ mb: 2 }}
                                                 variant="contained"
