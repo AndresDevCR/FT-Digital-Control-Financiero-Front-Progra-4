@@ -3,6 +3,6 @@ module.exports = {
   trailingSlash: true,
   env: {
     // HOST
-    HOST_API_KEY: 'http://localhost:3011/api/v1',
+    HOST_API_KEY: 'https://control-financiero.herokuapp.com/api/v1',
   },
 };
