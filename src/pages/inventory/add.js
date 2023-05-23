@@ -33,7 +33,7 @@ export default function Invoice() {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       axios
-        .post('http://localhost:3011/api/v1/inventory', values)
+        .post('/inventory', values)
         .then((response) => {
           console.log(response);
           toast.success('Inventario agregado con éxito');

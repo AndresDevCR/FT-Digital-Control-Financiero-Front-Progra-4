@@ -40,7 +40,7 @@ function MyTable() {
     const [invoices, setInvoices] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:3011/api/v1/inventory')
+        axios.get('/inventory')
             .then((response) => {
                 setInvoices(response.data);
             })
@@ -50,7 +50,7 @@ function MyTable() {
     }, []);
 
     const handleDelete = (id) => {
-        axios.delete(`http://localhost:3011/api/v1/inventory/${id}`)
+        axios.delete(`/inventory/${id}`)
             .then((response) => {
                 const filteredInvoices = invoices.filter((invoice) => invoice.id !== id);
                 setInvoices(filteredInvoices);
