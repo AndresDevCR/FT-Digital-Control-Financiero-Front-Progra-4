@@ -40,7 +40,7 @@ function MyTable() {
     const [invoices, setInvoices] = useState([]);
 
     useEffect(() => {
-        axios.get('https://control-financiero.herokuapp.com/api.v1/inventory')
+        axios.get('https://control-financiero.herokuapp.com/api/v1/inventory')
             .then((response) => {
                 setInvoices(response.data);
             })
