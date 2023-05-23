@@ -33,7 +33,7 @@ export default function Invoice() {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       axios
-        .post('/inventory', values)
+        .post('https://control-financiero.herokuapp.com/api/v1/inventory', values)
         .then((response) => {
           console.log(response);
           toast.success('Inventario agregado con éxito');

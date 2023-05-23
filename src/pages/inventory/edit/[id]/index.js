@@ -23,7 +23,7 @@ const EditInvoice = () => {
     if (id) {
       // Fetch invoice data from the API using the provided ID
       axios
-        .get(`/inventory/${id}`)
+        .get(`https://control-financiero.herokuapp.com/api/v1/inventory/${id}`)
         .then((response) => {
           const invoice = response.data;
           setProductName(invoice.productName);
@@ -41,7 +41,7 @@ const EditInvoice = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .patch(`http://localhost:3011/api/v1/inventory/${id}`, {
+      .patch(`https://control-financiero.herokuapp.com//api/v1/inventory/${id}`, {
         productName,
         availableQuantity,
         description,
