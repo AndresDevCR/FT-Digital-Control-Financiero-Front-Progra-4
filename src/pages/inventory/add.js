@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -10,6 +11,7 @@ import { Container, Typography, Box, Grid, TextField, Button } from '@mui/materi
 import DashboardLayout from '../../layouts/dashboard';
 import { useSettingsContext } from '../../components/settings';
 
+
 Invoice.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function Invoice() {
@@ -19,17 +21,16 @@ export default function Invoice() {
     productName: Yup.string().required('El nombre del producto/servicio es obligatorio'),
     availableQuantity: Yup.number().required('La cantidad disponible es obligatoria'),
     description: Yup.string().required('La descripción es obligatoria'),
-    entryDate: Yup.date().required('La fecha de ingreso es obligatoria')
+    entryDate: Yup.date().required('La fecha de ingreso es obligatoria'),
   });
 
   const formik = useFormik({
     initialValues: {
       productName: '',
-      availableQuantity: 0,
+      availableQuantity: '',
       description: '',
-      entryDate: ''
+      entryDate: '',
     },
-    // eslint-disable-next-line object-shorthand
     validationSchema: validationSchema,
     onSubmit: (values) => {
       axios
@@ -43,8 +44,8 @@ export default function Invoice() {
           console.log(error);
         });
 
-        formik.resetForm();
-    }
+      formik.resetForm();
+    },
   });
 
   return (
@@ -106,12 +107,13 @@ export default function Invoice() {
             </Grid>
 
             <Grid item xs={12} md={6}>
+              <div>
+                <label style={{ fontWeight: 'bold' }}>Fecha de ingreso</label>
+              </div>
               <TextField
                 fullWidth
-                label="Fecha de ingreso"
                 name="entryDate"
                 type="date"
-                value={formik.values.entryDate}
                 onChange={formik.handleChange}
                 error={formik.touched.entryDate && Boolean(formik.errors.entryDate)}
                 helperText={formik.touched.entryDate && formik.errors.entryDate}
