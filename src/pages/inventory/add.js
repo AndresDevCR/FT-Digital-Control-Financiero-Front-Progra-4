@@ -31,6 +31,7 @@ export default function Invoice() {
       description: '',
       entryDate: '',
     },
+    // eslint-disable-next-line object-shorthand
     validationSchema: validationSchema,
     onSubmit: (values) => {
       axios
