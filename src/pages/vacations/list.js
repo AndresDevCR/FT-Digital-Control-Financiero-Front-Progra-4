@@ -63,13 +63,14 @@ function MyTable() {
 
   const handleEdit = (rowId) => {
     setEditingRowId(rowId);
+    // eslint-disable-next-line no-shadow
     const row = rows.find((row) => row.id === rowId);
     setEditedData(row);
   };
 
   const handleSave = async () => {
     try {
-      await axios.put(`https://control-financiero.herokuapp.com/api/v1/vacation/${id}`, editedData);
+      await axios.put(`https://control-financiero.herokuapp.com/api/v1/vacation/${editingRowId}`, editedData);
       setEditingRowId(null);
       setEditedData({});
     } catch (error) {
