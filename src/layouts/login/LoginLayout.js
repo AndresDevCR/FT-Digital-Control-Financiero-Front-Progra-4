@@ -51,14 +51,13 @@ export default function LoginLayout({ children, illustration, title }) {
           }}
           xs={{ width: 1, height: 1 }}
           md={{ width: 'auto', height: 'auto' }}
-          
         />
 
         <StyledSectionBg />
       </StyledSection>
 
-      <StyledContent>
-        <Stack sx={{ width: 1 }}> {children} </Stack>
+      <StyledContent sx={{ p: { xs: 2, md: 5 } }}>
+        <Stack sx={{ width: 1 }}>{children}</Stack>
       </StyledContent>
     </StyledRoot>
   );
