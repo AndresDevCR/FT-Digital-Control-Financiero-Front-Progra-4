@@ -18,39 +18,42 @@ const initialState = {
   isInitialized: false,
   isAuthenticated: false,
   user: null,
+  accessToken: null,
 };
 
 const reducer = (state, action) => {
-  if (action.type === 'INITIAL') {
-    return {
-      isInitialized: true,
-      isAuthenticated: action.payload.isAuthenticated,
-      user: action.payload.user,
-    };
+  switch (action.type) {
+    case 'INITIAL':
+      return {
+        isInitialized: true,
+        isAuthenticated: action.payload.isAuthenticated,
+        user: action.payload.user,
+        accessToken: action.payload.accessToken,
+      };
+    case 'LOGIN':
+      return {
+        ...state,
+        isAuthenticated: true,
+        user: action.payload.user,
+        accessToken: action.payload.accessToken,
+      };
+    case 'REGISTER':
+      return {
+        ...state,
+        isAuthenticated: true,
+        user: action.payload.user,
+        accessToken: action.payload.accessToken,
+      };
+    case 'LOGOUT':
+      return {
+        ...state,
+        isAuthenticated: false,
+        user: null,
+        accessToken: null,
+      };
+    default:
+      return state;
   }
-  if (action.type === 'LOGIN') {
-    return {
-      ...state,
-      isAuthenticated: true,
-      user: action.payload.user,
-    };
-  }
-  if (action.type === 'REGISTER') {
-    return {
-      ...state,
-      isAuthenticated: true,
-      user: action.payload.user,
-    };
-  }
-  if (action.type === 'LOGOUT') {
-    return {
-      ...state,
-      isAuthenticated: false,
-      user: null,
-    };
-  }
-
-  return state;
 };
 
 // ----------------------------------------------------------------------
@@ -75,7 +78,11 @@ export function AuthProvider({ children }) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const response = await axios.get('/api/account/my-account');
+        const response = await axios.get('/user', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
 
         const { user } = response.data;
 
@@ -84,6 +91,7 @@ export function AuthProvider({ children }) {
           payload: {
             isAuthenticated: true,
             user,
+            accessToken,
           },
         });
       } else {
@@ -92,6 +100,7 @@ export function AuthProvider({ children }) {
           payload: {
             isAuthenticated: false,
             user: null,
+            accessToken: null,
           },
         });
       }
@@ -102,6 +111,7 @@ export function AuthProvider({ children }) {
         payload: {
           isAuthenticated: false,
           user: null,
+          accessToken: null,
         },
       });
     }
@@ -113,40 +123,68 @@ export function AuthProvider({ children }) {
 
   // LOGIN
   const login = useCallback(async (email, password) => {
-    const response = await axios.post('/auth/login', {
-      email,
-      password,
-    });
-    const { accessToken, user } = response.data;
+    try {
+      const response = await axios.post('/auth/login', {
+        email,
+        password,
+      });
+      const { token, user } = response.data;
 
-    setSession(accessToken);
+      setSession(token);
 
-    dispatch({
-      type: 'LOGIN',
-      payload: {
-        user,
-      },
-    });
+      console.log('Token:', token); // Imprime el token en la consola
+
+      dispatch({
+        type: 'LOGIN',
+        payload: {
+          user,
+          accessToken: token,
+        },
+      });
+
+      const userResponse = await axios.get('/user', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log('User Data:', userResponse.data);
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
 
   // REGISTER
   const register = useCallback(async (email, password, firstName, lastName) => {
-    const response = await axios.post('/api/account/register', {
-      email,
-      password,
-      firstName,
-      lastName,
-    });
-    const { accessToken, user } = response.data;
+    try {
+      const response = await axios.post('/api/account/register', {
+        email,
+        password,
+        firstName,
+        lastName,
+      });
+      const { token, user } = response.data;
 
-    localStorage.setItem('accessToken', accessToken);
+      setSession(token);
 
-    dispatch({
-      type: 'REGISTER',
-      payload: {
-        user,
-      },
-    });
+      dispatch({
+        type: 'REGISTER',
+        payload: {
+          user,
+          accessToken: token,
+        },
+      });
+
+      const userResponse = await axios.get('/user', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log('User Data:', userResponse.data);
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
 
   // LOGOUT
@@ -162,12 +200,13 @@ export function AuthProvider({ children }) {
       isInitialized: state.isInitialized,
       isAuthenticated: state.isAuthenticated,
       user: state.user,
+      accessToken: state.accessToken,
       method: 'jwt',
       login,
       register,
       logout,
     }),
-    [state.isAuthenticated, state.isInitialized, state.user, login, logout, register]
+    [state.isAuthenticated, state.isInitialized, state.user, state.accessToken, login, logout, register]
   );
 
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;
