@@ -15,7 +15,7 @@ export default function Login() {
           <Box
             component="img"
             alt={method}
-            src="/assets/illustrations/FT-Digital.png"
+            src="../../assets/illustrations/FT-Digital.png"
             sx={{
               width: '100%',
               maxWidth: 550,
