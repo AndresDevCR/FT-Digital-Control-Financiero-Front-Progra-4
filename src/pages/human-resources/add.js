@@ -60,7 +60,7 @@ const HrAdd = () => {
   const formik = useFormik({
     initialValues,
     onSubmit: handleSubmit,
-    validationSchema: validationSchema // Set the validation schema
+    validationSchema // Set the validation schema
   });
 
   return (

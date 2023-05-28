@@ -21,15 +21,15 @@ import {
 import { useEffect, useState, useContext } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
+import { makeStyles } from '@mui/styles';
 import DashboardLayout from '../../layouts/dashboard';
 // components
 import { useSettingsContext } from '../../components/settings';
 import { AuthContext } from '../../auth/JwtContext';
+
 // ----------------------------------------------------------------------
 
 MyTable.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
-
-import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -55,6 +55,7 @@ function MyTable() {
 
   useEffect(() => {
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchData = async () => {
