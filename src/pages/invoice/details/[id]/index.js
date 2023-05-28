@@ -58,8 +58,26 @@ function Details() {
       </Head>
 
       <Container maxWidth="xl">
-        <Box sx={{ position: 'relative', overflow: 'hidden', height: '400px', marginBottom: '2rem' }}>
-          <img src="https://i.imgur.com/kMkFPom.png" alt="Foto de portada" style={{ width: '100%', height: 'auto', position: 'absolute', top: 0, left: 0, zIndex: -1,borderRadius: '10px' }} />
+        <Box
+          sx={{
+            position: 'relative',
+            overflow: 'hidden',
+            height: '15rem',
+            borderRadius: '10px',
+            boxShadow: '0 0 10px rgba(0,0,0,.2)',
+          }}
+          xs={{
+            height: '1rem',
+            '@media (min-width: 600px)': {
+              height: '1rem',
+            },
+          }}
+        >
+          <img
+            src="https://i.imgur.com/kMkFPom.png"
+            alt="Foto de portada"
+            style={{ width: '100%', height: 'auto', position: 'absolute', top: 0, left: 0, zIndex: -1, borderRadius: '10px' }}
+          />
         </Box>
 
         <Typography variant="h3" component="h1" paragraph sx={{ mt: 3 }}>
