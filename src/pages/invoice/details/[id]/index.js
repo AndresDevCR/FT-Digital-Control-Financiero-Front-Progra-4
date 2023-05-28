@@ -6,6 +6,8 @@ import { Container, Typography, Box, Grid, Card, CardContent, Button } from '@mu
 import axios from 'axios';
 import DashboardLayout from '../../../../layouts/dashboard';
 import { AuthContext } from '../../../../auth/JwtContext';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 
 Details.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
@@ -19,12 +21,12 @@ function Details() {
     if (id) {
       fetchInvoice();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const fetchInvoice = async () => {
     try {
-      const response = await axios.get(`https://control-financiero.herokuapp.com/api/v1/invoice/${id}`,{
+      const response = await axios.get(`https://control-financiero.herokuapp.com/api/v1/invoice/${id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
         },
@@ -40,6 +42,11 @@ function Details() {
     return new Date(date).toLocaleDateString(undefined, options);
   };
 
+  const handleDownloadPDF = () => {
+    // Lógica para descargar el PDF
+    // Puedes implementarla según tus necesidades
+  };
+
   if (!invoice) {
     return null; // Render loading state or handle error
   }
@@ -51,11 +58,15 @@ function Details() {
       </Head>
 
       <Container maxWidth="xl">
+        <Box sx={{ position: 'relative', overflow: 'hidden', height: '400px', marginBottom: '2rem' }}>
+          <img src="https://i.imgur.com/kMkFPom.png" alt="Foto de portada" style={{ width: '100%', height: 'auto', position: 'absolute', top: 0, left: 0, zIndex: -1,borderRadius: '10px' }} />
+        </Box>
+
         <Typography variant="h3" component="h1" paragraph sx={{ mt: 3 }}>
           Detalles de la Factura
         </Typography>
 
-        <Card>
+        <Card sx={{ marginTop: '2rem' }}>
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
@@ -109,6 +120,15 @@ function Details() {
             onClick={() => router.back()}
           >
             Volver
+          </Button>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={handleDownloadPDF}
+            startIcon={<PictureAsPdfIcon />}
+            sx={{ ml: 2 }}
+          >
+            Descargar PDF
           </Button>
         </Box>
       </Container>
