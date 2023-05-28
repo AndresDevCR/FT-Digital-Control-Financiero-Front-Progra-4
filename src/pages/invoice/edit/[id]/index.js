@@ -56,6 +56,7 @@ const EditInvoice = () => {
           toast.error('Error al cargar la factura');
         });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, accessToken]);
 
   const validationSchema = Yup.object().shape({

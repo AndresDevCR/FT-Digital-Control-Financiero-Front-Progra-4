@@ -174,6 +174,7 @@ export function AuthProvider({ children }) {
 
       const { id: tokenID } = jwtDecode(token);
 
+      // eslint-disable-next-line no-unused-vars
       const response2 = await axios.get(`/user/${tokenID}`, {
         headers: {
           Authorization: `Bearer ${token}`,
