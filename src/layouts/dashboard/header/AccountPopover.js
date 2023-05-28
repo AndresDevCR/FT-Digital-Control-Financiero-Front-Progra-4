@@ -6,6 +6,7 @@ import { useAuthContext } from '../../../auth/useAuthContext';
 import { useSnackbar } from '../../../components/snackbar';
 import MenuPopover from '../../../components/menu-popover';
 import { IconButtonAnimate } from '../../../components/animate';
+// eslint-disable-next-line no-unused-vars
 import { AuthProvider } from '../../../auth/JwtContext';
 import { CustomAvatar } from '../../../components/custom-avatar';
 import { PATH_AUTH } from '../../../routes/paths';

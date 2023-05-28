@@ -18,6 +18,7 @@ const EditInvoice = () => {
   const router = useRouter();
   const { id } = router.query;
 
+  // eslint-disable-next-line no-unused-vars
   const [initialValues, setInitialValues] = useState({
     clientName: '',
     address: '',
