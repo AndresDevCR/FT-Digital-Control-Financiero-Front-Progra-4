@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React from 'react';
+import React, { useContext } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -9,13 +9,12 @@ import Head from 'next/head';
 import { Container, Typography, Box, Grid, TextField, Button } from '@mui/material';
 
 import DashboardLayout from '../../layouts/dashboard';
-import { useSettingsContext } from '../../components/settings';
-
+import { AuthContext } from '../../auth/JwtContext';
 
 Invoice.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function Invoice() {
-  const { themeStretch } = useSettingsContext();
+  const { themeStretch, accessToken } = useContext(AuthContext); // Obtiene el accessToken del AuthContext
 
   const validationSchema = Yup.object().shape({
     productName: Yup.string().required('El nombre del producto/servicio es obligatorio'),
@@ -31,11 +30,14 @@ export default function Invoice() {
       description: '',
       entryDate: '',
     },
-    // eslint-disable-next-line object-shorthand
-    validationSchema: validationSchema,
+    validationSchema,
     onSubmit: (values) => {
       axios
-        .post('https://control-financiero.herokuapp.com/api/v1/inventory', values)
+        .post('https://control-financiero.herokuapp.com/api/v1/inventory', values, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
+          },
+        })
         .then((response) => {
           console.log(response);
           toast.success('Inventario agregado con éxito');

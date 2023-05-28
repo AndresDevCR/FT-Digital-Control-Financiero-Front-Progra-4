@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
@@ -8,8 +8,10 @@ import { Container, Typography, Box, Grid, TextField, Button } from '@mui/materi
 
 import DashboardLayout from '../../../../layouts/dashboard';
 import { useSettingsContext } from '../../../../components/settings';
+import { AuthContext } from '../../../../auth/JwtContext';
 
 const EditInvoice = () => {
+  const { accessToken } = useContext(AuthContext);
   const { themeStretch } = useSettingsContext();
   const router = useRouter();
   const { id } = router.query;
@@ -23,7 +25,11 @@ const EditInvoice = () => {
     if (id) {
       // Fetch invoice data from the API using the provided ID
       axios
-        .get(`https://control-financiero.herokuapp.com/api/v1/inventory/${id}`)
+        .get(`https://control-financiero.herokuapp.com/api/v1/inventory/${id}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
         .then((response) => {
           const invoice = response.data;
           setProductName(invoice.productName);
@@ -36,27 +42,32 @@ const EditInvoice = () => {
           toast.error('Error al cargar el inventario');
         });
     }
-  }, [id]);
+  }, [accessToken, id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .patch(`https://control-financiero.herokuapp.com//api/v1/inventory/${id}`, {
+      .patch(`https://control-financiero.herokuapp.com/api/v1/inventory/${id}`, {
         productName,
         availableQuantity,
         description,
         entryDate
+      }, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        }
       })
       .then((response) => {
         console.log(response);
         toast.success('Inventario actualizado con éxito');
+        router.push('/inventory');
       })
       .catch((error) => {
         console.log(error);
         toast.error('Error al actualizar el inventario');
       });
-      router.push('/inventory');
   };
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

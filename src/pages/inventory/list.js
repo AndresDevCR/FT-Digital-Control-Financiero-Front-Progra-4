@@ -1,5 +1,5 @@
 // next
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Head from 'next/head';
 // layouts
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Typography, TextField, Button, TablePagination } from '@mui/material';
@@ -8,12 +8,13 @@ import axios from 'axios';
 import DashboardLayout from '../../layouts/dashboard';
 // components
 import { useSettingsContext } from '../../components/settings';
-
+import { AuthContext } from '../../auth/JwtContext';
 // ----------------------------------------------------------------------
 
 MyTable.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 function MyTable() {
+  const { accessToken } = useContext(AuthContext); // Obtiene el accessToken del AuthContext
   const { themeStretch } = useSettingsContext();
   const [invoices, setInvoices] = useState([]);
   const [filteredInvoices, setFilteredInvoices] = useState([]);
@@ -22,11 +23,16 @@ function MyTable() {
 
   useEffect(() => {
     fetchInvoices();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchInvoices = async () => {
     try {
-      const response = await axios.get('https://control-financiero.herokuapp.com/api/v1/inventory');
+      const response = await axios.get('https://control-financiero.herokuapp.com/api/v1/inventory', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
+        },
+      });
       setInvoices(response.data);
       setFilteredInvoices(response.data);
     } catch (error) {
@@ -55,20 +61,22 @@ function MyTable() {
     setPage(0);
   };
 
-  const handleDelete = (id) => {
-    axios
-      .delete(`https://control-financiero.herokuapp.com/api/v1/inventory/${id}`)
-      .then((response) => {
-        // eslint-disable-next-line no-shadow
-        const filteredInvoices = invoices.filter(
-          (invoice) => invoice.id !== id
-        );
-        setInvoices(filteredInvoices);
-        setFilteredInvoices(filteredInvoices);
-      })
-      .catch((error) => {
-        console.log(error);
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`https://control-financiero.herokuapp.com/api/v1/inventory/${id}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
+        },
       });
+      // eslint-disable-next-line no-shadow
+      const filteredInvoices = invoices.filter(
+        (invoice) => invoice.id !== id
+      );
+      setInvoices(filteredInvoices);
+      setFilteredInvoices(filteredInvoices);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -102,7 +110,6 @@ function MyTable() {
           sx={{ mb: 3 }}
         />
 
-        {/* tabla de inventario */}
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
