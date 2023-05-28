@@ -27,6 +27,7 @@
     "@mui/icons-material": "^5.11.16",
     "@mui/lab": "^5.0.0-alpha.109",
     "@mui/material": "^5.13.1",
+    "@mui/styles": "^5.13.2",
     "@next/font": "^13.0.5",
     "autosuggest-highlight": "^3.3.4",
     "axios": "^1.4.0",

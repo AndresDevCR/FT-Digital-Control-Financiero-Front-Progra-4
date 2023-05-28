@@ -1,36 +1,96 @@
+/* eslint-disable no-unused-vars */
 // next
-import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 // layouts
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Typography, TextField, Button, TablePagination } from '@mui/material';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Container,
+  Typography,
+  Box,
+  Grid,
+  TextField,
+  Button,
+  TablePagination,
+} from '@mui/material';
+import { useEffect, useState, useContext } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
+import { makeStyles } from '@mui/styles';
 import DashboardLayout from '../../layouts/dashboard';
 // components
 import { useSettingsContext } from '../../components/settings';
+import { AuthContext } from '../../auth/JwtContext';
 
 // ----------------------------------------------------------------------
 
 MyTable.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
+const useStyles = makeStyles((theme) => ({
+  container: {
+    marginBottom: theme.spacing(4),
+  },
+  addButton: {
+    float: 'right',
+    marginBottom: theme.spacing(3),
+  },
+  searchInput: {
+    marginBottom: theme.spacing(3),
+  },
+}));
+
 function MyTable() {
+  const { accessToken } = useContext(AuthContext);
   const { themeStretch } = useSettingsContext();
+  const classes = useStyles();
   const [rows, setRows] = useState([]);
-  const [filteredRows, setFilteredRows] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    fetchEmployees();
+    fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const fetchEmployees = async () => {
+  const fetchData = async () => {
     try {
-      const response = await axios.get('https://control-financiero.herokuapp.com/api/v1/employees');
+      const response = await axios.get(
+        'https://control-financiero.herokuapp.com/api/v1/human-rescourse',
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       setRows(response.data);
-      setFilteredRows(response.data);
     } catch (error) {
-      console.error(error);
+      console.log(error);
+    }
+  };
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value.toLowerCase());
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(
+        `https://control-financiero.herokuapp.com/api/v1/human-rescourse/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      fetchData();
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -38,20 +98,14 @@ function MyTable() {
     setPage(newPage);
   };
 
-  const handleSearch = (event) => {
-    const searchTerm = event.target.value.toLowerCase();
-    // eslint-disable-next-line no-shadow
-    const filteredRows = rows.filter((row) =>
-      row.name.toLowerCase().includes(searchTerm)
-    );
-    setFilteredRows(filteredRows);
-    setPage(0);
-  };
-
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  const filteredRows = rows.filter((row) =>
+    row.employee_name.toLowerCase().includes(searchTerm)
+  );
 
   return (
     <>
@@ -59,8 +113,8 @@ function MyTable() {
         <title>Lista de Empleados | FT Control Financiero</title>
       </Head>
 
-      <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Typography variant="h3" component="h1" paragraph sx={{ mt: 3 }}>
+      <Container maxWidth={themeStretch ? false : 'xl'} className={classes.container}>
+        <Typography variant="h3" component="h1" paragraph>
           Lista de Empleados
         </Typography>
 
@@ -69,33 +123,31 @@ function MyTable() {
           component={Link}
           href="/human-resources/add"
           size="large"
-          sx={{ mb: 3 }}
+          className={classes.addButton}
           variant="contained"
-          style={{ float: 'right' }}
         >
-          Agregar Empleado
+          Crear Empleado
         </Button>
 
         <TextField
           fullWidth
           label="Buscar"
           name="search"
+          value={searchTerm}
           onChange={handleSearch}
-          sx={{ mb: 3 }}
+          className={classes.searchInput}
         />
 
-        {/* tabla de empleados */}
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Nombre del cliente</TableCell>
+                <TableCell>Nombre del empleado</TableCell>
                 <TableCell>Teléfono</TableCell>
                 <TableCell>Correo electrónico</TableCell>
-                <TableCell>Fecha de ingreso</TableCell>
+                <TableCell>Fecha de entrada</TableCell>
                 <TableCell>Salario</TableCell>
-                <TableCell>Cargo</TableCell>
+                <TableCell>Puesto</TableCell>
                 <TableCell>Departamento</TableCell>
                 <TableCell>Horario</TableCell>
                 <TableCell>Días de descanso</TableCell>
@@ -105,19 +157,18 @@ function MyTable() {
             <TableBody>
               {filteredRows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => (
-                  <TableRow hover key={row.id}>
-                    <TableCell>{row.id}</TableCell>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.phone}</TableCell>
-                    <TableCell>{row.email}</TableCell>
-                    <TableCell>{row.date}</TableCell>
-                    <TableCell>{row.salary}</TableCell>
-                    <TableCell>{row.position}</TableCell>
-                    <TableCell>{row.department}</TableCell>
-                    <TableCell>{row.schedule}</TableCell>
-                    <TableCell>{row.restDays}</TableCell>
-                    <TableCell>{row.vacationDays}</TableCell>
+                .map((employee) => (
+                  <TableRow key={employee.id}>
+                    <TableCell>{employee.employee_name}</TableCell>
+                    <TableCell>{employee.phone}</TableCell>
+                    <TableCell>{employee.email}</TableCell>
+                    <TableCell>{employee.entry_date}</TableCell>
+                    <TableCell>{employee.salary}</TableCell>
+                    <TableCell>{employee.position}</TableCell>
+                    <TableCell>{employee.department}</TableCell>
+                    <TableCell>{employee.schedule}</TableCell>
+                    <TableCell>{employee.rest_days}</TableCell>
+                    <TableCell>{employee.vacation_days}</TableCell>
                   </TableRow>
                 ))}
             </TableBody>
