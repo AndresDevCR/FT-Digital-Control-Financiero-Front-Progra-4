@@ -73,10 +73,16 @@ export function AuthProvider({ children }) {
           },
         });
 
+        const role = await axios.get(`/role/${response.data.role_id}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
         const {first_name} = response.data;
         const {last_name} = response.data;
         const {email} = response.data;
-        const {role_id} = response.data;
+        const {name} = role.data;
         const {id} = response.data;
 
         // meter los datos en user
@@ -84,7 +90,7 @@ export function AuthProvider({ children }) {
           first_name,
           last_name,
           email,
-          role_id,
+          name,
           id,
         };
 

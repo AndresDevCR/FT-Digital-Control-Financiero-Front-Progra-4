@@ -35,7 +35,7 @@ export default function NavAccount() {
           </Typography>
 
           <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
-            {user?.email}
+            {user?.name}
           </Typography>
         </Box>
       </StyledRoot>
