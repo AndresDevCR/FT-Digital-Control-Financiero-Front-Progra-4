@@ -1,20 +1,14 @@
 import { useState } from 'react';
-// next
 import { useRouter } from 'next/router';
-// @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem } from '@mui/material';
-// routes
-import { PATH_AUTH } from '../../../routes/paths';
-// auth
 import { useAuthContext } from '../../../auth/useAuthContext';
-// components
-import { CustomAvatar } from '../../../components/custom-avatar';
 import { useSnackbar } from '../../../components/snackbar';
 import MenuPopover from '../../../components/menu-popover';
 import { IconButtonAnimate } from '../../../components/animate';
-
-// ----------------------------------------------------------------------
+import { AuthProvider } from '../../../auth/JwtContext';
+import { CustomAvatar } from '../../../components/custom-avatar';
+import { PATH_AUTH } from '../../../routes/paths';
 
 const OPTIONS = [
   {
@@ -31,15 +25,10 @@ const OPTIONS = [
   },
 ];
 
-// ----------------------------------------------------------------------
-
 export default function AccountPopover() {
   const { replace, push } = useRouter();
-
   const { user, logout } = useAuthContext();
-
   const { enqueueSnackbar } = useSnackbar();
-
   const [openPopover, setOpenPopover] = useState(null);
 
   const handleOpenPopover = (event) => {
@@ -85,7 +74,9 @@ export default function AccountPopover() {
           }),
         }}
       >
+        {/* CustomAvatar component */}
         <CustomAvatar src={user?.photoURL} alt={user?.first_name} name={user?.first_name} />
+        {console.log(user?.first_name)}
       </IconButtonAnimate>
 
       <MenuPopover open={openPopover} onClose={handleClosePopover} sx={{ width: 200, p: 0 }}>
