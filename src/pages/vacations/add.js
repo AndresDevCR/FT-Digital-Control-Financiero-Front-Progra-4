@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -8,36 +8,45 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DashboardLayout from '../../layouts/dashboard';
 import { useSettingsContext } from '../../components/settings';
-
-Invoice.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
-
-const validationSchema = Yup.object().shape({
-  vacationsStartDate: Yup.date().required('Fecha de inicio es requerida'),
-  vacationsEndDate: Yup.date().required('Fecha de reintegro es requerida'),
-});
+import { AuthContext } from '../../auth/JwtContext';
 
 export default function Invoice() {
   const { themeStretch } = useSettingsContext();
   const [loading, setLoading] = useState(false);
+  const { accessToken } = useContext(AuthContext);
+
+  const validationSchema = Yup.object().shape({
+    employee_name: Yup.string().required('Nombre es requerido'),
+    available_quantity: Yup.number().required('Cantidad disponible es requerida'),
+    start_date: Yup.date().required('Fecha de inicio es requerida'),
+    reentry_date: Yup.date().required('Fecha de reingreso es requerida')
+  });
 
   const formik = useFormik({
     initialValues: {
-      vacationsName: '',
-      vacationsQty: '',
-      vacationsStartDate: '',
-      vacationsEndDate: '',
+      employee_name: '',
+      available_quantity: '',
+      start_date: '',
+      reentry_date: ''
     },
     validationSchema,
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        // Aquí realizarías la solicitud POST a tu API utilizando axios
         // eslint-disable-next-line no-unused-vars
-        const response = await axios.post('', values);
-        toast.success('Solicitud enviada');
+        const response = await axios.post(
+          'https://control-financiero.herokuapp.com/api/v1/vacation',
+          values,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
+            },
+          }
+        );
+        toast.success('Vacaciones agregadas correctamente');
         formik.resetForm();
       } catch (error) {
-        toast.error('Error al enviar la solicitud');
+        toast.error('Error al agregar las vacaciones');
       }
       setLoading(false);
     },
@@ -57,29 +66,33 @@ export default function Invoice() {
 
       <ToastContainer />
 
-      {/* formulario de solicitar vacaciones */}
+      {/* Formulario de solicitar vacaciones */}
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Box component="form" noValidate autoComplete="off" sx={{ mt: 3 }} onSubmit={formik.handleSubmit}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
-                name="vacationsName"
+                name="employee_name"
                 label="Nombre"
                 InputLabelProps={{ shrink: true }}
-                value={formik.values.vacationsName}
+                value={formik.values.employee_name}
                 onChange={formik.handleChange}
+                error={formik.touched.employee_name && Boolean(formik.errors.employee_name)}
+                helperText={formik.touched.employee_name && formik.errors.employee_name}
               />
             </Grid>
 
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
-                name="vacationsQty"
+                name="available_quantity"
                 label="Cantidad Disponible"
                 InputLabelProps={{ shrink: true }}
-                value={formik.values.vacationsQty}
+                value={formik.values.available_quantity}
                 onChange={formik.handleChange}
+                error={formik.touched.available_quantity && Boolean(formik.errors.available_quantity)}
+                helperText={formik.touched.available_quantity && formik.errors.available_quantity}
               />
             </Grid>
 
@@ -88,12 +101,12 @@ export default function Invoice() {
                 fullWidth
                 type="date"
                 label="Fecha de inicio"
-                name="vacationsStartDate"
+                name="start_date"
                 InputLabelProps={{ shrink: true }}
-                value={formik.values.vacationsStartDate}
+                value={formik.values.start_date}
                 onChange={formik.handleChange}
-                error={formik.touched.vacationsStartDate && Boolean(formik.errors.vacationsStartDate)}
-                helperText={formik.touched.vacationsStartDate && formik.errors.vacationsStartDate}
+                error={formik.touched.start_date && Boolean(formik.errors.start_date)}
+                helperText={formik.touched.start_date && formik.errors.start_date}
               />
             </Grid>
 
@@ -102,23 +115,22 @@ export default function Invoice() {
                 fullWidth
                 type="date"
                 label="Fecha de reintegro"
-                name="vacationsEndDate"
+                name="reentry_date"
                 InputLabelProps={{ shrink: true }}
-                value={formik.values.vacationsEndDate}
+                value={formik.values.reentry_date}
                 onChange={formik.handleChange}
-                error={formik.touched.vacationsEndDate && Boolean(formik.errors.vacationsEndDate)}
-                helperText={formik.touched.vacationsEndDate && formik.errors.vacationsEndDate}
+                error={formik.touched.reentry_date && Boolean(formik.errors.reentry_date)}
+                helperText={formik.touched.reentry_date && formik.errors.reentry_date}
               />
             </Grid>
 
-            {/* boton del formulario */}
+            {/* Botón del formulario */}
             <Grid item xs={12} md={12}>
               <Button
                 fullWidth
                 size="large"
                 type="submit"
                 variant="contained"
-                onClick={formik.handleSubmit}
                 disabled={loading}
               >
                 Guardar
@@ -130,3 +142,5 @@ export default function Invoice() {
     </>
   );
 }
+
+Invoice.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;

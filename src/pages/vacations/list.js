@@ -3,17 +3,19 @@
 import Head from 'next/head';
 // layouts
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Typography, TextField, Button, TablePagination } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
 import DashboardLayout from '../../layouts/dashboard';
 // components
 import { useSettingsContext } from '../../components/settings';
+import { AuthContext } from '../../auth/JwtContext';
 // ----------------------------------------------------------------------
 
 MyTable.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 function MyTable() {
+  const { accessToken } = useContext(AuthContext);
   const { themeStretch } = useSettingsContext();
   const [rows, setRows] = useState([]);
   const [page, setPage] = useState(0);
@@ -38,7 +40,11 @@ function MyTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://control-financiero.herokuapp.com/api/v1/vacation');
+        const response = await axios.get('https://control-financiero.herokuapp.com/api/v1/vacation', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
         setRows(response.data);
       } catch (error) {
         console.log(error);
@@ -46,7 +52,7 @@ function MyTable() {
     };
 
     fetchData();
-  }, []);
+  }, [accessToken]);
 
   const filteredRows = rows.filter((row) =>
     row.employee_name.toLowerCase().includes(searchTerm)
@@ -54,7 +60,11 @@ function MyTable() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://control-financiero.herokuapp.com/api/v1/vacation/${id}`);
+      await axios.delete(`https://control-financiero.herokuapp.com/api/v1/vacation/${id}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       setRows((prevRows) => prevRows.filter((row) => row.id !== id));
     } catch (error) {
       console.log(error);
@@ -70,7 +80,13 @@ function MyTable() {
 
   const handleSave = async () => {
     try {
-      await axios.put(`https://control-financiero.herokuapp.com/api/v1/vacation/${editingRowId}`, editedData);
+      await axios.patch(`https://control-financiero.herokuapp.com/api/v1/vacation${editingRowId}`,
+        editedData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
       setEditingRowId(null);
       setEditedData({});
     } catch (error) {
