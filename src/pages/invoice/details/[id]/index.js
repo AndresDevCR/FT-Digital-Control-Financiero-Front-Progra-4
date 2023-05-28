@@ -4,10 +4,10 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { Container, Typography, Box, Grid, Card, CardContent, Button } from '@mui/material';
 import axios from 'axios';
-import DashboardLayout from '../../../../layouts/dashboard';
-import { AuthContext } from '../../../../auth/JwtContext';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import DashboardLayout from '../../../../layouts/dashboard';
+import { AuthContext } from '../../../../auth/JwtContext';
 
 Details.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
