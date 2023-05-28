@@ -4,13 +4,7 @@ import { createContext, useEffect, useReducer, useCallback, useMemo } from 'reac
 import axios from '../utils/axios';
 import localStorageAvailable from '../utils/localStorageAvailable';
 //
-import { isValidToken, setSession } from './utils';
-
-// ----------------------------------------------------------------------
-
-// NOTE:
-// We only build demo at basic level.
-// Customer will need to do some extra handling yourself if you want to extend the logic and other features...
+import { isValidToken, setSession, jwtDecode } from './utils';
 
 // ----------------------------------------------------------------------
 
@@ -27,21 +21,14 @@ const reducer = (state, action) => {
       return {
         isInitialized: true,
         isAuthenticated: action.payload.isAuthenticated,
-        user: action.payload.user,
+        user: action.payload.accessToken ? action.payload.user : null,
         accessToken: action.payload.accessToken,
       };
     case 'LOGIN':
       return {
         ...state,
         isAuthenticated: true,
-        user: action.payload.user,
-        accessToken: action.payload.accessToken,
-      };
-    case 'REGISTER':
-      return {
-        ...state,
-        isAuthenticated: true,
-        user: action.payload.user,
+        user: action.payload.accessToken ? action.payload.user : null,
         accessToken: action.payload.accessToken,
       };
     case 'LOGOUT':
@@ -78,13 +65,30 @@ export function AuthProvider({ children }) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const response = await axios.get('/user', {
+        const { id: tokenID } = jwtDecode(accessToken);
+
+        const response = await axios.get(`/user/${tokenID}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         });
 
-        const { user } = response.data;
+        const {first_name} = response.data;
+        const {last_name} = response.data;
+        const {email} = response.data;
+        const {role_id} = response.data;
+        const {id} = response.data;
+
+        // meter los datos en user
+        const user = {
+          first_name,
+          last_name,
+          email,
+          role_id,
+          id,
+        };
+
+        console.log(user);
 
         dispatch({
           type: 'INITIAL',
@@ -142,13 +146,6 @@ export function AuthProvider({ children }) {
         },
       });
 
-      const userResponse = await axios.get('/user', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      console.log('User Data:', userResponse.data);
     } catch (error) {
       console.error(error);
     }
@@ -168,23 +165,26 @@ export function AuthProvider({ children }) {
       setSession(token);
 
       dispatch({
-        type: 'REGISTER',
+        type: 'LOGIN',
         payload: {
           user,
           accessToken: token,
         },
       });
 
-      const userResponse = await axios.get('/user', {
+      const { id: tokenID } = jwtDecode(token);
+
+      const response2 = await axios.get(`/user/${tokenID}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      console.log('User Data:', userResponse.data);
+
     } catch (error) {
       console.error(error);
     }
+
   }, []);
 
   // LOGOUT
@@ -194,6 +194,24 @@ export function AuthProvider({ children }) {
       type: 'LOGOUT',
     });
   }, []);
+
+  useEffect(() => {
+    let logoutTimer;
+
+    const resetLogoutTimer = () => {
+      clearTimeout(logoutTimer);
+      logoutTimer = setTimeout(logout, 30 * 60 * 1000); // 30 minutes
+
+    };
+
+    if (state.isAuthenticated) {
+      resetLogoutTimer();
+    }
+
+    return () => {
+      clearTimeout(logoutTimer);
+    };
+  }, [state.isAuthenticated, logout]);
 
   const memoizedValue = useMemo(
     () => ({
@@ -206,7 +224,7 @@ export function AuthProvider({ children }) {
       register,
       logout,
     }),
-    [state.isAuthenticated, state.isInitialized, state.user, state.accessToken, login, logout, register]
+    [state.isInitialized, state.isAuthenticated, state.user, state.accessToken, login, register, logout]
   );
 
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;
