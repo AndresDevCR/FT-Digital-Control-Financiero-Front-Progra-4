@@ -9,6 +9,7 @@ import DashboardLayout from '../../layouts/dashboard';
 const Profile = () => {
   const theme = useTheme();
   const { user } = useContext(AuthContext);
+  const { themeStretch } = useSettingsContext();
 
   return (
     <Box>
@@ -24,25 +25,24 @@ const Profile = () => {
       {/* Contenedor principal */}
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 2 }}>
         {/* Tarjeta de foto de portada */}
-        <Card sx={{ width: '100%', marginBottom: 2 }}>
-          <img src="https://i.imgur.com/kMkFPom.png" alt="Foto de portada" style={{ width: '100%' }} />
-        </Card>
-
-        {/* Tarjeta de foto de perfil */}
-        <Card sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', p: 2, mb: 2, backgroundColor: 'transparent' }}>
-          <Avatar
-            src="/ruta-a-la-foto-de-perfil.jpg"
-            alt={user?.first_name}
-            name={user?.first_name}
-            sx={{
-              width: theme.spacing(15),
-              height: theme.spacing(15),
-              fontSize: theme.spacing(7),
-              fontWeight: 'bold',
-              color: theme.palette.primary.contrastText,
-              backgroundColor: theme.palette.primary.main,
-            }}
-          />
+        <Card sx={{ width: '100%', position: 'relative', marginBottom: 2, overflow: 'hidden' }}>
+          <img src="https://i.pinimg.com/originals/1a/c7/38/1ac7382c342c9c7dc6e8eb9a80f0083d.jpg" alt="Foto de portada" style={{ width: '100%', position: 'absolute', top: 0, left: 0, zIndex: -1 }} />
+          {/* Tarjeta de foto de perfil */}
+          <Card sx={{ width: '100%', display: 'flex', justifyContent: 'rigth', alignItems: 'center', p: 2, mb: 2, backgroundColor: 'transparent' }}>
+            <Avatar
+              src="/ruta-a-la-foto-de-perfil.jpg"
+              alt={user?.first_name}
+              name={user?.first_name}
+              sx={{
+                width: theme.spacing(30), // Aumentamos el tamaño de la imagen de perfil
+                height: theme.spacing(30),
+                fontSize: theme.spacing(10), // Aumentamos el tamaño de la fuente del avatar
+                fontWeight: 'bold',
+                color: theme.palette.primary.contrastText,
+                backgroundColor: theme.palette.primary.main,
+              }}
+            />
+          </Card>
         </Card>
 
         {/* Tarjeta de información del usuario */}
