@@ -100,7 +100,7 @@ export default function AccountPopover() {
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
-          Logout
+          Salir
         </MenuItem>
       </MenuPopover>
     </>
