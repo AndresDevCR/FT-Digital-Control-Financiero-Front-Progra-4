@@ -13,17 +13,13 @@ import { PATH_AUTH } from '../../../routes/paths';
 
 const OPTIONS = [
   {
-    label: 'Home',
+    label: 'Inicio',
     linkTo: '/',
   },
   {
-    label: 'Profile',
+    label: 'Perfil',
     linkTo: '/dashboard/profile',
-  },
-  {
-    label: 'Settings',
-    linkTo: '/',
-  },
+  }
 ];
 
 export default function AccountPopover() {
