@@ -1,4 +1,4 @@
-// next
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useContext } from 'react';
 import Head from 'next/head';
 // layouts
@@ -152,6 +152,18 @@ function MyTable() {
                           onClick={() => handleDelete(invoice.id)}
                         >
                           Eliminar
+                        </Button>
+                      </div>
+                      <div>
+                        <Button
+                          color="primary"
+                          size="small"
+                          sx={{ mb: 2 }}
+                          variant="contained"
+                          component={Link}
+                          href={`/inventory/details/${invoice.id}`}
+                        >
+                          Ver Detalles
                         </Button>
                       </div>
                     </TableCell>

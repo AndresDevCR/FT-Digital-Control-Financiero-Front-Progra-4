@@ -55,7 +55,7 @@ function MyTable() {
 
   useEffect(() => {
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchData = async () => {
@@ -152,6 +152,7 @@ function MyTable() {
                 <TableCell>Horario</TableCell>
                 <TableCell>Días de descanso</TableCell>
                 <TableCell>Días de vacaciones</TableCell>
+                <TableCell>Acciones</TableCell> {/* Agregado */}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -169,6 +170,17 @@ function MyTable() {
                     <TableCell>{employee.schedule}</TableCell>
                     <TableCell>{employee.rest_days}</TableCell>
                     <TableCell>{employee.vacation_days}</TableCell>
+                    <TableCell>
+                      <Button
+                        color="primary"
+                        component={Link}
+                        href={`/human-resources/details/${employee.id}`}
+                        size="small"
+                        variant="contained"
+                      >
+                        Ver detalles
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>
