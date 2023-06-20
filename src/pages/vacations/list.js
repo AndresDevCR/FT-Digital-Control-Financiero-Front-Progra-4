@@ -2,7 +2,7 @@
 // next
 import Head from 'next/head';
 // layouts
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Typography, TextField, Button, TablePagination } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Typography, TextField, Button, TablePagination, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { useState, useEffect, useContext } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
@@ -23,6 +23,8 @@ function MyTable() {
   const [searchTerm, setSearchTerm] = useState('');
   const [editingRowId, setEditingRowId] = useState(null);
   const [editedData, setEditedData] = useState({});
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState(null);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -58,19 +60,35 @@ function MyTable() {
     row.employee_name.toLowerCase().includes(searchTerm)
   );
 
-  const handleDelete = async (id) => {
+  const handleDeleteDialogOpen = (id) => {
+    setOpenDeleteDialog(true);
+    setDeleteItemId(id);
+  };
+
+  const handleDeleteDialogClose = () => {
+    setOpenDeleteDialog(false);
+    setDeleteItemId(null);
+  };
+
+  const handleDelete = (id) => {
+    setDeleteItemId(id);
+    handleDeleteDialogOpen();
+  };
+  
+  const handleConfirmDelete = async () => {
     try {
-      await axios.delete(`https://control-financiero.herokuapp.com/api/v1/vacation/${id}`, {
+      await axios.delete(`https://control-financiero.herokuapp.com/api/v1/vacation/${deleteItemId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+      setRows((prevRows) => prevRows.filter((row) => row.id !== deleteItemId));
+      handleDeleteDialogClose();
     } catch (error) {
       console.log(error);
     }
   };
-
+  
   const handleEdit = (rowId) => {
     setEditingRowId(rowId);
     // eslint-disable-next-line no-shadow
@@ -97,11 +115,6 @@ function MyTable() {
   const handleCancelEdit = () => {
     setEditingRowId(null);
     setEditedData({});
-  };
-
-  const handleFieldChange = (event) => {
-    const { name, value } = event.target;
-    setEditedData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   return (
@@ -252,14 +265,14 @@ function MyTable() {
                           Editar
                         </Button>
                         <Button
-                          color="error"
-                          size="small"
-                          sx={{ mb: 2, mr: 2 }}
-                          variant="contained"
-                          onClick={() => handleDelete(row.id)}
-                        >
-                          Borrar
-                        </Button>
+                            color="error"
+                            size="small"
+                            sx={{ mb: 2, mr: 2 }}
+                            variant="contained"
+                            onClick={() => handleDeleteDialogOpen(row.id)}
+                          >
+                            Eliminar
+                          </Button>
                       </>
                     )}
                   </TableCell>
@@ -278,6 +291,25 @@ function MyTable() {
           />
         </TableContainer>
       </Container>
+      <Dialog
+      open={openDeleteDialog}
+      onClose={handleDeleteDialogClose}
+    >
+      <DialogTitle>Confirmar eliminación</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          ¿Estás seguro de que deseas eliminar esta solicitud?
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleDeleteDialogClose} color="primary">
+          Cancelar
+        </Button>
+        <Button onClick={handleConfirmDelete} color="error" variant="contained">
+          Eliminar
+        </Button>
+      </DialogActions>
+    </Dialog>
     </>
   );
 }
