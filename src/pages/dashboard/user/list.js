@@ -1,17 +1,9 @@
 import Head from 'next/head';
-
-// layouts
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Typography, Box, Grid, TextField, Button, TablePagination } from '@mui/material';
 import { useState } from 'react';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Typography, Box, Grid, TextField, Button, TablePagination, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import Link from 'next/link';
-// eslint-disable-next-line no-unused-vars
-import axios from 'axios';
 import DashboardLayout from '../../../layouts/dashboard';
-// components
 import { useSettingsContext } from '../../../components/settings';
-
-
-// ----------------------------------------------------------------------
 
 MyTable.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
@@ -86,6 +78,8 @@ function MyTable() {
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedUserIndex, setSelectedUserIndex] = useState(null);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -100,17 +94,32 @@ function MyTable() {
     setPage(0);
   };
 
-  const filteredUsers = users.filter((user) => Object.values(user).some(
-    (value) => value.toLowerCase().includes(searchTerm)
-  ));
+  const filteredUsers = users.filter((user) =>
+    Object.values(user).some((value) =>
+      value.toLowerCase().includes(searchTerm)
+    )
+  );
+
+  const handleDeleteModalOpen = (index) => {
+    setSelectedUserIndex(index);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteModalClose = () => {
+    setSelectedUserIndex(null);
+    setDeleteModalOpen(false);
+  };
+
+  const handleDeleteUser = () => {
+     // Logica para eliminar el usuario
+  };
 
   return (
     <>
-
       <Head>
         <title>Lista de Usuarios | FT Control Financiero</title>
       </Head>
-      <Container maxWidth={themeStretch ? false : "xl"}>
+      <Container maxWidth={themeStretch ? false : 'xl'}>
         <Box sx={{ pb: 5 }}>
           <Typography variant="h4">Lista de Usuarios</Typography>
         </Box>
@@ -122,10 +131,10 @@ function MyTable() {
               onChange={handleSearch}
               variant="outlined"
               size="small"
-              sx={{ width: "100%" }}
+              sx={{ width: '100%' }}
             />
           </Grid>
-          <Grid item xs={12} md={6} sx={{ textAlign: "right" }}>
+          <Grid item xs={12} md={6} sx={{ textAlign: 'right' }}>
             <Link href="/dashboard/users/create">
               <Button
                 color="primary"
@@ -140,7 +149,7 @@ function MyTable() {
             </Link>
           </Grid>
         </Grid>
-        <Paper sx={{ width: "100%", overflow: "hidden" }}>
+        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader>
               <TableHead>
@@ -182,12 +191,11 @@ function MyTable() {
                         </div>
                         <div>
                           <Button
-                            color="primary"
-                            component={Link}
-                            href="/dashboard/user/list"
+                            color="error"
                             size="small"
                             sx={{ mb: 2 }}
                             variant="contained"
+                            onClick={() => handleDeleteModalOpen(index)}
                           >
                             Eliminar
                           </Button>
@@ -209,6 +217,27 @@ function MyTable() {
             sx={{ px: 3 }}
           />
         </Paper>
+        <Dialog
+          open={deleteModalOpen}
+          onClose={handleDeleteModalClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">Confirmación</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              ¿Estás seguro de que deseas eliminar este usuario?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+          <Button onClick={handleDeleteModalClose} color="primary">
+            Cancelar
+          </Button>
+          <Button onClick={handleDeleteModalClose} color="error" autoFocus>
+            Eliminar
+          </Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     </>
   );
