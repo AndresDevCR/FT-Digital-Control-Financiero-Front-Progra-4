@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useContext } from 'react';
 import Head from 'next/head';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Typography, TextField, Button, TablePagination, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Grid } from '@mui/material';
@@ -138,30 +139,42 @@ function MyTable() {
                     <TableCell>{invoice.availableQuantity}</TableCell>
                     <TableCell>{invoice.description}</TableCell>
                     <TableCell>{invoice.entryDate}</TableCell>
-                    <TableCell>
-                      <Grid container spacing={1}>
-                        <Grid item>
-                          <Button
-                            color="secondary"
-                            component={Link}
-                            href={`/inventory/edit/${invoice.id}`}
-                            size="small"
-                            variant="contained"
-                          >
-                            Editar
-                          </Button>
-                        </Grid>
-                        <Grid item>
-                          <Button
-                            color="error"
-                            size="small"
-                            variant="contained"
-                            onClick={() => handleDelete(invoice.id)}
-                          >
-                            Eliminar
-                          </Button>
-                        </Grid>
-                      </Grid>
+                    <TableCell style={{ margin: 1 }}>
+                      <div>
+                        <Button
+                          color="secondary"
+                          component={Link}
+                          href={`/inventory/edit/${invoice.id}`}
+                          size="small"
+                          sx={{ mb: 2 }}
+                          variant="contained"
+                        >
+                          Editar
+                        </Button>
+                      </div>
+                      <div>
+                        <Button
+                          color="primary"
+                          size="small"
+                          sx={{ mb: 2 }}
+                          variant="contained"
+                          onClick={() => handleDelete(invoice.id)}
+                        >
+                          Eliminar
+                        </Button>
+                      </div>
+                      <div>
+                        <Button
+                          color="primary"
+                          size="small"
+                          sx={{ mb: 2 }}
+                          variant="contained"
+                          component={Link}
+                          href={`/inventory/details/${invoice.id}`}
+                        >
+                          Ver Detalles
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}

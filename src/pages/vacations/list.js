@@ -1,16 +1,14 @@
 /* eslint-disable no-unused-vars */
-// next
 import Head from 'next/head';
 // layouts
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Typography, TextField, Button, TablePagination, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { useState, useEffect, useContext } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Typography, TextField, Button, TablePagination } from '@mui/material';
 import DashboardLayout from '../../layouts/dashboard';
-// components
 import { useSettingsContext } from '../../components/settings';
 import { AuthContext } from '../../auth/JwtContext';
-// ----------------------------------------------------------------------
 
 MyTable.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
@@ -91,25 +89,28 @@ function MyTable() {
   
   const handleEdit = (rowId) => {
     setEditingRowId(rowId);
-    // eslint-disable-next-line no-shadow
-    const row = rows.find((row) => row.id === rowId);
-    setEditedData(row);
+    const selectedRow = rows.find((row) => row.id === rowId);
+    setEditedData(selectedRow);
   };
-
+  
   const handleSave = async () => {
     try {
-      await axios.patch(`https://control-financiero.herokuapp.com/api/v1/vacation${editingRowId}`,
-        editedData,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+      await axios.patch(`https://control-financiero.herokuapp.com/api/v1/vacation/${editingRowId}`, editedData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       setEditingRowId(null);
       setEditedData({});
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleDetails = (rowId) => {
+    // Aquí debes redirigir a la vista de ver detalles
+    // Por ejemplo:
+    window.location.href = `/details/${rowId}`;
   };
 
   const handleCancelEdit = () => {
@@ -166,51 +167,61 @@ function MyTable() {
             <TableBody>
               {filteredRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                 <TableRow key={row.id}>
-                  <TableCell>{editingRowId === row.id ? (
-                    <TextField
-                      name="employee_name"
-                      value={editedData.employee_name || ''}
-                      onChange={handleFieldChange}
-                    />
-                  ) : (
-                    row.employee_name
-                  )}</TableCell>
-                  <TableCell>{editingRowId === row.id ? (
-                    <TextField
-                      name="available_quantity"
-                      value={editedData.available_quantity || ''}
-                      onChange={handleFieldChange}
-                    />
-                  ) : (
-                    row.available_quantity
-                  )}</TableCell>
-                  <TableCell>{editingRowId === row.id ? (
-                    <TextField
-                      name="start_date"
-                      value={editedData.start_date || ''}
-                      onChange={handleFieldChange}
-                    />
-                  ) : (
-                    row.start_date
-                  )}</TableCell>
-                  <TableCell>{editingRowId === row.id ? (
-                    <TextField
-                      name="reentry_date"
-                      value={editedData.reentry_date || ''}
-                      onChange={handleFieldChange}
-                    />
-                  ) : (
-                    row.reentry_date
-                  )}</TableCell>
-                  <TableCell>{editingRowId === row.id ? (
-                    <TextField
-                      name="request_status"
-                      value={editedData.request_status || ''}
-                      onChange={handleFieldChange}
-                    />
-                  ) : (
-                    row.request_status
-                  )}</TableCell>
+                  <TableCell>
+                    {editingRowId === row.id ? (
+                      <TextField
+                        name="employee_name"
+                        value={editedData.employee_name || ''}
+                        onChange={handleFieldChange}
+                      />
+                    ) : (
+                      row.employee_name
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editingRowId === row.id ? (
+                      <TextField
+                        name="available_quantity"
+                        value={editedData.available_quantity || ''}
+                        onChange={handleFieldChange}
+                      />
+                    ) : (
+                      row.available_quantity
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editingRowId === row.id ? (
+                      <TextField
+                        name="start_date"
+                        value={editedData.start_date || ''}
+                        onChange={handleFieldChange}
+                      />
+                    ) : (
+                      row.start_date
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editingRowId === row.id ? (
+                      <TextField
+                        name="reentry_date"
+                        value={editedData.reentry_date || ''}
+                        onChange={handleFieldChange}
+                      />
+                    ) : (
+                      row.reentry_date
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editingRowId === row.id ? (
+                      <TextField
+                        name="request_status"
+                        value={editedData.request_status || ''}
+                        onChange={handleFieldChange}
+                      />
+                    ) : (
+                      row.request_status
+                    )}
+                  </TableCell>
                   <TableCell>
                     {editingRowId === row.id ? (
                       <>
@@ -265,14 +276,24 @@ function MyTable() {
                           Editar
                         </Button>
                         <Button
-                            color="error"
-                            size="small"
-                            sx={{ mb: 2, mr: 2 }}
-                            variant="contained"
-                            onClick={() => handleDeleteDialogOpen(row.id)}
-                          >
-                            Eliminar
-                          </Button>
+                          color="error"
+                          size="small"
+                          sx={{ mb: 2, mr: 2 }}
+                          variant="contained"
+                          onClick={() => handleDelete(row.id)}
+                        >
+                          Borrar
+                        </Button>
+                        <Button
+                          color="error"
+                          size="small"
+                          sx={{ mb: 2, mr: 2 }}
+                          variant="contained"
+                          component={Link}
+                          href={`/vacations/details/${row.id}`}
+                        >
+                          Ver Detalles
+                        </Button>
                       </>
                     )}
                   </TableCell>
