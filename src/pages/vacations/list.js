@@ -5,7 +5,6 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { useState, useEffect, useContext } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Typography, TextField, Button, TablePagination } from '@mui/material';
 import DashboardLayout from '../../layouts/dashboard';
 import { useSettingsContext } from '../../components/settings';
 import { AuthContext } from '../../auth/JwtContext';
@@ -72,7 +71,7 @@ function MyTable() {
     setDeleteItemId(id);
     handleDeleteDialogOpen();
   };
-  
+
   const handleConfirmDelete = async () => {
     try {
       await axios.delete(`https://control-financiero.herokuapp.com/api/v1/vacation/${deleteItemId}`, {
@@ -86,13 +85,13 @@ function MyTable() {
       console.log(error);
     }
   };
-  
+
   const handleEdit = (rowId) => {
     setEditingRowId(rowId);
     const selectedRow = rows.find((row) => row.id === rowId);
     setEditedData(selectedRow);
   };
-  
+
   const handleSave = async () => {
     try {
       await axios.patch(`https://control-financiero.herokuapp.com/api/v1/vacation/${editingRowId}`, editedData, {
@@ -313,24 +312,24 @@ function MyTable() {
         </TableContainer>
       </Container>
       <Dialog
-      open={openDeleteDialog}
-      onClose={handleDeleteDialogClose}
-    >
-      <DialogTitle>Confirmar eliminación</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          ¿Estás seguro de que deseas eliminar esta solicitud?
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleDeleteDialogClose} color="primary">
-          Cancelar
-        </Button>
-        <Button onClick={handleConfirmDelete} color="error" variant="contained">
-          Eliminar
-        </Button>
-      </DialogActions>
-    </Dialog>
+        open={openDeleteDialog}
+        onClose={handleDeleteDialogClose}
+      >
+        <DialogTitle>Confirmar eliminación</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            ¿Estás seguro de que deseas eliminar esta solicitud?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteDialogClose} color="primary">
+            Cancelar
+          </Button>
+          <Button onClick={handleConfirmDelete} color="error" variant="contained">
+            Eliminar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
