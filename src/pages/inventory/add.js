@@ -33,45 +33,45 @@ export default function Invoice() {
   const formik = useFormik({
     initialValues: {
       productName: '',
-      availableQuantity: '',
+      availableQuantity: 0,
       description: '',
       entryDate: '',
     },
     validationSchema,
-    onSubmit: (values) => {
-      axios
-        .post('https://control-financiero.herokuapp.com/api/v1/inventory', values, {
+    onSubmit: async (values) => {
+      try {
+        const response = await axios.post('https://control-financiero.herokuapp.com/api/v1/inventory', values, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
-        })
-        .then((response) => {
-          console.log(response);
-          toast.success('Inventario agregado con éxito');
-        })
-        .catch((error) => {
-          toast.error('Error al agregar el inventario');
-          console.log(error);
         });
+        console.log(response);
+        toast.success('Inventario agregado con éxito');
+      } catch (error) {
+        toast.error('Error al agregar el inventario');
+        console.log(error);
+      }
 
       formik.resetForm();
     },
   });
 
   const handleInputChange = (event) => {
-    if (event.target.name === 'productName') {
-      if (event.target.value.length > 30) {
-        event.target.value = event.target.value.slice(0, 30);
+    const { name, value } = event.target;
+
+    if (name === 'productName') {
+      if (value.length > 30) {
+        event.target.value = value.slice(0, 30);
         toast.warning('Se ha alcanzado el límite máximo de caracteres para el nombre del producto/servicio');
       }
     }
 
-    if (event.target.name === 'availableQuantity') {
-      if (event.target.value.length > 10) {
-        event.target.value = event.target.value.slice(0, 10);
+    if (name === 'availableQuantity') {
+      if (value.length > 10) {
+        event.target.value = value.slice(0, 10);
         toast.warning('Se ha alcanzado el límite máximo de caracteres para la cantidad disponible');
       } else {
-        const numberValue = Number(event.target.value);
+        const numberValue = Number(value);
         if (Number.isNaN(numberValue)) {
           event.target.value = '';
         } else {
@@ -80,9 +80,9 @@ export default function Invoice() {
       }
     }
 
-    if (event.target.name === 'description') {
-      if (event.target.value.length > 250) {
-        event.target.value = event.target.value.slice(0, 250);
+    if (name === 'description') {
+      if (value.length > 250) {
+        event.target.value = value.slice(0, 250);
         toast.warning('Se ha alcanzado el límite máximo de caracteres para la descripción');
       }
     }
@@ -124,7 +124,7 @@ export default function Invoice() {
                 fullWidth
                 label="Cantidad disponible"
                 name="availableQuantity"
-                type="text"
+                type="number"
                 value={formik.values.availableQuantity}
                 onChange={handleInputChange}
                 error={formik.touched.availableQuantity && Boolean(formik.errors.availableQuantity)}
@@ -155,7 +155,8 @@ export default function Invoice() {
                 fullWidth
                 name="entryDate"
                 type="date"
-                onChange={formik.handleChange}
+                value={formik.values.entryDate}
+                onChange={handleInputChange}
                 error={formik.touched.entryDate && Boolean(formik.errors.entryDate)}
                 helperText={formik.touched.entryDate && formik.errors.entryDate}
               />
