@@ -22,6 +22,7 @@ function MyTable() {
 
   useEffect(() => {
     fetchInvoices();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchInvoices = async () => {
@@ -44,6 +45,7 @@ function MyTable() {
 
   const handleSearch = (event) => {
     const searchTerm = event.target.value.toLowerCase();
+    // eslint-disable-next-line no-shadow
     const filteredInvoices = invoices.filter((invoice) =>
       Object.values(invoice).some((value) =>
         String(value).toLowerCase().includes(searchTerm)
@@ -75,6 +77,7 @@ function MyTable() {
           Authorization: `Bearer ${accessToken}`,
         },
       });
+      // eslint-disable-next-line no-shadow
       const filteredInvoices = invoices.filter((invoice) => invoice.id !== selectedInvoiceId);
       setInvoices(filteredInvoices);
       setFilteredInvoices(filteredInvoices);

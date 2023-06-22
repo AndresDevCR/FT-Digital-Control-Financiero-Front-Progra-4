@@ -66,6 +66,7 @@ const HrAdd = () => {
   });
 
   const handleChange = (event) => {
+    // eslint-disable-next-line no-unused-vars
     const { name, value } = event.target;
     if (value.length <= 25) {
       // Set the character limit to 100

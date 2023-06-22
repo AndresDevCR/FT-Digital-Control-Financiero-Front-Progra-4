@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import PropTypes from 'prop-types';
 import { memo, useState, useEffect, useContext } from 'react';
 import { useTheme } from '@mui/material/styles';
