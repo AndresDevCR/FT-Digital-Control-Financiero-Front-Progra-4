@@ -1,7 +1,30 @@
 import Head from 'next/head';
 import { useEffect, useState, useContext } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Typography, Box, TextField, Button, TablePagination, Grid, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+// eslint-disable-next-line no-unused-vars
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Container,
+  Typography,
+  // eslint-disable-next-line no-unused-vars
+  Box,
+  TextField,
+  Button,
+  TablePagination,
+  Grid,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from '@mui/material';
+// eslint-disable-next-line import/no-unresolved
+ import { makeStyles } from '@mui/styles';
 import Link from 'next/link';
 import axios from 'axios';
 import DashboardLayout from '../../layouts/dashboard';
@@ -35,6 +58,7 @@ function MyTable() {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchData = async () => {
@@ -66,11 +90,14 @@ function MyTable() {
 
   const handleDeleteInvoice = async () => {
     try {
-      await axios.delete(`https://control-financiero.herokuapp.com/api/v1/invoice/${selectedInvoiceId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      await axios.delete(
+        `https://control-financiero.herokuapp.com/api/v1/invoice/${selectedInvoiceId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       fetchData();
       handleDeleteModalClose();
     } catch (error) {
@@ -91,9 +118,7 @@ function MyTable() {
     setPage(0);
   };
 
-  const filteredRows = rows.filter((row) =>
-    row.client_name.toLowerCase().includes(searchTerm)
-  );
+  const filteredRows = rows.filter((row) => row.client_name.toLowerCase().includes(searchTerm));
 
   return (
     <>
