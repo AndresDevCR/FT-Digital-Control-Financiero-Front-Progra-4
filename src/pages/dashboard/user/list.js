@@ -111,7 +111,7 @@ function MyTable() {
   };
 
   const handleDeleteUser = () => {
-     // Logica para eliminar el usuario
+    // Lógica para eliminar el usuario
   };
 
   return (
@@ -123,7 +123,7 @@ function MyTable() {
         <Box sx={{ pb: 5 }}>
           <Typography variant="h4">Lista de Usuarios</Typography>
         </Box>
-        <Grid container spacing={3}>
+        <Grid container spacing={1}>
           <Grid item xs={12} md={6}>
             <TextField
               label="Buscar"
@@ -177,28 +177,32 @@ function MyTable() {
                       <TableCell>{user.userRole}</TableCell>
                       <TableCell>{user.userStatus}</TableCell>
                       <TableCell>
-                        <div>
-                          <Button
-                            color="secondary"
-                            component={Link}
-                            href="/dashboard/user/edit"
-                            size="small"
-                            sx={{ mb: 2 }}
-                            variant="contained"
-                          >
-                            Editar
-                          </Button>
-                        </div>
-                        <div>
-                          <Button
-                            color="error"
-                            size="small"
-                            sx={{ mb: 2 }}
-                            variant="contained"
-                            onClick={() => handleDeleteModalOpen(index)}
-                          >
-                            Eliminar
-                          </Button>
+                       <div>
+                          <Grid container spacing={1}>
+                            <Grid item>
+                              <Button
+                                color="secondary"
+                                component={Link}
+                                href="/dashboard/user/edit"
+                                size="small"
+                                sx={{ mb: 2 }}
+                                variant="contained"
+                              >
+                                Editar
+                              </Button>
+                            </Grid>
+                            <Grid item>
+                              <Button
+                                color="error"
+                                size="small"
+                                sx={{ mb: 2 }}
+                                variant="contained"
+                                onClick={() => handleDeleteModalOpen(index)}
+                              >
+                                Eliminar
+                              </Button>
+                            </Grid>
+                          </Grid>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -230,12 +234,12 @@ function MyTable() {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-          <Button onClick={handleDeleteModalClose} color="primary">
-            Cancelar
-          </Button>
-          <Button onClick={handleDeleteModalClose} color="error" autoFocus>
-            Eliminar
-          </Button>
+            <Button onClick={handleDeleteModalClose} color="primary">
+              Cancelar
+            </Button>
+            <Button onClick={handleDeleteModalClose} color="error" autoFocus>
+              Eliminar
+            </Button>
           </DialogActions>
         </Dialog>
       </Container>

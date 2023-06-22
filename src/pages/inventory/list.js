@@ -140,7 +140,8 @@ function MyTable() {
                     <TableCell>{invoice.description}</TableCell>
                     <TableCell>{invoice.entryDate}</TableCell>
                     <TableCell style={{ margin: 1 }}>
-                      <div>
+                    <Grid container spacing={1}>
+                      <Grid item>
                         <Button
                           color="secondary"
                           component={Link}
@@ -151,10 +152,10 @@ function MyTable() {
                         >
                           Editar
                         </Button>
-                      </div>
-                      <div>
+                      </Grid>
+                      <Grid item>
                         <Button
-                          color="primary"
+                          color="error"
                           size="small"
                           sx={{ mb: 2 }}
                           variant="contained"
@@ -162,8 +163,8 @@ function MyTable() {
                         >
                           Eliminar
                         </Button>
-                      </div>
-                      <div>
+                      </Grid>
+                      <Grid item>
                         <Button
                           color="primary"
                           size="small"
@@ -174,8 +175,9 @@ function MyTable() {
                         >
                           Ver Detalles
                         </Button>
-                      </div>
-                    </TableCell>
+                      </Grid>
+                    </Grid>
+                  </TableCell>
                   </TableRow>
                 ))}
             </TableBody>

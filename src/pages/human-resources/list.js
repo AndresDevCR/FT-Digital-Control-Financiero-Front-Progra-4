@@ -171,16 +171,23 @@ function MyTable() {
                     <TableCell>{employee.rest_days}</TableCell>
                     <TableCell>{employee.vacation_days}</TableCell>
                     <TableCell>
-                      <Button
-                        color="primary"
-                        component={Link}
-                        href={`/human-resources/details/${employee.id}`}
-                        size="small"
-                        variant="contained"
-                      >
-                        Ver detalles
-                      </Button>
-                    </TableCell>
+                    <div>
+                      <Grid container spacing={1}>
+                        <Grid item>
+                          <Button
+                            color="primary"
+                            component={Link}
+                            href={`/human-resources/details/${employee.id}`}
+                            size="small"
+                            variant="contained"
+                            sx={{ whiteSpace: 'nowrap' }}
+                          >
+                            Ver detalles
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </div>
+                  </TableCell>
                   </TableRow>
                 ))}
             </TableBody>
