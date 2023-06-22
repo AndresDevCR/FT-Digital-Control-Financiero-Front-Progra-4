@@ -14,12 +14,19 @@ import { AuthContext } from '../../auth/JwtContext';
 Invoice.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function Invoice() {
-  const { themeStretch, accessToken } = useContext(AuthContext); // Obtiene el accessToken del AuthContext
+  const { themeStretch, accessToken } = useContext(AuthContext);
 
   const validationSchema = Yup.object().shape({
-    productName: Yup.string().required('El nombre del producto/servicio es obligatorio'),
-    availableQuantity: Yup.number().required('La cantidad disponible es obligatoria'),
-    description: Yup.string().required('La descripción es obligatoria'),
+    productName: Yup.string()
+      .required('El nombre del producto/servicio es obligatorio')
+      .max(30, 'El nombre debe tener máximo 30 caracteres'),
+    availableQuantity: Yup.number()
+      .required('La cantidad disponible es obligatoria')
+      .max(9999999999, 'La cantidad debe tener máximo 10 dígitos')
+      .typeError('La cantidad debe ser un número'),
+    description: Yup.string()
+      .required('La descripción es obligatoria')
+      .max(250, 'La descripción debe tener máximo 250 caracteres'),
     entryDate: Yup.date().required('La fecha de ingreso es obligatoria'),
   });
 
@@ -35,7 +42,7 @@ export default function Invoice() {
       axios
         .post('https://control-financiero.herokuapp.com/api/v1/inventory', values, {
           headers: {
-            Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
+            Authorization: `Bearer ${accessToken}`,
           },
         })
         .then((response) => {
@@ -51,6 +58,38 @@ export default function Invoice() {
     },
   });
 
+  const handleInputChange = (event) => {
+    if (event.target.name === 'productName') {
+      if (event.target.value.length > 30) {
+        event.target.value = event.target.value.slice(0, 30);
+        toast.warning('Se ha alcanzado el límite máximo de caracteres para el nombre del producto/servicio');
+      }
+    }
+
+    if (event.target.name === 'availableQuantity') {
+      if (event.target.value.length > 10) {
+        event.target.value = event.target.value.slice(0, 10);
+        toast.warning('Se ha alcanzado el límite máximo de caracteres para la cantidad disponible');
+      } else {
+        const numberValue = Number(event.target.value);
+        if (Number.isNaN(numberValue)) {
+          event.target.value = '';
+        } else {
+          event.target.value = numberValue.toString();
+        }
+      }
+    }
+
+    if (event.target.name === 'description') {
+      if (event.target.value.length > 250) {
+        event.target.value = event.target.value.slice(0, 250);
+        toast.warning('Se ha alcanzado el límite máximo de caracteres para la descripción');
+      }
+    }
+
+    formik.handleChange(event);
+  };
+
   return (
     <>
       <Head>
@@ -65,7 +104,6 @@ export default function Invoice() {
 
       <ToastContainer />
 
-      {/* formulario de agregar Inventario */}
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Box component="form" noValidate autoComplete="off" sx={{ mt: 3 }} onSubmit={formik.handleSubmit}>
           <Grid container spacing={3}>
@@ -75,7 +113,7 @@ export default function Invoice() {
                 label="Nombre del producto/servicio"
                 name="productName"
                 value={formik.values.productName}
-                onChange={formik.handleChange}
+                onChange={handleInputChange}
                 error={formik.touched.productName && Boolean(formik.errors.productName)}
                 helperText={formik.touched.productName && formik.errors.productName}
               />
@@ -86,9 +124,9 @@ export default function Invoice() {
                 fullWidth
                 label="Cantidad disponible"
                 name="availableQuantity"
-                type="number"
+                type="text"
                 value={formik.values.availableQuantity}
-                onChange={formik.handleChange}
+                onChange={handleInputChange}
                 error={formik.touched.availableQuantity && Boolean(formik.errors.availableQuantity)}
                 helperText={formik.touched.availableQuantity && formik.errors.availableQuantity}
               />
@@ -103,7 +141,7 @@ export default function Invoice() {
                 minRows={5}
                 maxRows={10}
                 value={formik.values.description}
-                onChange={formik.handleChange}
+                onChange={handleInputChange}
                 error={formik.touched.description && Boolean(formik.errors.description)}
                 helperText={formik.touched.description && formik.errors.description}
               />
@@ -123,7 +161,6 @@ export default function Invoice() {
               />
             </Grid>
 
-            {/* boton del formulario */}
             <Grid item xs={12} md={12}>
               <Button fullWidth size="large" type="submit" variant="contained" sx={{ mt: 3 }}>
                 Guardar
