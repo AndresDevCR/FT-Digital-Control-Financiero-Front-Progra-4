@@ -10,13 +10,13 @@ import { AuthContext } from '../../../../auth/JwtContext';
 
 const validationSchema = Yup.object().shape({
     name: Yup.string()
-        .required('Nombre de la aplicación es requerido')
+        .required('Nombre de la compañía es requerido')
         .max(30, 'El nombre debe tener como máximo 30 caracteres'),
     description: Yup.string()
-        .required('Descripción de la aplicación es requerida')
+        .required('Descripción de la compañía es requerida')
         .max(200, 'La descripción debe tener como máximo 200 caracteres'),
     category: Yup.string()
-        .required('Categoría de la aplicación es requerida')
+        .required('Categoría de la compañía es requerida')
         .max(30, 'La categoría debe tener como máximo 30 caracteres'),
     primary_phone_number: Yup.string()
         .required('Número de teléfono es requerido')
@@ -102,7 +102,7 @@ export default function CompanyForm() {
         <>
             <Container>
                 <Typography variant="h3" component="h1" paragraph>
-                    Agregar aplicación
+                    Agregar compañía
                 </Typography>
             </Container>
 
@@ -120,7 +120,7 @@ export default function CompanyForm() {
                         <Grid item xs={12} md={12}>
                             <TextField
                                 fullWidth
-                                label="Nombre de la aplicación"
+                                label="Nombre de la compañía"
                                 name="name"
                                 value={formik.values.name}
                                 onChange={handleInputChange}
@@ -191,22 +191,6 @@ export default function CompanyForm() {
                                 }}
                             />
                         </Grid>
-
-                        <Grid item xs={12} md={12}>
-                            <TextField
-                                fullWidth
-                                label="Correo electrónico"
-                                name="email"
-                                value={formik.values.email}
-                                onChange={handleInputChange}
-                                error={formik.touched.email && formik.errors.email}
-                                helperText={formik.touched.email && formik.errors.email}
-                                inputProps={{
-                                    maxLength: 30,
-                                }}
-                            />
-                        </Grid>
-
                         <Grid item xs={12} md={12}>
                             <TextField
                                 fullWidth
