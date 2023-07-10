@@ -1,6 +1,8 @@
 import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+import CancelIcon from '@mui/icons-material/Cancel';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { AuthContext } from '../../auth/JwtContext';
 
 // eslint-disable-next-line react/prop-types
@@ -30,10 +32,21 @@ export default function DeleteConfirmationDialog({ open, onClose, itemId, onDele
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button
+          onClick={onClose}
+          startIcon={<CancelIcon />}
+          color="warning"
+          style={{ color: '#fff' }}
+          variant="contained"
+        >
           Cancelar
         </Button>
-        <Button onClick={handleDelete} color="error" variant="contained">
+        <Button
+          startIcon={<RemoveCircleIcon />}
+          onClick={handleDelete}
+          color="error"
+          variant="contained"
+        >
           Eliminar
         </Button>
       </DialogActions>
