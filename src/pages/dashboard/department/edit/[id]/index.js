@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
         .required('El nombre es obligatorio'),
 });
 
-const EditApplication = () => {
+const EditDepartment = () => {
     const { accessToken } = useContext(AuthContext);
     const { themeStretch } = useSettingsContext();
     const router = useRouter();
@@ -158,6 +158,6 @@ const EditApplication = () => {
     );
 };
 
-EditApplication.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+EditDepartment.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-export default EditApplication;
+export default EditDepartment;
