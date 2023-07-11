@@ -186,7 +186,7 @@ const navConfig = [
                 icon: ICONS.employee,
                 children: [
                   { title: 'Agregar Empleado', path: EMPLOYEE.employeeadd },
-                  { title: 'Lista de Empleados', path: EMPLOYEE.employeeadd },
+                  { title: 'Lista de Empleados', path: EMPLOYEE.employeelist },
                 ],
               },
               {
