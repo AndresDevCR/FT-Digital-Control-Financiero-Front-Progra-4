@@ -8,8 +8,6 @@ import {
     Grid,
     TextField,
     Button,
-    FormControlLabel,
-    Checkbox,
     Select,
     MenuItem,
     InputLabel,
