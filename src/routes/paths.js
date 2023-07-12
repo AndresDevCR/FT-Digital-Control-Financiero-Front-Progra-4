@@ -19,7 +19,6 @@ const ROOTS_EMPLOYEE = '/dashboard/employee';
 const ROOTS_ENTERPRISE = '/dashboard/enterprise';
 const ROOTS_PERMISSION = '/dashboard/permission';
 const ROOTS_POSITION = '/dashboard/position';
-const ROOTS_PROVIDER = '/dashboard/provider';
 const ROOTS_ROLES = '/dashboard/roles';
 const ROOTS_SUPPLIER = '/dashboard/supplier';
 const ROOTS_USER = '/dashboard/user';
@@ -138,12 +137,6 @@ export const POSITION = {
   positionedit: path(ROOTS_POSITION, '/edit'),
 };
 
-export const PROVIDER = {
-  root: ROOTS_PROVIDER,
-  provideradd: path(ROOTS_PROVIDER, '/add'),
-  providerlist: path(ROOTS_PROVIDER, '/list'),
-  provideredit: path(ROOTS_PROVIDER, '/edit'),
-};
 
 export const ROLES = {
   root: ROOTS_ROLES,

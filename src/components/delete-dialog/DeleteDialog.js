@@ -5,6 +5,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { AuthContext } from '../../auth/JwtContext';
 
+
 // eslint-disable-next-line react/prop-types
 export default function DeleteConfirmationDialog({ open, onClose, itemId, onDelete, apiEndpoint }) {
   const { accessToken } = useContext(AuthContext);
@@ -18,6 +19,7 @@ export default function DeleteConfirmationDialog({ open, onClose, itemId, onDele
       });
       onDelete(itemId);
       onClose();
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -38,6 +40,7 @@ export default function DeleteConfirmationDialog({ open, onClose, itemId, onDele
           color="warning"
           style={{ color: '#fff' }}
           variant="contained"
+          
         >
           Cancelar
         </Button>
