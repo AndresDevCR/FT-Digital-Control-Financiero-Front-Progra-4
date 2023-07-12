@@ -11,24 +11,24 @@ import { useRouter } from 'next/router';
 import { AuthContext } from '../../../../auth/JwtContext';
 
 const validationSchema = Yup.object().shape({
-  position_name: Yup.string()
-    .required('El titulo del puesto es obligatorio')
-    .max(30, 'El titulo del puesto debe tener como máximo 30 caracteres'),
+  supplier_name: Yup.string()
+    .required('El nombre del proveedor es obligatorio')
+    .max(30, 'El nombre del proveedor debe tener como máximo 30 caracteres'),
 });
 
-export default function PositionForm() {
+export default function SupplierForm() {
   const { accessToken } = useContext(AuthContext);
   const router = useRouter();
 
   const handleSubmit = async (values) => {
     try {
-      await axios.post('https://control-financiero.herokuapp.com/api/v1/position', values, {
+      await axios.post('https://control-financiero.herokuapp.com/api/v1/supplier', values, {
         headers: {
           Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
         },
       });
       toast.success('Agregado correctamente');
-      router.push('/dashboard/position/list'); // Redireccionar a la lista de inventario
+      router.push('/dashboard/supplier/list'); // Redireccionar a la lista de proveedores
     } catch (error) {
       toast.error('Error al agregar puesto');
     }
@@ -36,7 +36,7 @@ export default function PositionForm() {
 
   const formik = useFormik({
     initialValues: {
-      position_name: '',
+      supplier_name: '',
     },
     validationSchema,
     onSubmit: handleSubmit,
@@ -56,7 +56,7 @@ export default function PositionForm() {
     <>
       <Container>
         <Typography variant="h3" component="h1" paragraph>
-          Agregar Puesto
+          Agregar proveedor
         </Typography>
       </Container>
 
@@ -74,12 +74,12 @@ export default function PositionForm() {
             <Grid item xs={12} md={12}>
               <TextField
                 fullWidth
-                label="Titulo del puesto"
-                name="position_name"
-                value={formik.values.position_name}
+                label="Nombre del proveedor"
+                name="supplier_name"
+                value={formik.values.supplier_name}
                 onChange={handleInputChange}
-                error={formik.touched.position_name && formik.errors.position_name}
-                helperText={formik.touched.position_name && formik.errors.position_name}
+                error={formik.touched.supplier_name && formik.errors.supplier_name}
+                helperText={formik.touched.supplier_name && formik.errors.supplier_name}
                 inputProps={{
                   maxLength: 30,
                 }}
@@ -92,16 +92,16 @@ export default function PositionForm() {
               </Button>
             </Grid>
 
-            {/* Botón para volver a la lista de puestos */}
+            {/* Botón para volver a la lista de proveedores */}
             <Grid item xs={12} md={12}>
               <Button
                 fullWidth
                 size="large"
                 variant="outlined"
-                onClick={() => router.push("/dashboard/position/list")}
+                onClick={() => router.push("/dashboard/supplier/list")}
                 startIcon={<KeyboardBackspaceIcon />}
               >
-                Volver a la lista de puestos
+                Volver a la lista de proveedores
               </Button>
             </Grid>
           </Grid>

@@ -79,6 +79,7 @@ const ICONS = {
   finance:<AccountBalanceWalletIcon/>,
   humanresources:<ContactMailIcon/>,
   inventory:<InventoryIcon/>,
+  supplier: <LocalShippingIcon />,
   
 };
 
@@ -201,8 +202,17 @@ const navConfig = [
                 path: POSITION.root,
                 icon: ICONS.position,
                 children: [
-                  { title: 'Agregar Posición', path: POSITION.positionadd },
-                  { title: 'Lista de Posiciones', path: POSITION.positionlist },
+                  { title: 'Agregar Puesto', path: POSITION.positionadd },
+                  { title: 'Lista de Puestos', path: POSITION.positionlist },
+                ],
+              },
+              {
+                title: 'Proveedores',
+                path: SUPPLIER.root,
+                icon: ICONS.supplier,
+                children: [
+                  { title: 'Agregar Proveedor', path: SUPPLIER.supplieradd },
+                  { title: 'Lista de Proveedores', path: SUPPLIER.supplierlist },
                 ],
               },
             ],
