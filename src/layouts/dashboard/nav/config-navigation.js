@@ -158,7 +158,7 @@ const navConfig = [
             ],
           },
           {
-            title: 'Control Adminstativo',
+            title: 'Control Admin',
             icon: ICONS.admincontrol,
             path: PATH_DASHBOARD.user.root,
             children: [
@@ -258,7 +258,7 @@ const navConfig = [
             ],
           },
           {
-            title: 'Recursos Humanos',
+            title: 'H R',
             path: '',
             icon: ICONS.humanresources,
             children: [
@@ -284,18 +284,11 @@ const navConfig = [
           },
           {
             title: 'Inventario',
-            path: '',
+            path: INVENTORY.root,
             icon: ICONS.inventory,
             children: [
-              {
-                title: 'Inventario',
-                path: INVENTORY.root,
-                icon: ICONS.inventory,
-                children: [
-                  { title: 'Agregar inventario', path: INVENTORY.inventoryadd },
-                  { title: 'Lista de inventario', path: INVENTORY.inventorylist },
-                ],
-              },
+              { title: 'Agregar inventario', path: INVENTORY.inventoryadd },
+              { title: 'Lista de inventario', path: INVENTORY.inventorylist },
             ],
           },
         ],
