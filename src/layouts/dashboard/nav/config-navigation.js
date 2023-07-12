@@ -38,7 +38,6 @@ import {
   ENTERPRISE,
   PERMISSION,
   POSITION,
-  PROVIDER,
   ROLES,
   SUPPLIER,
   USER,
@@ -70,7 +69,6 @@ const ICONS = {
   permission: <CheckCircleIcon />,
   roles: <VpnKeyIcon />,
   position: <DeviceHubIcon />,
-  provider: <LocalShippingIcon />,
   appcontrol: <AdminPanelSettingsIcon />,
   admincontrol: <CardTravelIcon />,
   quotations: <RequestQuoteIcon />,
@@ -81,6 +79,7 @@ const ICONS = {
   finance:<AccountBalanceWalletIcon/>,
   humanresources:<ContactMailIcon/>,
   inventory:<InventoryIcon/>,
+  supplier: <LocalShippingIcon />,
   
 };
 
@@ -199,21 +198,21 @@ const navConfig = [
                 ],
               },
               {
-                title: 'Posiciones',
+                title: 'Puestos',
                 path: POSITION.root,
                 icon: ICONS.position,
                 children: [
-                  { title: 'Agregar Posición', path: POSITION.positionadd },
-                  { title: 'Lista de Posiciones', path: POSITION.positionlist },
+                  { title: 'Agregar Puesto', path: POSITION.positionadd },
+                  { title: 'Lista de Puestos', path: POSITION.positionlist },
                 ],
               },
               {
                 title: 'Proveedores',
-                path: PROVIDER.root,
-                icon: ICONS.provider,
+                path: SUPPLIER.root,
+                icon: ICONS.supplier,
                 children: [
-                  { title: 'Agregar Proveedor', path: PROVIDER.provideradd },
-                  { title: 'Lista de Proveedores', path: PROVIDER.providerlist },
+                  { title: 'Agregar Proveedor', path: SUPPLIER.supplieradd },
+                  { title: 'Lista de Proveedores', path: SUPPLIER.supplierlist },
                 ],
               },
             ],

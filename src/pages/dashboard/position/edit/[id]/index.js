@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import SaveIcon from '@mui/icons-material/Save';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import Head from 'next/head';
 import { Container, Typography, Box, Grid, TextField, Button } from '@mui/material';
 import { useFormik } from 'formik';
@@ -13,11 +15,11 @@ import { useSettingsContext } from '../../../../../components/settings';
 import { AuthContext } from '../../../../../auth/JwtContext';
 
 const validationSchema = Yup.object().shape({
-    supplier_name: Yup.string()
-        .required('El nombre es obligatorio'),
+    position_name: Yup.string()
+        .required('El titulo del puesto es obligatorio'),
 });
 
-const EditSupplier = () => {
+const EditPosition = () => {
     const { accessToken } = useContext(AuthContext);
     const { themeStretch } = useSettingsContext();
     const router = useRouter();
@@ -25,19 +27,19 @@ const EditSupplier = () => {
 
     const handleSubmit = (values) => {
         axios
-            .patch(`https://control-financiero.herokuapp.com/api/v1/supplier/${id}`, values, {
+            .patch(`https://control-financiero.herokuapp.com/api/v1/position/${id}`, values, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
             })
             .then((response) => {
                 console.log(response);
-                toast.success('Proveedor actualizado con éxito');
-                router.push('/dashboard/supplier/list');
+                toast.success('Puesto actualizado con éxito');
+                router.push('/dashboard/position/list');
             })
             .catch((error) => {
                 console.log(error);
-                toast.error('Error al actualizar el proveedor');
+                toast.error('Error al actualizar el Puesto');
             });
     };
 
@@ -53,7 +55,7 @@ const EditSupplier = () => {
 
     const formik = useFormik({
         initialValues: {
-            supplier_name: '',
+            position_name: '',
         },
         validationSchema,
         onSubmit: handleSubmit,
@@ -61,22 +63,22 @@ const EditSupplier = () => {
 
     useEffect(() => {
         if (id) {
-            // Fetch supplier data from the API using the provided ID
+            // Fetch position data from the API using the provided ID
             axios
-                .get(`https://control-financiero.herokuapp.com/api/v1/supplier/${id}`, {
+                .get(`https://control-financiero.herokuapp.com/api/v1/position/${id}`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
                 })
                 .then((response) => {
-                    const supplier = response.data;
+                    const position = response.data;
                     formik.setValues({
-                        supplier_name: supplier.supplier_name,
+                        position_name: position.position_name,
                     });
                 })
                 .catch((error) => {
                     console.log(error);
-                    toast.error('Error al cargar el proveedor');
+                    toast.error('Error al cargar el puesto');
                 });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -85,12 +87,12 @@ const EditSupplier = () => {
     return (
         <>
             <Head>
-                <title>Editar Proveedor | FT Control Financiero</title>
+                <title>Editar Puesto | FT Control Financiero</title>
             </Head>
 
             <Container maxWidth={themeStretch ? false : 'xl'}>
                 <Typography variant="h3" component="h1" paragraph>
-                    Editar Proveedor
+                    Editar Puesto
                 </Typography>
             </Container>
 
@@ -109,17 +111,17 @@ const EditSupplier = () => {
                         <Grid item xs={12} md={12}>
                             <TextField
                                 fullWidth
-                                label="Nombre del Proveedor"
-                                name="supplier_name"
-                                value={formik.values.supplier_name}
+                                label="Titulo del puesto"
+                                name="position_name"
+                                value={formik.values.position_name}
                                 onChange={handleInputChange}
                                 error={
-                                    formik.touched.supplier_name &&
-                                    formik.errors.supplier_name
+                                    formik.touched.position_name &&
+                                    formik.errors.position_name
                                 }
                                 helperText={
-                                    formik.touched.supplier_name &&
-                                    formik.errors.supplier_name
+                                    formik.touched.position_name &&
+                                    formik.errors.position_name
                                 }
                                 inputProps={{
                                     maxLength: 30,
@@ -135,20 +137,22 @@ const EditSupplier = () => {
                                 type="submit"
                                 variant="contained"
                                 sx={{ mt: 3 }}
+                                startIcon={<SaveIcon />}
                             >
                                 Guardar
                             </Button>
                         </Grid>
 
-                        {/* Botón para volver a la lista de Proveedores */}
+                        {/* Botón para volver a la lista de Empresas */}
                         <Grid item xs={12} md={12}>
                             <Button
                                 fullWidth
                                 size="large"
                                 variant="outlined"
-                                onClick={() => router.push("/dashboard/supplier/list")}
+                                onClick={() => router.push("/dashboard/position/list")}
+                                startIcon={<KeyboardBackspaceIcon />}
                             >
-                                Volver a la lista de Proveedores
+                                Volver a la lista de Puestos
                             </Button>
                         </Grid>
                     </Grid>
@@ -158,6 +162,6 @@ const EditSupplier = () => {
     );
 };
 
-EditSupplier.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+EditPosition.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-export default EditSupplier;
+export default EditPosition;

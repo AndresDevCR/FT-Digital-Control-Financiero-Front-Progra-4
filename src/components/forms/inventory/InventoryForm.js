@@ -4,6 +4,8 @@ import * as Yup from 'yup';
 import { Container, Typography, Box, Grid, TextField, Button } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import SaveIcon from '@mui/icons-material/Save';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { AuthContext } from '../../../auth/JwtContext';
@@ -158,7 +160,7 @@ export default function InventoryForm() {
             </Grid>
 
             <Grid item xs={12} md={12}>
-              <Button fullWidth size="large" type="submit" variant="contained">
+              <Button fullWidth size="large" type="submit" variant="contained" startIcon={<SaveIcon />}>
                 Guardar
               </Button>
             </Grid>
@@ -170,6 +172,7 @@ export default function InventoryForm() {
                 size="large"
                 variant="outlined"
                 onClick={() => router.push('/inventory')}
+                startIcon={<KeyboardBackspaceIcon />}
               >
                 Volver a la lista de inventario
               </Button>
