@@ -7,10 +7,10 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup'; // Import Yup for form validation
 import axios from 'axios';
 // layouts
-import DashboardLayout from '../../layouts/dashboard';
+import DashboardLayout from '../../../layouts/dashboard';
 // components
-import { useSettingsContext } from '../../components/settings';
-import { AuthContext } from '../../auth/JwtContext';
+import { useSettingsContext } from '../../settings';
+import { AuthContext } from '../../../auth/JwtContext';
 
 const HrAdd = () => {
   const { themeStretch } = useSettingsContext();

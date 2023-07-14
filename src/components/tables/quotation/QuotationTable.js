@@ -24,7 +24,7 @@ import Link from 'next/link';
 import DeleteConfirmationDialog from '../../delete-dialog/DeleteDialog';
 import { AuthContext } from '../../../auth/JwtContext';
 
-export default function QuotationList() {
+export function QuotationList() {
     const [quotation, setQuotation] = useState([]);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [deleteItemId, setDeleteItemId] = useState(null);

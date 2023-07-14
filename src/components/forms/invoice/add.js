@@ -6,9 +6,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { AuthContext } from '../../auth/JwtContext';
+import { AuthContext } from '../../../auth/JwtContext';
 
-import DashboardLayout from '../../layouts/dashboard';
+import DashboardLayout from '../../../layouts/dashboard';
 
 Invoice.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
