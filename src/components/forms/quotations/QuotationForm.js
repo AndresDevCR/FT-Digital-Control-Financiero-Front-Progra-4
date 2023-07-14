@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Container, Typography, Box, Grid, TextField, Button } from '@mui/material';
+import { Container, Typography, Box, Grid, TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SaveIcon from '@mui/icons-material/Save';
@@ -12,6 +12,9 @@ import { AuthContext } from '../../../auth/JwtContext';
 
 
 const validationSchema = Yup.object().shape({
+    client_id: Yup.number()
+        .required('Id de cliente es requerido')
+        .min(1, 'El campo debe tener como mínimo 1 digito'),
     total_payment: Yup.number()
         .required('Total de pago es requerido')
         .min(1, 'El campo debe tener como mínimo 1 digito'),
@@ -40,6 +43,26 @@ const validationSchema = Yup.object().shape({
 export default function QuotationForm() {
     const { accessToken } = useContext(AuthContext);
     const router = useRouter();
+    const [clients, setClients] = useState([]);
+
+    useEffect(() => {
+        const fetchClients = async () => {
+            try {
+                const response = await axios.get(
+                    'https://control-financiero.herokuapp.com/api/v1/client',
+                    {
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`,
+                        },
+                    }
+                );
+                setClients(response.data);
+            } catch (error) {
+                console.error('Error fetching clients:', error);
+            }
+        };
+        fetchClients();
+    }, [accessToken]);
 
     const handleSubmit = async (values) => {
         try {
@@ -54,10 +77,21 @@ export default function QuotationForm() {
             toast.error('Error al agregar al inventario');
         }
     };
-    
+    // "client_id": 0,
+    // "total_payment": 0,
+    // "total_payment_dollar": 0,
+    // "e_invoice_code": "string",
+    // "issue_date": "2023-07-14T21:31:26.442Z",
+    // "po_number": 0,
+    // "po_date": "2023-07-14T21:31:26.442Z",
+    // "description": "string",
+    // "quote_title": "string",
+    // "created_at": "2023-07-14T21:31:26.442Z",
+    // "updated_at": "2023-07-14T21:31:26.442Z"
 
     const formik = useFormik({
         initialValues: {
+            client_id: 1,
             total_payment: '',
             total_payment_dollar: '',
             e_invoice_code: '',
@@ -72,8 +106,8 @@ export default function QuotationForm() {
     });
 
     const handleInputChange = (event) => {
-        if (event.target.name === 'productName' && event.target.value.length >= 30) {
-            toast.info('Se ha alcanzado el límite de caracteres permitidos');
+        if (event.target.name === 'client_id' && !/^\d+$/.test(event.target.value)) {
+            toast.error('Solo se permiten números en el campo de Id de cliente');
         }
 
         if (event.target.name === 'availableQuantity' && !/^\d+$/.test(event.target.value)) {
@@ -110,7 +144,31 @@ export default function QuotationForm() {
                     sx={{ mt: 3 }}
                     onSubmit={formik.handleSubmit}
                 >
-      
+
+                    <Grid item xs={12} md={12}>
+                        <FormControl fullWidth>
+                            <InputLabel id="client-label">Cliente</InputLabel>
+                            <Select
+                                labelId="client-label"
+                                id="client_id"
+                                type='number'
+                                name="client_id"
+                                value={formik.values.client_id}
+                                onChange={formik.handleChange}
+                                error={formik.touched.client_id && formik.errors.client_id}
+                                fullWidth
+                            >
+                                {clients.map((client) => (
+                                    <MenuItem key={client.id} value={client.id}>
+                                        {client.client_name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <br />
+
+
                     <Grid container spacing={3}>
                         <Grid item xs={12} md={6}>
                             <TextField
@@ -246,7 +304,7 @@ export default function QuotationForm() {
                             </Button>
                         </Grid>
 
-                       
+
                         <Grid item xs={12} md={12}>
                             <Button
                                 fullWidth
@@ -263,4 +321,4 @@ export default function QuotationForm() {
             </Container>
         </>
     );
-}
+};

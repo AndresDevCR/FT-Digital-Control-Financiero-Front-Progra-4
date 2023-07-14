@@ -1,4 +1,4 @@
-import QuotationForm from "../../components/forms/quotation/QuotationForm";
+import QuotationForm from "../../components/forms/quotations/QuotationForm";
 import DashboardLayout from '../../layouts/dashboard';
 
 
