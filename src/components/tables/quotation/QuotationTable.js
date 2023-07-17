@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import {
@@ -24,8 +25,7 @@ import Link from 'next/link';
 import DeleteConfirmationDialog from '../../delete-dialog/DeleteDialog';
 import { AuthContext } from '../../../auth/JwtContext';
 
-export function QuotationList() {
-    const [quotation, setQuotation] = useState([]);
+export default function QuotationList() {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [deleteItemId, setDeleteItemId] = useState(null);
     const { accessToken } = useContext(AuthContext);
@@ -50,10 +50,7 @@ export function QuotationList() {
 
     useEffect(() => {
         fetchQuotation();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    const filteredRows = rows.filter((row) => row.e_invoice_code.toLowerCase().includes(searchTerm));
 
     const fetchQuotation = async () => {
         try {
@@ -71,6 +68,10 @@ export function QuotationList() {
         }
     };
 
+    const filteredRows = rows.filter((row) =>
+        row.e_invoice_code.toLowerCase().includes(searchTerm)
+    );
+
     const handleDeleteDialogOpen = (id) => {
         setDeleteItemId(id);
         setOpenDeleteDialog(true);
@@ -83,14 +84,15 @@ export function QuotationList() {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`https://control-financiero.herokuapp.com/api/v1/quotation/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
-            setQuotation((prevQuotation) =>
-                prevQuotation.filter((quotationItem) => quotationItem.id !== id)
+            await axios.delete(
+                `https://control-financiero.herokuapp.com/api/v1/quotation/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
             );
+            setRows((prevRows) => prevRows.filter((quotationItem) => quotationItem.id !== id));
             handleDeleteDialogClose();
         } catch (error) {
             console.log(error);
@@ -183,7 +185,9 @@ export function QuotationList() {
                                                     size="small"
                                                     sx={{ mb: 2 }}
                                                     variant="contained"
-                                                    onClick={() => handleDeleteDialogOpen(quotationItem.id)}
+                                                    onClick={() =>
+                                                        handleDeleteDialogOpen(quotationItem.id)
+                                                    }
                                                     startIcon={<DeleteForeverIcon />}
                                                 >
                                                     Eliminar
