@@ -42,7 +42,7 @@ export default function Header({ isOffset }) {
         <Logo />
 
         <Link variant="subtitle2" color="inherit">
-          Need Help?
+         Necesitas ayuda?
         </Link>
       </Toolbar>
 
