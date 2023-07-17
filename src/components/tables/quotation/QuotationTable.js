@@ -103,7 +103,7 @@ export default function QuotationList() {
         <>
             <Container>
                 <Typography variant="h3" component="h1" paragraph>
-                    Lista de Inventario
+                    Lista de Cotizaciones
                 </Typography>
 
                 <Button
@@ -116,7 +116,7 @@ export default function QuotationList() {
                     style={{ float: 'right' }}
                     startIcon={<AddIcon />}
                 >
-                    Crear Inventario
+                    Crear Cotizaciones
                 </Button>
 
                 <TextField
