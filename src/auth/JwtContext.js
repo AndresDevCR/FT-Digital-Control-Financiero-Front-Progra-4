@@ -79,11 +79,11 @@ export function AuthProvider({ children }) {
           },
         });
 
-        const {first_name} = response.data;
-        const {last_name} = response.data;
-        const {email} = response.data;
-        const {name} = role.data;
-        const {id} = response.data;
+        const { first_name } = response.data;
+        const { last_name } = response.data;
+        const { email } = response.data;
+        const { name } = role.data;
+        const { id } = response.data;
 
         // meter los datos en user
         const user = {
@@ -154,6 +154,7 @@ export function AuthProvider({ children }) {
 
     } catch (error) {
       console.error(error);
+      throw error;
     }
   }, []);
 
@@ -190,6 +191,7 @@ export function AuthProvider({ children }) {
 
     } catch (error) {
       console.error(error);
+      throw error;
     }
 
   }, []);
