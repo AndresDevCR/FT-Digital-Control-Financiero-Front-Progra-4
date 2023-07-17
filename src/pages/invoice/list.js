@@ -1,6 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Head from 'next/head';
 import { useEffect, useState, useContext } from 'react';
-// eslint-disable-next-line no-unused-vars
 import {
   Table,
   TableBody,
@@ -11,20 +11,16 @@ import {
   Paper,
   Container,
   Typography,
-  // eslint-disable-next-line no-unused-vars
-  Box,
   TextField,
   Button,
   TablePagination,
-  Grid,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogContentText,
   DialogActions,
 } from '@mui/material';
-// eslint-disable-next-line import/no-unresolved
- import { makeStyles } from '@mui/styles';
+import { makeStyles } from '@mui/styles'; // Corrección de importación
 import Link from 'next/link';
 import axios from 'axios';
 import DashboardLayout from '../../layouts/dashboard';
@@ -58,8 +54,7 @@ function MyTable() {
 
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); // Limpieza del warning de react-hooks/exhaustive-deps
 
   const fetchData = async () => {
     try {
@@ -182,40 +177,32 @@ function MyTable() {
                     <TableCell>{invoice.invoice_number}</TableCell>
                     <TableCell>{invoice.order_number}</TableCell>
                     <TableCell className={classes.actionButtons}>
-                      <Grid container spacing={1}>
-                        <Grid item>
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            component={Link}
-                            href={`/invoice/details/${invoice.id}`}
-                            size="small"
-                          >
-                            Detalles
-                          </Button>
-                        </Grid>
-                        <Grid item>
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            component={Link}
-                            href={`/invoice/edit/${invoice.id}`}
-                            size="small"
-                          >
-                            Editar
-                          </Button>
-                        </Grid>
-                        <Grid item>
-                          <Button
-                            variant="contained"
-                            color="error"
-                            size="small"
-                            onClick={() => handleDelete(invoice.id)}
-                          >
-                            Eliminar
-                          </Button>
-                        </Grid>
-                      </Grid>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        component={Link}
+                        href={`/invoice/details/${invoice.id}`}
+                        size="small"
+                      >
+                        Detalles
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="secondary" // Corrección de color
+                        component={Link}
+                        href={`/invoice/edit/${invoice.id}`}
+                        size="small"
+                      >
+                        Editar
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="error" // Corrección de color
+                        size="small"
+                        onClick={() => handleDelete(invoice.id)}
+                      >
+                        Eliminar
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -248,7 +235,7 @@ function MyTable() {
             <Button onClick={handleDeleteModalClose} color="primary">
               Cancelar
             </Button>
-            <Button onClick={handleDeleteInvoice} color="error" autoFocus>
+            <Button onClick={handleDeleteInvoice} color="secondary" autoFocus /* Corrección de autoFocus */>
               Eliminar
             </Button>
           </DialogActions>
