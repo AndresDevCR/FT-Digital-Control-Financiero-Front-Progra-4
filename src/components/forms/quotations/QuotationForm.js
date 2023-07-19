@@ -14,28 +14,28 @@ import { AuthContext } from '../../../auth/JwtContext';
 const validationSchema = Yup.object().shape({
     client_id: Yup.number()
         .required('Id de cliente es requerido')
-        .min(1, 'El campo debe tener como mínimo 1 digito'),
+        .min(1, 'El campo debe tener como mínimo 1 dígito'),
     total_payment: Yup.number()
         .required('Total de pago es requerido')
-        .min(1, 'El campo debe tener como mínimo 1 digito'),
+        .min(1, 'El campo debe tener como mínimo 1 dígito'),
     total_payment_dollar: Yup.number()
-        .required('Total de pago en dolares es requerido')
-        .min(1, 'El campo debe tener como mínimo 1 digito'),
+        .required('Total de pago en dólares es requerido')
+        .min(1, 'El campo debe tener como mínimo 1 dígito'),
     e_invoice_code: Yup.string()
-        .required('Codigo de factura es requerido')
+        .required('Código de factura es requerido')
         .min(1, 'El campo debe tener como mínimo 1 caracter'),
     issue_date: Yup.date()
         .required('Fecha de emisión es requerido'),
     po_number: Yup.number()
-        .required('Numero de orden de compra es requerido')
-        .min(1, 'El campo debe tener como mínimo 1 digito'),
+        .required('Número de orden de compra es requerido')
+        .min(1, 'El campo debe tener como mínimo 1 dígito'),
     po_date: Yup.date()
         .required('Fecha de orden de compra es requerido'),
     description: Yup.string()
         .required('Descripción es requerido')
         .max(200, 'El campo debe tener como máximo 200 caracteres'),
     quote_title: Yup.string()
-        .required('Titulo de cotización es requerido')
+        .required('Título de cotización es requerido')
         .max(30, 'El campo debe tener como máximo 30 caracteres'),
 
 });
@@ -180,7 +180,7 @@ export default function QuotationForm() {
                         <Grid item xs={12} md={6}>
                             <TextField
                                 fullWidth
-                                label="Total a pagar en dolares"
+                                label="Total a pagar en dólares"
                                 name="total_payment_dollar"
                                 type="number"
                                 value={formik.values.total_payment_dollar}
@@ -199,7 +199,7 @@ export default function QuotationForm() {
                         <Grid item xs={12} md={12}>
                             <TextField
                                 fullWidth
-                                label="Codigo de factura electronica"
+                                label="Código de factura electronica"
                                 name="e_invoice_code"
                                 type="text"
                                 value={formik.values.e_invoice_code}
@@ -215,7 +215,7 @@ export default function QuotationForm() {
                         <Grid item xs={12} md={6}>
                             <TextField
                                 fullWidth
-                                label="Fecha de emision"
+                                label="Fecha de emisión"
                                 name="issue_date"
                                 type="date"
                                 value={formik.values.issue_date}
@@ -258,7 +258,7 @@ export default function QuotationForm() {
                         <Grid item xs={12} md={6}>
                             <TextField
                                 fullWidth
-                                label="Descripcion"
+                                label="Descripción"
                                 name="description"
                                 type="text"
                                 value={formik.values.description}
@@ -274,7 +274,7 @@ export default function QuotationForm() {
                         <Grid item xs={12} md={6}>
                             <TextField
                                 fullWidth
-                                label="Titulo de cotizacion"
+                                label="Título de cotización"
                                 name="quote_title"
                                 type="text"
                                 value={formik.values.quote_title}
