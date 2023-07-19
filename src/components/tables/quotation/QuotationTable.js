@@ -109,7 +109,7 @@ export default function QuotationList() {
                 <Button
                     color="primary"
                     component={Link}
-                    href="/quotation/add"
+                    href="/quotations/add"
                     size="large"
                     sx={{ mb: 3 }}
                     variant="contained"
