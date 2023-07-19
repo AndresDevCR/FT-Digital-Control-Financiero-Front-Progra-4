@@ -299,7 +299,7 @@ export default function QuotationForm() {
                                 fullWidth
                                 size="large"
                                 variant="outlined"
-                                onClick={() => router.push('/quotation')}
+                                onClick={() => router.push('/quotations/list')}
                                 startIcon={<KeyboardBackspaceIcon />}
                             >
                                 Volver a la lista de cotizaciones
