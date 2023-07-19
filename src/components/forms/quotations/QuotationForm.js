@@ -77,18 +77,7 @@ export default function QuotationForm() {
             toast.error('Error al agregar al inventario');
         }
     };
-    // "client_id": 0,
-    // "total_payment": 0,
-    // "total_payment_dollar": 0,
-    // "e_invoice_code": "string",
-    // "issue_date": "2023-07-14T21:31:26.442Z",
-    // "po_number": 0,
-    // "po_date": "2023-07-14T21:31:26.442Z",
-    // "description": "string",
-    // "quote_title": "string",
-    // "created_at": "2023-07-14T21:31:26.442Z",
-    // "updated_at": "2023-07-14T21:31:26.442Z"
-
+    
     const formik = useFormik({
         initialValues: {
             client_id: 1,
