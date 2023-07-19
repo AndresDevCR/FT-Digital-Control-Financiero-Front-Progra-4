@@ -21,20 +21,19 @@ export default function Page404() {
   return (
     <>
       <Head>
-        <title> 404 Page Not Found | Minimal UI</title>
+        <title>404 Página no encontrada | Control Financiero</title>
       </Head>
 
       <MotionContainer>
         <m.div variants={varBounce().in}>
           <Typography variant="h3" paragraph>
-            Sorry, page not found!
+            ¡Lo sentimos, página no encontrada!
           </Typography>
         </m.div>
 
         <m.div variants={varBounce().in}>
           <Typography sx={{ color: 'text.secondary' }}>
-            Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve mistyped the URL? Be
-            sure to check your spelling.
+            Lo siento, no pudimos encontrar la página que estás buscando. ¿Quizás has escrito mal la URL? Asegúrate de revisar la ortografía.
           </Typography>
         </m.div>
 
@@ -48,7 +47,7 @@ export default function Page404() {
         </m.div>
 
         <Button component={NextLink} href="/" size="large" variant="contained">
-          Go to Home
+          Ir a la página de inicio
         </Button>
       </MotionContainer>
     </>

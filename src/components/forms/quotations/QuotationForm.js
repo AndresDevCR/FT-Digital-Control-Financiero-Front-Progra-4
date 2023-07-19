@@ -180,7 +180,7 @@ export default function QuotationForm() {
                         <Grid item xs={12} md={6}>
                             <TextField
                                 fullWidth
-                                label="Total a pagar en dolares"
+                                label="Total a pagar en dólares"
                                 name="total_payment_dollar"
                                 type="number"
                                 value={formik.values.total_payment_dollar}
@@ -199,7 +199,7 @@ export default function QuotationForm() {
                         <Grid item xs={12} md={12}>
                             <TextField
                                 fullWidth
-                                label="Codigo de factura electronica"
+                                label="Código de factura electronica"
                                 name="e_invoice_code"
                                 type="text"
                                 value={formik.values.e_invoice_code}
@@ -215,7 +215,7 @@ export default function QuotationForm() {
                         <Grid item xs={12} md={6}>
                             <TextField
                                 fullWidth
-                                label="Fecha de emision"
+                                label="Fecha de emisión"
                                 name="issue_date"
                                 type="date"
                                 value={formik.values.issue_date}
