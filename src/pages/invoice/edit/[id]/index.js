@@ -1,108 +1,182 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useRouter } from 'next/router';
-import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Head from 'next/head';
-import { Container, Typography, Box, Grid, TextField, Button } from '@mui/material';
+/* eslint-disable no-unused-vars */
+import React, { useContext, useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-
-import DashboardLayout from '../../../../layouts/dashboard';
-import { useSettingsContext } from '../../../../components/settings';
+import {
+  Container,
+  Typography,
+  Box,
+  Grid,
+  TextField,
+  Button,
+  FormControlLabel,
+  Checkbox,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+} from '@mui/material';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
+import axios from 'axios';
+import { useRouter } from 'next/router';
 import { AuthContext } from '../../../../auth/JwtContext';
+import DashboardLayout from '../../../../layouts/dashboard';
 
-const EditInvoice = () => {
+EditInvoiceForm.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+
+const validationSchema = Yup.object().shape({
+  invoice_number: Yup.string().required('Número de factura es requerido'),
+  dollar_value: Yup.number()
+    .required('Valor requerido')
+    .max(999999, 'La cantidad debe tener como máximo 999,999'),
+  total_colon: Yup.number()
+    .required('Valor requerido')
+    .max(999999, 'La cantidad debe tener como máximo 999,999'),
+  total_dollar: Yup.number().required('Valor requerido'),
+  issue_date: Yup.date().required('Fecha de ingreso es requerida'),
+  expiration_date: Yup.date().required('Fecha de ingreso es requerida'),
+});
+export default function EditInvoiceForm() {
   const { accessToken } = useContext(AuthContext);
-  const { themeStretch } = useSettingsContext();
   const router = useRouter();
   const { id } = router.query;
-
-  // eslint-disable-next-line no-unused-vars
-  const [initialValues, setInitialValues] = useState({
-    clientName: '',
-    address: '',
-    phone: '',
-    email: '',
-    issueDate: '',
-    expirationDate: '',
-    invoiceNumber: 0,
-    orderNumber: 0,
-  });
+  const [quotations, setQuotations] = useState([]);
+  const [suppliers, setSuppliers] = useState([]);
+  const [invoiceData, setInvoice] = useState(null);
 
   useEffect(() => {
-    if (id) {
-      axios
-        .get(`https://control-financiero.herokuapp.com/api/v1/invoice/${id}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        .then((response) => {
-          const invoice = response.data;
-          formik.setValues({
-            clientName: invoice.client_name,
-            address: invoice.address,
-            phone: invoice.phone,
-            email: invoice.email,
-            issueDate: invoice.issue_date,
-            expirationDate: invoice.expiration_date,
-            invoiceNumber: invoice.invoice_number,
-            orderNumber: invoice.order_number,
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-          toast.error('Error al cargar la factura');
+    const fetchInvoiceData = async () => {
+      try {
+        const response = await axios.get(
+          `https://control-financiero.herokuapp.com/api/v1/invoice/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        const invoice = response.data;
+        setInvoice(invoice);
+        formik.setValues({
+          quotation_id: invoice.quotation_id,
+          supplier_id: invoice.supplier_id,
+          issue_date: invoice.issue_date.split('T')[0],
+          expiration_date: invoice.expiration_date.split('T')[0],
+          invoice_number: invoice.invoice_number,
+          dollar_value: invoice.dollar_value,
+          total_colon: invoice.total_colon,
+          total_dollar: invoice.total_dollar,
         });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, accessToken]);
+      } catch (error) {
+        console.error('Error fetching invoice data:', error);
+      }
+    };
 
-  const validationSchema = Yup.object().shape({
-    clientName: Yup.string().required('El nombre del cliente es requerido'),
-    address: Yup.string().required('La dirección es requerida'),
-    phone: Yup.string().required('El teléfono es requerido'),
-    email: Yup.string().email('Correo electrónico inválido').required('El correo electrónico es requerido'),
-    issueDate: Yup.string().required('La fecha de emisión es requerida'),
-    expirationDate: Yup.string().required('La fecha de vencimiento es requerida'),
-    invoiceNumber: Yup.number().required('El número de factura es requerido'),
-    orderNumber: Yup.number().required('El número de orden es requerido'),
-  });
+    fetchInvoiceData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accessToken, id]);
 
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: (values) => {
-      handleSubmit(values);
-    },
-  });
+  useEffect(() => {
+    const fetchQuotations = async () => {
+      try {
+        const response = await axios.get(
+          'https://control-financiero.herokuapp.com/api/v1/quotation',
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        setQuotations(response.data);
+      } catch (error) {
+        console.error('Error fetching quotations:', error);
+      }
+    };
 
-  const handleSubmit = (values) => {
-    axios
-      .patch(`https://control-financiero.herokuapp.com/api/v1/invoice/${id}`, values, {
+    fetchQuotations();
+  }, [accessToken]);
+
+  useEffect(() => {
+    const fetchSuppliers = async () => {
+      try {
+        const response = await axios.get(
+          'https://control-financiero.herokuapp.com/api/v1/supplier',
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        setSuppliers(response.data);
+      } catch (error) {
+        console.error('Error fetching suppliers:', error);
+      }
+    };
+
+    fetchSuppliers();
+  }, [accessToken]);
+
+  const handleSubmit = async (values) => {
+    try {
+      await axios.patch(`https://control-financiero.herokuapp.com/api/v1/invoice/${id}`, values, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      })
-      .then((response) => {
-        console.log(response);
-        toast.success('Factura actualizada con éxito');
-        router.push('/invoice');
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error('Error al actualizar la factura');
       });
+      toast.success('Factura editada exitosamente');
+      router.push('/invoice/list');
+    } catch (error) {
+      toast.error('Error al editar factura');
+    }
   };
+
+  const formik = useFormik({
+    initialValues: {
+      quotation_id: 1,
+      supplier_id: 1,
+      issue_date: new Date().toISOString().split('T')[0],
+      expiration_date: new Date().toISOString().split('T')[0],
+      invoice_number: 0,
+      dollar_value: 0,
+      total_colon: 0,
+      total_dollar: 0,
+    },
+    validationSchema,
+    onSubmit: handleSubmit,
+  });
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+
+    if (event.target.name === 'supplier_id' && !/^\d+$/.test(event.target.value)) {
+      toast.error('Solo se permiten números en el campo de Id del proveedor');
+    }
+
+    if (event.target.name === 'availableQuantity' && !/^\d+$/.test(event.target.value)) {
+      toast.error('Solo se permiten números en el campo de Cantidad disponible');
+    }
+
+    if (event.target.name === 'availableQuantity' && event.target.value.length >= 7) {
+      event.target.value = event.target.value.slice(0, 6); // Limitar a 6 dígitos
+      toast.info('Se ha alcanzado el límite de números permitidos ');
+    }
+
+    if (event.target.name === 'description' && event.target.value.length >= 200) {
+      toast.info('Se ha alcanzado el límite de caracteres permitidos para la descripción');
+    }
+
+    formik.handleChange(event);
+  };
+
+  if (!invoiceData) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
-      <Head>
-        <title>Editar Factura | FT Control Financiero</title>
-      </Head>
-
-      <Container maxWidth={themeStretch ? false : 'xl'}>
+      <Container>
         <Typography variant="h3" component="h1" paragraph>
           Editar Factura
         </Typography>
@@ -110,112 +184,179 @@ const EditInvoice = () => {
 
       <ToastContainer />
 
-      <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Box component="form" noValidate autoComplete="off" sx={{ mt: 3 }} onSubmit={formik.handleSubmit}>
+      <Container>
+      <Box
+          component="form"
+          noValidate
+          autoComplete="off"
+          sx={{ mt: 3 }}
+          onSubmit={formik.handleSubmit}
+        >
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Nombre del cliente"
-                name="clientName"
-                value={formik.values.clientName}
-                onChange={formik.handleChange}
-                error={formik.touched.clientName && Boolean(formik.errors.clientName)}
-                helperText={formik.touched.clientName && formik.errors.clientName}
-              />
+          <Grid item xs={12} md={12}>
+              <FormControl fullWidth>
+                <InputLabel id="quotation_label">Cotización</InputLabel>
+                <Select
+                  labelId="quotation_label"
+                  id="quotation"
+                  name="quotation_id"
+                  value={formik.values.quotation_id}
+                  onChange={formik.handleChange}
+                  error={formik.touched.quotation_id && formik.errors.quotation_id}
+                  fullWidth
+                >
+                  {quotations.map((quotation) => (
+                    <MenuItem key={quotation.id} value={quotation.id}>
+                      {quotation.e_invoice_code}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Grid>
 
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Dirección"
-                name="address"
-                value={formik.values.address}
-                onChange={formik.handleChange}
-                error={formik.touched.address && Boolean(formik.errors.address)}
-                helperText={formik.touched.address && formik.errors.address}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Teléfono"
-                name="phone"
-                value={formik.values.phone}
-                onChange={formik.handleChange}
-                error={formik.touched.phone && Boolean(formik.errors.phone)}
-                helperText={formik.touched.phone && formik.errors.phone}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Correo electrónico"
-                name="email"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                error={formik.touched.email && Boolean(formik.errors.email)}
-                helperText={formik.touched.email && formik.errors.email}
-              />
+            <Grid item xs={12} md={12}>
+              <FormControl fullWidth>
+                <InputLabel id="supplier_label">Proveedor</InputLabel>
+                <Select
+                  labelId="supplier_label"
+                  id="supplier"
+                  name="supplier_id"
+                  value={formik.values.supplier_id}
+                  onChange={formik.handleChange}
+                  error={formik.touched.supplier_id && formik.errors.supplier_id}
+                  fullWidth
+                >
+                  {suppliers.map((supplier) => (
+                    <MenuItem key={supplier.id} value={supplier.id}>
+                      {supplier.supplier_name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Grid>
 
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
                 label="Fecha de emisión"
-                name="issueDate"
+                name="issue_date"
                 type="date"
-                value={formik.values.issueDate}
+                value={formik.values.issue_date}
                 onChange={formik.handleChange}
-                error={formik.touched.issueDate && Boolean(formik.errors.issueDate)}
-                helperText={formik.touched.issueDate && formik.errors.issueDate}
+                error={formik.touched.issue_date && formik.errors.issue_date}
+                helperText={formik.touched.issue_date && formik.errors.issue_date}
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
             </Grid>
 
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
-                label="Fecha de vencimiento"
-                name="expirationDate"
+                label="Fecha de expiración"
+                name="expiration_date"
                 type="date"
-                value={formik.values.expirationDate}
+                value={formik.values.expiration_date}
                 onChange={formik.handleChange}
-                error={formik.touched.expirationDate && Boolean(formik.errors.expirationDate)}
-                helperText={formik.touched.expirationDate && formik.errors.expirationDate}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Número de factura"
-                name="invoiceNumber"
-                type="number"
-                value={formik.values.invoiceNumber}
-                onChange={formik.handleChange}
-                error={formik.touched.invoiceNumber && Boolean(formik.errors.invoiceNumber)}
-                helperText={formik.touched.invoiceNumber && formik.errors.invoiceNumber}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Número de orden"
-                name="orderNumber"
-                type="number"
-                value={formik.values.orderNumber}
-                onChange={formik.handleChange}
-                error={formik.touched.orderNumber && Boolean(formik.errors.orderNumber)}
-                helperText={formik.touched.orderNumber && formik.errors.orderNumber}
+                error={formik.touched.expiration_date && formik.errors.expiration_date}
+                helperText={formik.touched.expiration_date && formik.errors.expiration_date}
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
             </Grid>
 
             <Grid item xs={12} md={12}>
-              <Button fullWidth size="large" type="submit" variant="contained" sx={{ mt: 3 }}>
-                Guardar cambios
+              <TextField
+                fullWidth
+                label="Numero de factura"
+                name="invoice_number"
+                type="number"
+                value={formik.values.invoice_number}
+                onChange={handleInputChange}
+                error={formik.touched.invoice_number && formik.errors.invoice_number}
+                helperText={formik.touched.invoice_number && formik.errors.invoice_number}
+                inputProps={{
+                  maxLength: 30,
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={12}>
+              <TextField
+                fullWidth
+                label="Valor del dólar"
+                name="dollar_value"
+                type="number"
+                value={formik.values.dollar_value}
+                onChange={handleInputChange}
+                error={formik.touched.dollar_value && formik.errors.dollar_value}
+                helperText={formik.touched.dollar_value && formik.errors.dollar_value}
+                inputProps={{
+                  maxLength: 15,
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Total en colones"
+                name="total_colon"
+                type="number"
+                value={formik.values.total_colon}
+                onChange={handleInputChange}
+                error={formik.touched.total_colon && formik.errors.total_colon}
+                helperText={formik.touched.total_colon && formik.errors.total_colon}
+                inputProps={{
+                  maxLength: 15,
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Total en dólares"
+                name="total_dollar"
+                type="number"
+                value={formik.values.total_dollar}
+                onChange={handleInputChange}
+                error={formik.touched.total_dollar && formik.errors.total_dollar}
+                helperText={formik.touched.total_dollar && formik.errors.total_dollar}
+                inputProps={{
+                  maxLength: 15,
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={12}>
+              <Button fullWidth size="large" type="submit" variant="contained">
+                Guardar
+              </Button>
+            </Grid>
+
+            <Grid item xs={12} md={12}>
+              <Button
+                fullWidth
+                size="large"
+                variant="outlined"
+                onClick={() => router.push('/invoice/list')}
+              >
+                Volver a la lista de facturas
               </Button>
             </Grid>
           </Grid>
@@ -223,8 +364,4 @@ const EditInvoice = () => {
       </Container>
     </>
   );
-};
-
-EditInvoice.layout = DashboardLayout;
-
-export default EditInvoice;
+}
