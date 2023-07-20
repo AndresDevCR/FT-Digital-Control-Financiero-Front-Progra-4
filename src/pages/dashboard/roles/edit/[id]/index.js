@@ -33,7 +33,7 @@ export default function EditRolePage() {
         },
       });
       toast.success('Rol editado correctamente');
-      // Aquí puedes redireccionar a otra página o realizar otras acciones necesarias después de editar el rol
+      router.push('/dashboard/roles/list'); 
     } catch (error) {
       toast.error('Error al editar el rol');
     }

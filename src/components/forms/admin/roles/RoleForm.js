@@ -29,7 +29,7 @@ export default function RoleForm() {
         },
       });
       toast.success('Rol agregado correctamente');
-      // Aquí puedes redireccionar a otra página o realizar otras acciones necesarias después de agregar el rol
+      router.push('/dashboard/roles/list'); 
     } catch (error) {
       toast.error('Error al agregar el rol');
     }

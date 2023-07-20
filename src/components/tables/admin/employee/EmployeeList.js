@@ -144,7 +144,7 @@ export default function EmployeeList() {
                                 <TableCell> Departamento </TableCell>
                                 <TableCell> Salario mensual </TableCell>
                                 <TableCell> Correo </TableCell>
-                                <TableCell> Telefono </TableCell>
+                                <TableCell> Teléfono </TableCell>
                                 <TableCell> Cantidad de vacaciones disponibles </TableCell>
                                 <TableCell> Acciones </TableCell>
                             </TableRow>
@@ -155,7 +155,7 @@ export default function EmployeeList() {
                                 .map((employeeItem) => (
                                     <TableRow key={employeeItem.id}>
                                         <TableCell>{employeeItem.employee_name}</TableCell>
-                                        <TableCell>{employeeItem.enrollment_date}</TableCell>
+                                        <TableCell>{employeeItem.enrollment_date.split('T')[0]}</TableCell>
                                         <TableCell>{employeeItem.position.position_name}</TableCell>
                                         <TableCell>{employeeItem.department.department_name}</TableCell>
                                         <TableCell>{employeeItem.monthly_salary}</TableCell>

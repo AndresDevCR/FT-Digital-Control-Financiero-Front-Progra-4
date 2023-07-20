@@ -1,7 +1,15 @@
-import React from 'react'
+import UserList from "../../../components/tables/admin/user/UserList";
+import DashboardLayout from '../../../layouts/dashboard';
+// components
 
-export default function list() {
-  return (
-    <div>list</div>
-  )
+
+
+list.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+
+export default function list () {
+    
+    
+    return (
+        <UserList/>
+    )
 }

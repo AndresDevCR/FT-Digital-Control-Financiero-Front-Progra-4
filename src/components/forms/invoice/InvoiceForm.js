@@ -11,43 +11,54 @@ import { useRouter } from 'next/router';
 import { AuthContext } from '../../../auth/JwtContext';
 
 const validationSchema = Yup.object().shape({
-  productName: Yup.string()
-    .required('Nombre del producto/servicio es requerido')
-    .max(30, 'El nombre debe tener como máximo 30 caracteres'),
-  availableQuantity: Yup.number()
+  invoice_number: Yup.number()
     .required('Cantidad disponible es requerida')
     .integer('Solo se permiten números enteros')
     .max(999999, 'La cantidad debe tener como máximo 999,999'),
-  description: Yup.string()
-    .required('Descripción es requerida')
-    .max(200, 'La descripción debe tener como máximo 200 caracteres'),
-  entryDate: Yup.date().required('Fecha de ingreso es requerida'),
+  dollar_value: Yup.number()
+    .required('Cantidad disponible es requerida')
+    .integer('Solo se permiten números enteros')
+    .max(999999, 'La cantidad debe tener como máximo 999,999'),
+  total_colon: Yup.number()
+    .required('Cantidad disponible es requerida')
+    .integer('Solo se permiten números enteros')
+    .max(999999, 'La cantidad debe tener como máximo 999,999'),
+  total_dollar: Yup.number()
+    .required('Cantidad disponible es requerida')
+    .integer('Solo se permiten números enteros')
+    .max(999999, 'La cantidad debe tener como máximo 999,999'),
+  issue_date: Yup.date().required('Fecha de ingreso es requerida'),
+  expiration_date: Yup.date().required('Fecha de ingreso es requerida'),
 });
 
-export default function InventoryForm() {
+export default function InvoiceForm() {
   const { accessToken } = useContext(AuthContext);
   const router = useRouter();
 
   const handleSubmit = async (values) => {
     try {
-      await axios.post('https://control-financiero.herokuapp.com/api/v1/inventory', values, {
+      await axios.post('https://control-financiero.herokuapp.com/api/v1/invoice', values, {
         headers: {
           Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
         },
       });
-      toast.success('Agregado correctamente al inventario');
-      router.push('/inventory'); // Redireccionar a la lista de inventario
+      toast.success('Agregado correctamente la factura');
+      router.push('/invoice'); // Redireccionar a la lista de inventario
     } catch (error) {
-      toast.error('Error al agregar al inventario');
+      toast.error('Error al agregar la factura');
     }
   };
 
   const formik = useFormik({
     initialValues: {
-      productName: '',
-      availableQuantity: 1,
-      description: '',
-      entryDate: '',
+      quotation_id: 1,
+      supplier_id: 1,
+      issue_date: new Date().toISOString().split('T')[0],
+      expiration_date: new Date().toISOString().split('T')[0],
+      invoice_number: 1,
+      dollar_value: 0,
+      total_colon: 0,
+      total_dollar: 0,
     },
     validationSchema,
     onSubmit: handleSubmit,
@@ -160,7 +171,13 @@ export default function InventoryForm() {
             </Grid>
 
             <Grid item xs={12} md={12}>
-              <Button fullWidth size="large" type="submit" variant="contained" startIcon={<SaveIcon />}>
+              <Button
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+                startIcon={<SaveIcon />}
+              >
                 Guardar
               </Button>
             </Grid>

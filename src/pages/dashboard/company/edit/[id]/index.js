@@ -18,25 +18,18 @@ const validationSchema = Yup.object().shape({
     .required('Nombre de la compañía es requerido')
     .max(30, 'El nombre debe tener como máximo 30 caracteres'),
   description: Yup.string()
-    .required('Descripción de la compañía es requerida')
     .max(200, 'La descripción debe tener como máximo 200 caracteres'),
   category: Yup.string()
-    .required('Categoría de la compañía es requerida')
     .max(30, 'La categoría debe tener como máximo 30 caracteres'),
   primary_phone_number: Yup.string()
-    .required('Número de teléfono es requerido')
     .max(30, 'El número de teléfono debe tener como máximo 30 caracteres'),
   secondary_phone_number: Yup.string()
-    .required('Número de teléfono es requerido')
     .max(30, 'El número de teléfono debe tener como máximo 30 caracteres'),
   city: Yup.string()
-    .required('Ciudad es requerida')
     .max(30, 'La ciudad debe tener como máximo 30 caracteres'),
   state: Yup.string()
-    .required('Estado es requerido')
     .max(30, 'El estado debe tener como máximo 30 caracteres'),
   country: Yup.string()
-    .required('País es requerido')
     .max(30, 'El país debe tener como máximo 30 caracteres'),
   is_active: Yup.boolean().required('Estado es requerido').default(true),
 });
@@ -57,7 +50,10 @@ const EditCompany = () => {
       .then((response) => {
         console.log(response);
         toast.success('Compañía actualizada con éxito');
-        router.push('/dashboard/company/list');
+        setTimeout(() => {
+          router.push('/dashboard/company/list');
+        }, 100); 
+        
       })
       .catch((error) => {
         console.log(error);
@@ -68,9 +64,39 @@ const EditCompany = () => {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
 
-    if (value.length >= 30) {
-      toast.info('Se ha alcanzado el límite de caracteres permitidos');
-    }
+    if (event.target.name === 'name' && event.target.value.length >= 30) {
+            toast.info('Se ha alcanzado el límite de caracteres permitidos');
+        }
+        if (event.target.name === 'description' && event.target.value.length >= 200) {
+            toast.info('Se ha alcanzado el límite de caracteres permitidos');
+        }
+        if (event.target.name === 'category' && event.target.value.length >= 30) {
+            toast.info('Se ha alcanzado el límite de caracteres permitidos');
+        }
+        if (event.target.name === 'primary_phone_number' && event.target.value.length >= 30) {
+            toast.info('Se ha alcanzado el límite de caracteres permitidos');
+        }
+        if (event.target.name === 'secondary_phone_number' && event.target.value.length >= 30) {
+            toast.info('Se ha alcanzado el límite de caracteres permitidos');
+        }
+        if (event.target.name === 'primary_phone_number' && !/^\d+$/.test(event.target.value)) {
+            toast.error('Solo se permiten números en este campo');
+        }
+        if (event.target.name === 'secondary_phone_number' && !/^\d+$/.test(event.target.value)) {
+            toast.error('Solo se permiten números en este campo');
+        }
+        if (event.target.name === 'city' && event.target.value.length >= 30) {
+            toast.info('Se ha alcanzado el límite de caracteres permitidos');
+        }
+        if (event.target.name === 'state' && event.target.value.length >= 30) {
+            toast.info('Se ha alcanzado el límite de caracteres permitidos');
+        }
+        if (event.target.name === 'country' && event.target.value.length >= 30) {
+            toast.info('Se ha alcanzado el límite de caracteres permitidos');
+        }
+        if (event.target.name === 'is_active' && event.target.value.length >= 30) {
+            toast.info('Se ha alcanzado el límite de caracteres permitidos');
+        }
 
     formik.setFieldValue(name, value);
   };
@@ -153,6 +179,9 @@ const EditCompany = () => {
                 inputProps={{
                   maxLength: 30,
                 }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
             </Grid>
 
@@ -167,6 +196,9 @@ const EditCompany = () => {
                 helperText={formik.touched.description && formik.errors.description}
                 inputProps={{
                   maxLength: 200,
+                }}
+                InputLabelProps={{
+                  shrink: true,
                 }}
               />
             </Grid>
@@ -183,6 +215,9 @@ const EditCompany = () => {
                 inputProps={{
                   maxLength: 30,
                 }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
             </Grid>
 
@@ -197,6 +232,9 @@ const EditCompany = () => {
                 helperText={formik.touched.primary_phone_number && formik.errors.primary_phone_number}
                 inputProps={{
                   maxLength: 30,
+                }}
+                InputLabelProps={{
+                  shrink: true,
                 }}
               />
             </Grid>
@@ -213,6 +251,9 @@ const EditCompany = () => {
                 inputProps={{
                   maxLength: 30,
                 }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
             </Grid>
 
@@ -227,6 +268,9 @@ const EditCompany = () => {
                 helperText={formik.touched.city && formik.errors.city}
                 inputProps={{
                   maxLength: 30,
+                }}
+                InputLabelProps={{
+                  shrink: true,
                 }}
               />
             </Grid>
@@ -243,6 +287,9 @@ const EditCompany = () => {
                 inputProps={{
                   maxLength: 30,
                 }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
             </Grid>
 
@@ -257,6 +304,9 @@ const EditCompany = () => {
                 helperText={formik.touched.country && formik.errors.country}
                 inputProps={{
                   maxLength: 30,
+                }}
+                InputLabelProps={{
+                  shrink: true,
                 }}
               />
             </Grid>

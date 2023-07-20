@@ -33,8 +33,11 @@ const validationSchema = Yup.object().shape({
         .required('Número de teléfono es requerido')
         .max(30, 'El nombre debe tener como máximo 30 caracteres'),
     email: Yup.string()
-        .required('Correo electrónico es requerido')
-        .max(30, 'El nombre debe tener como máximo 30 caracteres'),
+    .max(70, 'El correo debe tener como máximo 70 caracteres')
+    .matches(
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      'El correo electrónico ingresado no tiene un formato válido'
+    ),
     address: Yup.string()
         .required('Dirección es requerida')
         .max(30, 'El nombre debe tener como máximo 30 caracteres'),
@@ -135,6 +138,9 @@ export default function EditClientForm() {
 
         if (name === 'phone' && value.length >= 30) {
             toast.info('Se ha alcanzado el límite de caracteres permitidos');
+        }
+        if (event.target.name === 'phone' && !/^\d+$/.test(event.target.value)) {
+            toast.error('Solo se permiten números en este campo');
         }
 
         if (name === 'email' && value.length >= 30) {
@@ -265,7 +271,7 @@ export default function EditClientForm() {
                                 variant="outlined"
                                 onClick={() => router.push('/dashboard/client/list')}
                             >
-                                Volver a la lista de aplicaciones
+                                Volver a la lista de clientes
                             </Button>
                         </Grid>
                     </Grid>

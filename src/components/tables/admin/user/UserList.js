@@ -21,11 +21,11 @@ import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Link from 'next/link';
-import DeleteConfirmationDialog from '../../delete-dialog/DeleteDialog';
-import { AuthContext } from '../../../auth/JwtContext';
+import DeleteConfirmationDialog from '../../../delete-dialog/DeleteDialog';
+import { AuthContext } from '../../../../auth/JwtContext';
 
-export default function VacationList() {
-    const [vacation, setVacation] = useState([]);
+export default function UserList() {
+    const [user, setUser] = useState([]);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [deleteItemId, setDeleteItemId] = useState(null);
     const { accessToken } = useContext(AuthContext);
@@ -49,35 +49,23 @@ export default function VacationList() {
     };
 
     useEffect(() => {
-        fetchVacation();
+        fetchUser();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const filteredRows = rows.filter((row) => {
-        const employeeName = row.employee ? row.employee.employee_name.toLowerCase() : '';
-        const startDate = row.start_date.toLowerCase();
-        const reentryDate = row.reentry_date.toLowerCase();
-        const requestStatus = row.request_status.toLowerCase();
+    const filteredRows = rows.filter((row) => row.first_name.toLowerCase().includes(searchTerm));
 
-        return (
-            employeeName.includes(searchTerm) ||
-            startDate.includes(searchTerm) ||
-            reentryDate.includes(searchTerm) ||
-            requestStatus.includes(searchTerm)
-        );
-    });
-
-    const fetchVacation = async () => {
+    const fetchUser = async () => {
         try {
             const response = await axios.get(
-                'https://control-financiero.herokuapp.com/api/v1/vacation',
+                'https://control-financiero.herokuapp.com/api/v1/user',
                 {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
                 }
             );
-            setVacation(response.data);
+            setUser(response.data);
             setRows(response.data);
         } catch (error) {
             console.log(error);
@@ -96,13 +84,13 @@ export default function VacationList() {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`https://control-financiero.herokuapp.com/api/v1/vacation/${id}`, {
+            await axios.delete(`https://control-financiero.herokuapp.com/api/v1/user/${id}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
             });
-            setVacation((prevVacation) =>
-                prevVacation.filter((vacationItem) => vacationItem.id !== id)
+            setUser((prevUser) =>
+                prevUser.filter((userItem) => userItem.id !== id)
             );
             handleDeleteDialogClose();
         } catch (error) {
@@ -114,20 +102,20 @@ export default function VacationList() {
         <>
             <Container>
                 <Typography variant="h3" component="h1" paragraph>
-                    Lista de vacaciones
+                    Lista de usuarios
                 </Typography>
 
                 <Button
                     color="primary"
                     component={Link}
-                    href="/vacations/add"
+                    href="/dashboard/user/add"
                     size="large"
                     sx={{ mb: 3 }}
                     variant="contained"
                     style={{ float: 'right' }}
                     startIcon={<AddIcon />}
                 >
-                    Solicitar vacaciones
+                    Agregar usuario
                 </Button>
 
                 <TextField
@@ -150,32 +138,34 @@ export default function VacationList() {
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell>Empleado</TableCell>
-                                <TableCell>Fecha de inicio</TableCell>
-                                <TableCell>Fecha de reingreso</TableCell>
-                                <TableCell>Estatus</TableCell>
-                                <TableCell>Acciones</TableCell>
+                                <TableCell>Nombre del Usuario</TableCell>
+                                <TableCell> Apellido del Usuario </TableCell>
+                                <TableCell> Email </TableCell>
+                                <TableCell> Estado </TableCell>
+                                <TableCell> Fecha de inicio </TableCell>
+                                <TableCell> Rol </TableCell>
+                                <TableCell> Empresa</TableCell>
+                                <TableCell> Acciones</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {filteredRows
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((vacationItem) => (
-                                    <TableRow key={vacationItem.id}>
-                                        <TableCell>
-                                            {vacationItem.employee
-                                                ? vacationItem.employee.employee_name
-                                                : '-'}
-                                        </TableCell>
-                                        <TableCell>{vacationItem.start_date.split('T')[0]}</TableCell>
-                                        <TableCell>{vacationItem.reentry_date.split('T')[0]}</TableCell>
-                                        <TableCell>{vacationItem.request_status}</TableCell>
+                                .map((userItem) => (
+                                    <TableRow key={userItem.id}>
+                                        <TableCell>{userItem.first_name}</TableCell>
+                                        <TableCell>{userItem.last_name}</TableCell>
+                                        <TableCell>{userItem.email}</TableCell>
+                                        <TableCell>{userItem.is_active}</TableCell>
+                                        <TableCell>{userItem.company_start_date}</TableCell>
+                                        <TableCell>{userItem.role_name}</TableCell>
+                                        <TableCell>{userItem.company_name}</TableCell>
                                         <TableCell>
                                             <div>
                                                 <Button
                                                     style={{ backgroundColor: 'orange' }}
                                                     component={Link}
-                                                    href={`/vacations/edit/${vacationItem.id}`}
+                                                    href={`/dashboard/user/edit/${userItem.id}`}
                                                     size="small"
                                                     sx={{ mb: 2 }}
                                                     variant="contained"
@@ -190,7 +180,7 @@ export default function VacationList() {
                                                     size="small"
                                                     sx={{ mb: 2 }}
                                                     variant="contained"
-                                                    onClick={() => handleDeleteDialogOpen(vacationItem.id)}
+                                                    onClick={() => handleDeleteDialogOpen(userItem.id)}
                                                     startIcon={<DeleteForeverIcon />}
                                                 >
                                                     Eliminar
@@ -218,9 +208,8 @@ export default function VacationList() {
                 onClose={handleDeleteDialogClose}
                 itemId={deleteItemId}
                 onDelete={handleDelete}
-                apiEndpoint="https://control-financiero.herokuapp.com/api/v1/vacation/"
+                apiEndpoint="https://control-financiero.herokuapp.com/api/v1/user/"
             />
         </>
     );
 }
-

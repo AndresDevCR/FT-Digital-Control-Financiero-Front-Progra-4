@@ -30,7 +30,7 @@ export default function DeleteConfirmationDialog({ open, onClose, itemId, onDele
       <DialogTitle>Confirmar eliminación</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          ¿Estás seguro de que deseas eliminar esta solicitud?
+          ¿Estás seguro de que deseas eliminar este campo?
         </DialogContentText>
       </DialogContent>
       <DialogActions>
