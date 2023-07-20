@@ -10,8 +10,8 @@ import { AuthContext } from '../../../../auth/JwtContext';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
-    .required('El name es obligatorio')
-    .max(30, 'El name debe tener como máximo 30 caracteres'),
+    .required('El nombre del rol es obligatorio')
+    .max(30, 'El nombre del rol debe tener como máximo 30 caracteres'),
   description: Yup.string()
     .required('La descripción es obligatoria')
     .max(100, 'La descripción debe tener como máximo 100 caracteres'),

@@ -14,10 +14,10 @@ import { AuthContext } from '../../../../../auth/JwtContext';
 
 const validationSchema = Yup.object().shape({
     name: Yup.string()
-      .required('Nombre del producto/servicio es requerido')
+      .required('Nombre de aplicación es requerido')
       .max(30, 'El nombre debe tener como máximo 30 caracteres'),
     display_name: Yup.string()
-      .required('Cantidad disponible es requerida')
+      .required('Nombre de visualización es requerida')
       .max(30, 'El nombre de visualización debe tener como máximo 30 caracteres'),
     description: Yup.string()
       .max(200, 'La descripción debe tener como máximo 200 caracteres'),

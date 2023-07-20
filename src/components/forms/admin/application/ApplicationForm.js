@@ -10,10 +10,10 @@ import { AuthContext } from '../../../../auth/JwtContext';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
-    .required('Nombre del producto/servicio es requerido')
+    .required('Nombre de la aplicación es requerido')
     .max(30, 'El nombre debe tener como máximo 30 caracteres'),
   display_name: Yup.string()
-    .required('Cantidad disponible es requerida')
+    .required('Nombre de visualización es requerida')
     .max(30, 'El nombre de visualización debe tener como máximo 30 caracteres'),
   description: Yup.string()
     .max(200, 'La descripción debe tener como máximo 200 caracteres'),
@@ -31,7 +31,7 @@ export default function ApplicationForm() {
           Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
         },
       });
-      toast.success('Agregado correctamente al inventario');
+      toast.success('Agregado correctamente a las aplicaciones');
       router.push('/dashboard/application/list'); // Redireccionar a la lista de inventario
     } catch (error) {
       toast.error('Error al agregar a las aplicaciones');

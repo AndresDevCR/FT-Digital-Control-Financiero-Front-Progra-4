@@ -115,7 +115,7 @@ export default function EnterpriseList() {
           style={{ float: 'right' }}
           startIcon={<AddIcon />}
         >
-          Agregar departamento
+          Agregar Empresa
         </Button>
 
         <TextField
