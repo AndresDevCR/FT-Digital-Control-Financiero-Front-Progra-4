@@ -231,7 +231,7 @@ export default function ClientForm() {
                 variant="outlined"
                 onClick={() => router.push('/dashboard/client/list')}
               >
-                Volver a la lista de aplicaciones
+                Volver a la lista de clientes
               </Button>
             </Grid>
           </Grid>

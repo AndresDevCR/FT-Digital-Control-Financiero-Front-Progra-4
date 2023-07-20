@@ -331,7 +331,7 @@ const EditCompany = () => {
               </Button>
             </Grid>
 
-            {/* Botón para volver a la lista de aplicaciones */}
+            {/* Botón para volver a la lista de compañías */}
             <Grid item xs={12} md={12}>
               <Button
                 fullWidth
@@ -339,7 +339,7 @@ const EditCompany = () => {
                 variant="outlined"
                 onClick={() => router.push("/dashboard/company/list")}
               >
-                Volver a la lista de aplicaciones
+                Volver a la lista de compañías
               </Button>
             </Grid>
           </Grid>
