@@ -157,7 +157,7 @@ export default function UserList() {
                                         <TableCell>{userItem.last_name}</TableCell>
                                         <TableCell>{userItem.email}</TableCell>
                                         <TableCell>{userItem.is_active}</TableCell>
-                                        <TableCell>{userItem.company_start_date}</TableCell>
+                                        <TableCell>{userItem.company_start_date ? userItem.company_start_date.split('T')[0] : 'Fecha de inicio no asignada'}</TableCell>
                                         <TableCell>{userItem.role_name}</TableCell>
                                         <TableCell>{userItem.company_name}</TableCell>
                                         <TableCell>
