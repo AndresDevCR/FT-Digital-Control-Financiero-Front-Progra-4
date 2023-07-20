@@ -145,7 +145,6 @@ export default function InvoiceList() {
                                 <TableCell>Valor del dólar</TableCell>
                                 <TableCell>Total en colones</TableCell>
                                 <TableCell>Total en dólares</TableCell>
-                                <TableCell>Descripción</TableCell>
                                 <TableCell>Acciones</TableCell>
                             </TableRow>
                         </TableHead>

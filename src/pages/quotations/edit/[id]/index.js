@@ -3,18 +3,18 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {
-    Container,
-    Typography,
-    Box,
-    Grid,
-    TextField,
-    Button,
-    FormControlLabel,
-    Checkbox,
-    Select,
-    MenuItem,
-    InputLabel,
-    FormControl,
+  Container,
+  Typography,
+  Box,
+  Grid,
+  TextField,
+  Button,
+  FormControlLabel,
+  Checkbox,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
 } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -26,162 +26,156 @@ import DashboardLayout from '../../../../layouts/dashboard';
 
 EditQuotationForm.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-const validationSchema = Yup.object().shape({client_id: Yup.number()
-  .required('Id de cliente es requerido')
-  .min(1, 'El campo debe tener como mínimo 1 digito'),
-total_payment: Yup.number()
-  .required('Total de pago es requerido')
-  .min(1, 'El campo debe tener como mínimo 1 digito'),
-total_payment_dollar: Yup.number()
-  .required('Total de pago en dolares es requerido')
-  .min(1, 'El campo debe tener como mínimo 1 digito'),
-e_invoice_code: Yup.string()
-  .required('Codigo de factura es requerido')
-  .min(1, 'El campo debe tener como mínimo 1 caracter'),
-issue_date: Yup.date().required('Fecha de emisión es requerido'),
-po_number: Yup.number()
-  .required('Numero de orden de compra es requerido')
-  .min(1, 'El campo debe tener como mínimo 1 digito'),
-po_date: Yup.date().required('Fecha de orden de compra es requerido'),
-description: Yup.string()
-  .required('Descripción es requerido')
-  .max(200, 'El campo debe tener como máximo 200 caracteres'),
-quote_title: Yup.string()
-  .required('Titulo de cotización es requerido')
-  .max(30, 'El campo debe tener como máximo 30 caracteres'),
+const validationSchema = Yup.object().shape({
+  client_id: Yup.number()
+    .required('Id de cliente es requerido')
+    .min(1, 'El campo debe tener como mínimo 1 digito'),
+  total_payment: Yup.number()
+    .required('Total de pago es requerido')
+    .min(1, 'El campo debe tener como mínimo 1 digito'),
+  total_payment_dollar: Yup.number()
+    .required('Total de pago en dolares es requerido')
+    .min(1, 'El campo debe tener como mínimo 1 digito'),
+  e_invoice_code: Yup.string()
+    .required('Codigo de factura es requerido')
+    .min(1, 'El campo debe tener como mínimo 1 caracter'),
+  issue_date: Yup.date().required('Fecha de emisión es requerido'),
+  po_number: Yup.number()
+    .required('Numero de orden de compra es requerido')
+    .min(1, 'El campo debe tener como mínimo 1 digito'),
+  po_date: Yup.date().required('Fecha de orden de compra es requerido'),
+  description: Yup.string()
+    .required('Descripción es requerido')
+    .max(200, 'El campo debe tener como máximo 200 caracteres'),
+  quote_title: Yup.string()
+    .required('Titulo de cotización es requerido')
+    .max(30, 'El campo debe tener como máximo 30 caracteres'),
 });
 export default function EditQuotationForm() {
-    const { accessToken } = useContext(AuthContext);
-    const router = useRouter();
-    const { id } = router.query;
-    const [clients, setClients] = useState([]);
-    const [quotationData, setQuotation] = useState(null);
+  const { accessToken } = useContext(AuthContext);
+  const router = useRouter();
+  const { id } = router.query;
+  const [clients, setClients] = useState([]);
+  const [quotationData, setQuotation] = useState(null);
 
-    useEffect(() => {
-        const fetchQuotationData = async () => {
-            try {
-                const response = await axios.get(
-                    `https://control-financiero.herokuapp.com/api/v1/quotation/${id}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${accessToken}`,
-                        },
-                    }
-                );
-                const quotation = response.data;
-                setQuotation(quotation);
-                formik.setValues({
-                  client_id: quotation.client_id,
-                  total_payment: quotation.total_payment,
-                  total_payment_dollar: quotation.total_payment_dollar,
-                  e_invoice_code: quotation.e_invoice_code,
-                  issue_date: quotation.issue_date.split('T')[0],
-                  po_number:quotation.po_number,
-                  po_date: quotation.po_date.split('T')[0],
-                  description: quotation.description,
-                  quote_title: quotation.quote_title,
-                });
-            } catch (error) {
-                console.error('Error fetching quote data:', error);
-            }
-        };
+  useEffect(() => {
+    const fetchQuotationData = async () => {
+      try {
+        const response = await axios.get(
+          `https://control-financiero.herokuapp.com/api/v1/quotation/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        const quotation = response.data;
+        setQuotation(quotation);
+        formik.setValues({
+          client_id: quotation.client_id,
+          total_payment: quotation.total_payment,
+          total_payment_dollar: quotation.total_payment_dollar,
+          e_invoice_code: quotation.e_invoice_code,
+          issue_date: quotation.issue_date.split('T')[0],
+          po_number: quotation.po_number,
+          po_date: quotation.po_date.split('T')[0],
+          description: quotation.description,
+          quote_title: quotation.quote_title,
+        });
+      } catch (error) {
+        console.error('Error fetching quote data:', error);
+      }
+    };
 
-        fetchQuotationData();
+    fetchQuotationData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [accessToken, id]);
+  }, [accessToken, id]);
 
-    useEffect(() => {
-        const fetchClients = async () => {
-            try {
-                const response = await axios.get(
-                    'https://control-financiero.herokuapp.com/api/v1/client',
-                    {
-                        headers: {
-                            Authorization: `Bearer ${accessToken}`,
-                        },
-                    }
-                );
-                setClients(response.data);
-            } catch (error) {
-                console.error('Error fetching clients:', error);
-            }
-        };
-
-        fetchClients();
-    }, [accessToken]);
-
-    const handleSubmit = async (values) => {
-        try {
-            await axios.patch(
-                `https://control-financiero.herokuapp.com/api/v1/quotation/${id}`,
-                values,
-                {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                }
-            );
-            toast.success('Cotización editada exitosamente');
-            router.push('/quotations/list');
-        } catch (error) {
-            toast.error('Error al editar cotización');
-        }
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const response = await axios.get('https://control-financiero.herokuapp.com/api/v1/client', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        setClients(response.data);
+      } catch (error) {
+        console.error('Error fetching clients:', error);
+      }
     };
 
-    const formik = useFormik({
-        initialValues: {
-          client_id: 1,
-          total_payment: '',
-          total_payment_dollar: '',
-          e_invoice_code: '',
-          issue_date: '',
-          po_number: '',
-          po_date: '',
-          description: '',
-          quote_title: '',
+    fetchClients();
+  }, [accessToken]);
+
+  const handleSubmit = async (values) => {
+    try {
+      await axios.patch(`https://control-financiero.herokuapp.com/api/v1/quotation/${id}`, values, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
-        validationSchema,
-        onSubmit: handleSubmit,
-    });
+      });
+      toast.success('Cotización editada exitosamente');
+      router.push('/quotations/list');
+    } catch (error) {
+      toast.error('Error al editar cotización');
+    }
+  };
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
+  const formik = useFormik({
+    initialValues: {
+      client_id: 1,
+      total_payment: '',
+      total_payment_dollar: '',
+      e_invoice_code: '',
+      issue_date: '',
+      po_number: '',
+      po_date: '',
+      description: '',
+      quote_title: '',
+    },
+    validationSchema,
+    onSubmit: handleSubmit,
+  });
 
-        if (event.target.name === 'client_id' && !/^\d+$/.test(event.target.value)) {
-          toast.error('Solo se permiten números en el campo de Id de cliente');
-        }
-    
-        if (event.target.name === 'availableQuantity' && !/^\d+$/.test(event.target.value)) {
-          toast.error('Solo se permiten números en el campo de Cantidad disponible');
-        }
-    
-        if (event.target.name === 'availableQuantity' && event.target.value.length >= 7) {
-          event.target.value = event.target.value.slice(0, 6); // Limitar a 6 dígitos
-          toast.info('Se ha alcanzado el límite de números permitidos ');
-        }
-    
-        if (event.target.name === 'description' && event.target.value.length >= 200) {
-          toast.info('Se ha alcanzado el límite de caracteres permitidos para la descripción');
-        }
-    
-        formik.handleChange(event);
-    };
- 
-    if (!quotationData) {
-        return <div>Loading...</div>;
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+
+    if (event.target.name === 'client_id' && !/^\d+$/.test(event.target.value)) {
+      toast.error('Solo se permiten números en el campo de Id de cliente');
     }
 
-    return (
-        <>
-            <Container>
-                <Typography variant="h3" component="h1" paragraph>
-                    Editar Cotización
-                </Typography>
-            </Container>
+    if (event.target.name === 'availableQuantity' && !/^\d+$/.test(event.target.value)) {
+      toast.error('Solo se permiten números en el campo de Cantidad disponible');
+    }
 
-            <ToastContainer />
+    if (event.target.name === 'availableQuantity' && event.target.value.length >= 7) {
+      event.target.value = event.target.value.slice(0, 6); // Limitar a 6 dígitos
+      toast.info('Se ha alcanzado el límite de números permitidos ');
+    }
 
-            <Container>
+    if (event.target.name === 'description' && event.target.value.length >= 200) {
+      toast.info('Se ha alcanzado el límite de caracteres permitidos para la descripción');
+    }
+
+    formik.handleChange(event);
+  };
+
+  if (!quotationData) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <>
+      <Container>
+        <Typography variant="h3" component="h1" paragraph>
+          Editar Cotización
+        </Typography>
+      </Container>
+
+      <ToastContainer />
+
+      <Container>
         <Box
           component="form"
           noValidate
@@ -247,8 +241,14 @@ export default function EditQuotationForm() {
                 }}
               />
             </Grid>
-            <Grid item xs={12}md={2} container alignItems="center">
-              <Button variant="contained" color="primary" component="a" href="https://www.sucursalelectronica.com/redir/showLogin.go" target="_blank">
+            <Grid item xs={12} md={2} container alignItems="center">
+              <Button
+                variant="contained"
+                color="primary"
+                component="a"
+                href="https://www.sucursalelectronica.com/redir/showLogin.go"
+                target="_blank"
+              >
                 <CurrencyExchangeIcon />
               </Button>
             </Grid>
@@ -272,7 +272,7 @@ export default function EditQuotationForm() {
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
-                label="Fecha de emision"
+                label="Fecha de emisión"
                 name="issue_date"
                 type="date"
                 value={formik.values.issue_date}
@@ -305,7 +305,7 @@ export default function EditQuotationForm() {
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
-                label="Fecha de orden de compra"
+                label="Fecha de expiración"
                 name="po_date"
                 type="date"
                 value={formik.values.po_date}
@@ -349,25 +349,25 @@ export default function EditQuotationForm() {
               />
             </Grid>
 
-                        <Grid item xs={12} md={12}>
-                            <Button fullWidth size="large" type="submit" variant="contained">
-                                Guardar
-                            </Button>
-                        </Grid>
+            <Grid item xs={12} md={12}>
+              <Button fullWidth size="large" type="submit" variant="contained">
+                Guardar
+              </Button>
+            </Grid>
 
-                        <Grid item xs={12} md={12}>
-                            <Button
-                                fullWidth
-                                size="large"
-                                variant="outlined"
-                                onClick={() => router.push('/dashboard/client/list')}
-                            >
-                                Volver a la lista de cotizaciones
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </Box>
-            </Container>
-        </>
-    );
+            <Grid item xs={12} md={12}>
+              <Button
+                fullWidth
+                size="large"
+                variant="outlined"
+                onClick={() => router.push('/quotation/list')}
+              >
+                Volver a la lista de cotizaciones
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+      </Container>
+    </>
+  );
 }
