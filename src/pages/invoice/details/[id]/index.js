@@ -89,42 +89,32 @@ function Details() {
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle1">
-                  Nombre del cliente: {invoice.client_name}
+                  Fecha de emisión: {invoice.issue_date.split('T')[0]}
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle1">
-                  Dirección: {invoice.address}
+                  Fecha de expiración: {invoice.expiration_date.split('T')[0]}
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle1">
-                  Teléfono: {invoice.phone}
+                  Código de factura: {invoice.invoice_number}
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle1">
-                  Correo electrónico: {invoice.email}
+                  Monto en dólares: {invoice.total_dollar}
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle1">
-                  Fecha de emisión: {formatDate(invoice.issue_date)}
+                  Monto en colones: {invoice.total_colon}
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle1">
-                  Fecha de vencimiento: {formatDate(invoice.expiration_date)}
-                </Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle1">
-                  Número de factura: {invoice.invoice_number}
-                </Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle1">
-                  Número de orden: {invoice.order_number}
+                  Tipo de cambio: {invoice.dollar_value}
                 </Typography>
               </Grid>
             </Grid>

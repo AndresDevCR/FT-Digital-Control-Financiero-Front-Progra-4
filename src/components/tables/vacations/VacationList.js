@@ -19,6 +19,7 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import EditIcon from '@mui/icons-material/Edit';
+import InfoIcon from '@mui/icons-material/Info';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Link from 'next/link';
 import DeleteConfirmationDialog from '../../delete-dialog/DeleteDialog';
@@ -194,6 +195,19 @@ export default function VacationList() {
                                                     startIcon={<DeleteForeverIcon />}
                                                 >
                                                     Eliminar
+                                                </Button>
+                                            </div>
+                                            <div>
+                                                <Button
+                                                    color="info"
+                                                    size="small"
+                                                    sx={{ mb: 2, mr: 2 }}
+                                                    variant="contained"
+                                                    component={Link}
+                                                    href={`/vacations/details/${vacationItem.id}`}
+                                                    startIcon={<InfoIcon />}
+                                                >
+                                                    Detalles
                                                 </Button>
                                             </div>
                                         </TableCell>

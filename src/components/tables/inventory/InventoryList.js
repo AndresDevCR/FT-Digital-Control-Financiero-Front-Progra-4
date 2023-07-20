@@ -181,7 +181,7 @@ export default function InventoryList() {
                     </div>
                     <div>
                       <Button
-                        color="primary"
+                        color="info"
                         size="small"
                         sx={{ mb: 2, mr: 2 }}
                         variant="contained"
