@@ -47,7 +47,7 @@ export default function InventoryForm() {
       productName: '',
       availableQuantity: 1,
       description: '',
-      entryDate: '',
+      entryDate: new Date().toISOString().split('T')[0],
     },
     validationSchema,
     onSubmit: handleSubmit,

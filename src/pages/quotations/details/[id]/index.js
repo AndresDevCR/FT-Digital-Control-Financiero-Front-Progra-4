@@ -15,23 +15,23 @@ function Details() {
   const { accessToken } = useContext(AuthContext); // Obtiene el accessToken del AuthContext
   const router = useRouter();
   const { id } = router.query;
-  const [vacation, setVacation] = useState(null);
+  const [quotation, setQuotation] = useState(null);
 
   useEffect(() => {
     if (id) {
-      fetchVacation();
+      fetchQuotation();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  const fetchVacation = async () => {
+  const fetchQuotation = async () => {
     try {
-      const response = await axios.get(`https://control-financiero.herokuapp.com/api/v1/vacation/${id}`, {
+      const response = await axios.get(`https://control-financiero.herokuapp.com/api/v1/quotation/${id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
         },
       });
-      setVacation(response.data);
+      setQuotation(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -43,18 +43,16 @@ function Details() {
   };
 
   const handleDownloadPDF = () => {
-    // Lógica para descargar el PDF
-    // Puedes implementarla según tus necesidades
   };
 
-  if (!vacation) {
-    return null; // Render loading state or handle error
+  if (!quotation) {
+    return null; 
   }
 
   return (
     <>
       <Head>
-        <title>Detalles de solicitud de vacaciones | FT Control Financiero</title>
+        <title>Detalles de la cotización | FT Control Financiero</title>
       </Head>
 
       <Container maxWidth="xl">
@@ -81,7 +79,7 @@ function Details() {
         </Box>
 
         <Typography variant="h3" component="h1" paragraph sx={{ mt: 3 }}>
-          Detalles de solicitud de vacaciones
+          Detalles de la cotización
         </Typography>
 
         <Card sx={{ marginTop: '2rem' }}>
@@ -89,17 +87,37 @@ function Details() {
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle1">
-                  Fecha de salida : {vacation.start_date.split('T')[0]}
+                  Total a pagar: {quotation.total_payment}
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle1">
-                  Fecha de ingreso: {vacation.reentry_date.split('T')[0]}
+                  Total a pagar en dólares: {quotation.total_payment_dollar}
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle1">
-                  Estado de la solicitud: {vacation.request_status}
+                  Código de cotización: {quotation.e_invoice_code}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Typography variant="subtitle1">
+                  Código de orden: {quotation.po_number}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Typography variant="subtitle1">
+                  Título : {quotation.quote_title}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Typography variant="subtitle1">
+                  Descripción: {quotation.description}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Typography variant="subtitle1">
+                  Fecha de emisión: {formatDate(quotation.issue_date)}
                 </Typography>
               </Grid>
             </Grid>
