@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import { useState, useContext } from 'react';
 import Head from 'next/head';
 import { Container, Typography, Box, Grid, TextField, Button } from '@mui/material';
@@ -8,6 +9,9 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { AuthContext } from '../../auth/JwtContext';
 
+=======
+import InvoiceForm from "../../components/forms/invoice/InvoiceForm";
+>>>>>>> Stashed changes
 import DashboardLayout from '../../layouts/dashboard';
 
 Invoice.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -66,6 +70,7 @@ export default function Invoice() {
   } = formik;
 
   return (
+<<<<<<< Updated upstream
     <>
       <Head>
         <title>Agregar Factura | FT Control Financiero</title>
@@ -211,5 +216,8 @@ export default function Invoice() {
         </Box>
       </Container>
     </>
+=======
+    <InvoiceForm />
+>>>>>>> Stashed changes
   );
 }

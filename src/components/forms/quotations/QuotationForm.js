@@ -180,7 +180,7 @@ export default function QuotationForm() {
                         <Grid item xs={12} md={6}>
                             <TextField
                                 fullWidth
-                                label="Total a pagar en dolares"
+                                label="Total a pagar en dólares"
                                 name="total_payment_dollar"
                                 type="number"
                                 value={formik.values.total_payment_dollar}
@@ -199,7 +199,11 @@ export default function QuotationForm() {
                         <Grid item xs={12} md={12}>
                             <TextField
                                 fullWidth
+<<<<<<< Updated upstream
                                 label="Codigo de factura electronica"
+=======
+                                label="Código de factura electrónica"
+>>>>>>> Stashed changes
                                 name="e_invoice_code"
                                 type="text"
                                 value={formik.values.e_invoice_code}
@@ -242,6 +246,7 @@ export default function QuotationForm() {
                             />
                         </Grid>
 
+<<<<<<< Updated upstream
                         <Grid item xs={12} md={6}>
                             <TextField
                                 fullWidth
@@ -292,6 +297,152 @@ export default function QuotationForm() {
                                 Guardar
                             </Button>
                         </Grid>
+=======
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Número de orden de compra"
+                                    name="po_number"
+                                    type="number"
+                                    value={formik.values.po_number}
+                                    onChange={handleInputChange}
+                                    error={formik.touched.po_number && formik.errors.po_number}
+                                    helperText={formik.touched.po_number && formik.errors.po_number}
+                                    inputProps={{
+                                        max: 999999,
+                                        maxLength: 6,
+                                    }}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Fecha de orden de compra"
+                                    name="po_date"
+                                    type="date"
+                                    value={formik.values.po_date}
+                                    onChange={handleInputChange}
+                                    error={formik.touched.po_date && formik.errors.po_date}
+                                    helperText={formik.touched.po_date && formik.errors.po_date}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Descripción"
+                                    name="description"
+                                    type="text"
+                                    value={formik.values.description}
+                                    onChange={handleInputChange}
+                                    error={formik.touched.description && formik.errors.description}
+                                    helperText={formik.touched.description && formik.errors.description}
+                                    inputProps={{
+                                        maxLength: 200,
+                                    }}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12} md={12}>
+                                <TextField
+                                    fullWidth
+                                    label="Código de factura electrónica"
+                                    name="e_invoice_code"
+                                    type="text"
+                                    value={formik.values.e_invoice_code}
+                                    onChange={handleInputChange}
+                                    error={formik.touched.e_invoice_code && formik.errors.e_invoice_code}
+                                    helperText={formik.touched.e_invoice_code && formik.errors.e_invoice_code}
+                                    inputProps={{
+                                        maxLength: 30,
+                                    }}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Fecha de emisión"
+                                    name="issue_date"
+                                    type="date"
+                                    value={formik.values.issue_date}
+                                    onChange={handleInputChange}
+                                    error={formik.touched.issue_date && formik.errors.issue_date}
+                                    helperText={formik.touched.issue_date && formik.errors.issue_date}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Número de orden de compra"
+                                    name="po_number"
+                                    type="number"
+                                    value={formik.values.po_number}
+                                    onChange={handleInputChange}
+                                    error={formik.touched.po_number && formik.errors.po_number}
+                                    helperText={formik.touched.po_number && formik.errors.po_number}
+                                    inputProps={{
+                                        max: 999999,
+                                        maxLength: 6,
+                                    }}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Fecha de orden de compra"
+                                    name="po_date"
+                                    type="date"
+                                    value={formik.values.po_date}
+                                    onChange={handleInputChange}
+                                    error={formik.touched.po_date && formik.errors.po_date}
+                                    helperText={formik.touched.po_date && formik.errors.po_date}
+                                />
+
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Descripción"
+                                    name="description"
+                                    type="text"
+                                    value={formik.values.description}
+                                    onChange={handleInputChange}
+                                    error={formik.touched.description && formik.errors.description}
+                                    helperText={formik.touched.description && formik.errors.description}
+                                    inputProps={{
+                                        maxLength: 200,
+                                    }}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Título de cotización"
+                                    name="quote_title"
+                                    type="text"
+                                    value={formik.values.quote_title}
+                                    onChange={handleInputChange}
+                                    error={formik.touched.quote_title && formik.errors.quote_title}
+                                    helperText={formik.touched.quote_title && formik.errors.quote_title}
+                                    inputProps={{
+                                        maxLength: 30,
+                                    }}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12} md={12}>
+                                <Button fullWidth size="large" type="submit" variant="contained" startIcon={<SaveIcon />}>
+                                    Guardar
+                                </Button>
+                            </Grid>
+>>>>>>> Stashed changes
 
 
                         <Grid item xs={12} md={12}>

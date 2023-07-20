@@ -80,6 +80,23 @@ const EditInvoice = () => {
     } else if (name === 'entryDate') {
       setEntryDate(value);
     }
+<<<<<<< Updated upstream
+=======
+
+    if (event.target.name === 'availableQuantity' && !/^\d+$/.test(event.target.value)) {
+      toast.error('Solo se permiten números en el campo de Cantidad disponible');
+    }
+
+    if (event.target.name === 'availableQuantity' && event.target.value.length >= 7) {
+      event.target.value = event.target.value.slice(0, 6); // Limitar a 6 dígitos
+      toast.info('Se ha alcanzado el límite de números permitidos ');
+    }
+
+    if (event.target.name === 'description' && event.target.value.length >= 200) {
+      toast.info('Se ha alcanzado el límite de caracteres permitidos para la descripción');
+    }
+    formik.handleChange(event);
+>>>>>>> Stashed changes
   };
 
   return (
