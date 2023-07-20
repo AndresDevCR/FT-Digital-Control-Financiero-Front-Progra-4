@@ -33,7 +33,7 @@ const EditEnterprise = () => {
             })
             .then((response) => {
                 console.log(response);
-                toast.success('Empresa actualizado con éxito');
+                toast.success('Empresa actualizada con éxito');
                 router.push('/dashboard/enterprise/list');
             })
             .catch((error) => {
@@ -54,7 +54,7 @@ const EditEnterprise = () => {
 
     const formik = useFormik({
         initialValues: {
-            enterprise_name: '',
+            enterprise_name:'',
         },
         validationSchema,
         onSubmit: handleSubmit,

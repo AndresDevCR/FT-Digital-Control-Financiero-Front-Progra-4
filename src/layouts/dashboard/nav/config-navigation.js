@@ -128,30 +128,12 @@ const navConfig = [
                 ],
               },
               {
-                title: 'Permisos',
-                path: PERMISSION.root,
-                icon: ICONS.permission,
-                children: [
-                  { title: 'Agregar Permiso', path: PERMISSION.permissionadd },
-                  { title: 'Lista de Permisos', path: PERMISSION.permissionlist },
-                ],
-              },
-              {
                 title: 'Roles',
                 path: ROLES.root,
                 icon: ICONS.roles,
                 children: [
                   { title: 'Agregar Rol', path: ROLES.rolesadd },
                   { title: 'Lista de Roles', path: ROLES.roleslist },
-                ],
-              },
-              {
-                title: 'Usuarios',
-                path: USER.root,
-                icon: ICONS.user,
-                children: [
-                  { title: 'Agregar Usuario', path: USER.useradd },
-                  { title: 'Lista de Usuarios', path: USER.userlist },
                 ],
               },
             ],

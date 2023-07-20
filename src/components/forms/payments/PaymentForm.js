@@ -30,7 +30,7 @@ const validationSchema = Yup.object().shape({
   ins_payroll: Yup.number().required('El seguro de nómina es requerido'),
 });
 
-export default function EmployeeForm() {
+export default function PaymentForm() {
   const { accessToken } = useContext(AuthContext);
   const router = useRouter();
   const [employees, setEmployees] = useState([]);
@@ -115,7 +115,7 @@ export default function EmployeeForm() {
     <>
       <Container>
         <Typography variant="h3" component="h1" paragraph>
-          Agregar Empleado
+          Agregar pago
         </Typography>
       </Container>
 

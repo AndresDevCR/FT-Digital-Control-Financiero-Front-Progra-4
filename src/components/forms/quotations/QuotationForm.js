@@ -1,15 +1,26 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Container, Typography, Box, Grid, TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import {
+    Container,
+    Typography,
+    Box,
+    Grid,
+    TextField,
+    Button,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+} from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import SaveIcon from '@mui/icons-material/Save';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { AuthContext } from '../../../auth/JwtContext';
-
 
 const validationSchema = Yup.object().shape({
     client_id: Yup.number()
@@ -48,14 +59,11 @@ export default function QuotationForm() {
     useEffect(() => {
         const fetchClients = async () => {
             try {
-                const response = await axios.get(
-                    'https://control-financiero.herokuapp.com/api/v1/client',
-                    {
-                        headers: {
-                            Authorization: `Bearer ${accessToken}`,
-                        },
-                    }
-                );
+                const response = await axios.get('https://control-financiero.herokuapp.com/api/v1/client', {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
                 setClients(response.data);
             } catch (error) {
                 console.error('Error fetching clients:', error);
@@ -72,21 +80,21 @@ export default function QuotationForm() {
                 },
             });
             toast.success('Agregado correctamente al inventario');
-            router.push('/quotation'); // Redireccionar a la lista de inventario
+            router.push('/quotations/list'); // Redireccionar a la lista de inventario
         } catch (error) {
             toast.error('Error al agregar al inventario');
         }
     };
-    
+
     const formik = useFormik({
         initialValues: {
             client_id: 1,
             total_payment: '',
             total_payment_dollar: '',
             e_invoice_code: '',
-            issue_date: '',
+            issue_date: new Date().toISOString().split('T')[0],
             po_number: '',
-            po_date: '',
+            po_date: new Date().toISOString().split('T')[0],
             description: '',
             quote_title: '',
         },
@@ -133,14 +141,13 @@ export default function QuotationForm() {
                     sx={{ mt: 3 }}
                     onSubmit={formik.handleSubmit}
                 >
-
                     <Grid item xs={12} md={12}>
                         <FormControl fullWidth>
                             <InputLabel id="client-label">Cliente</InputLabel>
                             <Select
                                 labelId="client-label"
                                 id="client_id"
-                                type='number'
+                                type="number"
                                 name="client_id"
                                 value={formik.values.client_id}
                                 onChange={formik.handleChange}
@@ -157,9 +164,8 @@ export default function QuotationForm() {
                     </Grid>
                     <br />
 
-
                     <Grid container spacing={3}>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={12} md={5}>
                             <TextField
                                 fullWidth
                                 label="Total a pagar"
@@ -173,27 +179,31 @@ export default function QuotationForm() {
                                     max: 999999,
                                     maxLength: 6,
                                 }}
-
                             />
                         </Grid>
 
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={12} md={5}>
                             <TextField
                                 fullWidth
-                                label="Total a pagar en dólares"
+                                label="Total a pagar en dolares"
                                 name="total_payment_dollar"
                                 type="number"
                                 value={formik.values.total_payment_dollar}
                                 onChange={handleInputChange}
                                 error={formik.touched.total_payment_dollar && formik.errors.total_payment_dollar}
-                                helperText={formik.touched.total_payment_dollar && formik.errors.total_payment_dollar}
+                                helperText={
+                                    formik.touched.total_payment_dollar && formik.errors.total_payment_dollar
+                                }
                                 inputProps={{
                                     max: 999999,
                                     maxLength: 6,
                                 }}
                             />
-
-
+                        </Grid>
+                        <Grid item xs={12} md={2} container alignItems="center">
+                            <Button variant="contained" color="primary" component="a" href="https://www.sucursalelectronica.com/redir/showLogin.go" target="_blank">
+                                <CurrencyExchangeIcon />
+                            </Button>
                         </Grid>
 
                         <Grid item xs={12} md={12}>
@@ -215,99 +225,180 @@ export default function QuotationForm() {
                         <Grid item xs={12} md={6}>
                             <TextField
                                 fullWidth
-                                label="Fecha de emisión"
-                                name="issue_date"
-                                type="date"
-                                value={formik.values.issue_date}
-                                onChange={handleInputChange}
-                                error={formik.touched.issue_date && formik.errors.issue_date}
-                                helperText={formik.touched.issue_date && formik.errors.issue_date}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                fullWidth
-                                label="Numero de orden de compra"
-                                name="po_number"
+                                label="Total a pagar en dólares"
+                                name="total_payment_dollar"
                                 type="number"
-                                value={formik.values.po_number}
+                                value={formik.values.total_payment_dollar}
                                 onChange={handleInputChange}
-                                error={formik.touched.po_number && formik.errors.po_number}
-                                helperText={formik.touched.po_number && formik.errors.po_number}
+                                error={formik.touched.total_payment_dollar && formik.errors.total_payment_dollar}
+                                helperText={formik.touched.total_payment_dollar && formik.errors.total_payment_dollar}
                                 inputProps={{
                                     max: 999999,
                                     maxLength: 6,
                                 }}
                             />
-                        </Grid>
 
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                fullWidth
-                                label="Fecha de orden de compra"
-                                name="po_date"
-                                type="date"
-                                value={formik.values.po_date}
-                                onChange={handleInputChange}
-                                error={formik.touched.po_date && formik.errors.po_date}
-                                helperText={formik.touched.po_date && formik.errors.po_date}
-                            />
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Numero de orden de compra"
+                                    name="po_number"
+                                    type="number"
+                                    value={formik.values.po_number}
+                                    onChange={handleInputChange}
+                                    error={formik.touched.po_number && formik.errors.po_number}
+                                    helperText={formik.touched.po_number && formik.errors.po_number}
+                                    inputProps={{
+                                        max: 999999,
+                                        maxLength: 6,
+                                    }}
+                                />
+                            </Grid>
 
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                fullWidth
-                                label="Descripción"
-                                name="description"
-                                type="text"
-                                value={formik.values.description}
-                                onChange={handleInputChange}
-                                error={formik.touched.description && formik.errors.description}
-                                helperText={formik.touched.description && formik.errors.description}
-                                inputProps={{
-                                    maxLength: 200,
-                                }}
-                            />
-                        </Grid>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Fecha de orden de compra"
+                                    name="po_date"
+                                    type="date"
+                                    value={formik.values.po_date}
+                                    onChange={handleInputChange}
+                                    error={formik.touched.po_date && formik.errors.po_date}
+                                    helperText={formik.touched.po_date && formik.errors.po_date}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Descripcion"
+                                    name="description"
+                                    type="text"
+                                    value={formik.values.description}
+                                    onChange={handleInputChange}
+                                    error={formik.touched.description && formik.errors.description}
+                                    helperText={formik.touched.description && formik.errors.description}
+                                    inputProps={{
+                                        maxLength: 200,
+                                    }}
+                                />
+                            </Grid>
 
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                fullWidth
-                                label="Título de cotización"
-                                name="quote_title"
-                                type="text"
-                                value={formik.values.quote_title}
-                                onChange={handleInputChange}
-                                error={formik.touched.quote_title && formik.errors.quote_title}
-                                helperText={formik.touched.quote_title && formik.errors.quote_title}
-                                inputProps={{
-                                    maxLength: 30,
-                                }}
-                            />
-                        </Grid>
+                            <Grid item xs={12} md={12}>
+                                <TextField
+                                    fullWidth
+                                    label="Código de factura electronica"
+                                    name="e_invoice_code"
+                                    type="text"
+                                    value={formik.values.e_invoice_code}
+                                    onChange={handleInputChange}
+                                    error={formik.touched.e_invoice_code && formik.errors.e_invoice_code}
+                                    helperText={formik.touched.e_invoice_code && formik.errors.e_invoice_code}
+                                    inputProps={{
+                                        maxLength: 30,
+                                    }}
+                                />
+                            </Grid>
 
-                        <Grid item xs={12} md={12}>
-                            <Button fullWidth size="large" type="submit" variant="contained" startIcon={<SaveIcon />}>
-                                Guardar
-                            </Button>
-                        </Grid>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Fecha de emisión"
+                                    name="issue_date"
+                                    type="date"
+                                    value={formik.values.issue_date}
+                                    onChange={handleInputChange}
+                                    error={formik.touched.issue_date && formik.errors.issue_date}
+                                    helperText={formik.touched.issue_date && formik.errors.issue_date}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Numero de orden de compra"
+                                    name="po_number"
+                                    type="number"
+                                    value={formik.values.po_number}
+                                    onChange={handleInputChange}
+                                    error={formik.touched.po_number && formik.errors.po_number}
+                                    helperText={formik.touched.po_number && formik.errors.po_number}
+                                    inputProps={{
+                                        max: 999999,
+                                        maxLength: 6,
+                                    }}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Fecha de orden de compra"
+                                    name="po_date"
+                                    type="date"
+                                    value={formik.values.po_date}
+                                    onChange={handleInputChange}
+                                    error={formik.touched.po_date && formik.errors.po_date}
+                                    helperText={formik.touched.po_date && formik.errors.po_date}
+                                />
+
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Descripción"
+                                    name="description"
+                                    type="text"
+                                    value={formik.values.description}
+                                    onChange={handleInputChange}
+                                    error={formik.touched.description && formik.errors.description}
+                                    helperText={formik.touched.description && formik.errors.description}
+                                    inputProps={{
+                                        maxLength: 200,
+                                    }}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Título de cotización"
+                                    name="quote_title"
+                                    type="text"
+                                    value={formik.values.quote_title}
+                                    onChange={handleInputChange}
+                                    error={formik.touched.quote_title && formik.errors.quote_title}
+                                    helperText={formik.touched.quote_title && formik.errors.quote_title}
+                                    inputProps={{
+                                        maxLength: 30,
+                                    }}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12} md={12}>
+                                <Button fullWidth size="large" type="submit" variant="contained" startIcon={<SaveIcon />}>
+                                    Guardar
+                                </Button>
+                            </Grid>
 
 
-                        <Grid item xs={12} md={12}>
-                            <Button
-                                fullWidth
-                                size="large"
-                                variant="outlined"
-                                onClick={() => router.push('/quotations/list')}
-                                startIcon={<KeyboardBackspaceIcon />}
-                            >
-                                Volver a la lista de cotizaciones
-                            </Button>
+                            <Grid item xs={12} md={12}>
+                                <Button
+                                    fullWidth
+                                    size="large"
+                                    variant="outlined"
+                                    onClick={() => router.push('/quotations/list')}
+                                    startIcon={<KeyboardBackspaceIcon />}
+                                >
+                                    Volver a la lista de cotizaciones
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Box>
             </Container>
         </>
     );
-};
+}

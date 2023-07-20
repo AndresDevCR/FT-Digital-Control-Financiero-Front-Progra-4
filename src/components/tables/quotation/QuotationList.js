@@ -159,9 +159,9 @@ export default function QuotationList() {
                                         <TableCell>{quotationItem.total_payment}</TableCell>
                                         <TableCell>{quotationItem.total_payment_dollar}</TableCell>
                                         <TableCell>{quotationItem.e_invoice_code}</TableCell>
-                                        <TableCell>{quotationItem.issue_date}</TableCell>
+                                        <TableCell>{quotationItem.issue_date.split('T')[0]}</TableCell>
                                         <TableCell>{quotationItem.po_number}</TableCell>
-                                        <TableCell>{quotationItem.po_date}</TableCell>
+                                        <TableCell>{quotationItem.po_date.split('T')[0]}</TableCell>
                                         <TableCell>{quotationItem.description}</TableCell>
                                         <TableCell>{quotationItem.quote_title}</TableCell>
                                         <TableCell>{quotationItem.client.client_name}</TableCell>
@@ -170,7 +170,7 @@ export default function QuotationList() {
                                                 <Button
                                                     style={{ backgroundColor: 'orange' }}
                                                     component={Link}
-                                                    href={`/quotation/edit/${quotationItem.id}`}
+                                                    href={`/quotations/edit/${quotationItem.id}`}
                                                     size="small"
                                                     sx={{ mb: 2 }}
                                                     variant="contained"
@@ -195,15 +195,15 @@ export default function QuotationList() {
                                             </div>
                                             <div>
                                                 <Button
-                                                    color="primary"
+                                                    color="info"
                                                     size="small"
                                                     sx={{ mb: 2, mr: 2 }}
                                                     variant="contained"
                                                     component={Link}
-                                                    href={`/quotation/details/${quotationItem.id}`}
+                                                    href={`/quotations/details/${quotationItem.id}`}
                                                     startIcon={<InfoIcon />}
                                                 >
-                                                    Ver Detalles
+                                                    Detalles
                                                 </Button>
                                             </div>
                                         </TableCell>

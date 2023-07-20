@@ -31,7 +31,11 @@ const validationSchema = Yup.object().shape({
     monthly_salary: Yup.number().required('Salario mensual es requerido'),
     email: Yup.string()
         .required('Correo electrónico es requerido')
-        .max(30, 'El nombre debe tener como máximo 30 caracteres'),
+        .max(70, 'El correo debe tener como máximo 70 caracteres')
+        .matches(
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      ' El correo electrónico ingresado no tiene un formato válido'
+    ),
     phone: Yup.string()
         .required('Número de teléfono es requerido')
         .max(30, 'El nombre debe tener como máximo 30 caracteres'),
@@ -98,9 +102,9 @@ export default function EmployeeForm() {
     const formik = useFormik({
         initialValues: {
             employee_name: '',
-            enrollment_date: '',
-            position_id: '',
-            department_id: '',
+            enrollment_date: new Date().toISOString().split('T')[0],
+            position_id: 1,
+            department_id: 1,
             monthly_salary: 0,
             email: '',
             phone: '',
@@ -119,6 +123,9 @@ export default function EmployeeForm() {
 
         if (name === 'phone' && value.length >= 30) {
             toast.info('Se ha alcanzado el límite de caracteres permitidos');
+        }
+        if (event.target.name === 'phone' && !/^\d+$/.test(event.target.value)) {
+            toast.error('Solo se permiten números en este campo');
         }
 
         if (name === 'email' && value.length >= 30) {

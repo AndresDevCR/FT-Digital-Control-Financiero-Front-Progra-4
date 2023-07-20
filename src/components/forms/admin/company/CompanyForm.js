@@ -82,6 +82,12 @@ export default function CompanyForm() {
         if (event.target.name === 'secondary_phone_number' && event.target.value.length >= 30) {
             toast.info('Se ha alcanzado el límite de caracteres permitidos');
         }
+        if (event.target.name === 'primary_phone_number' && !/^\d+$/.test(event.target.value)) {
+            toast.error('Solo se permiten números en este campo');
+        }
+        if (event.target.name === 'secondary_phone_number' && !/^\d+$/.test(event.target.value)) {
+            toast.error('Solo se permiten números en este campo');
+        }
         if (event.target.name === 'city' && event.target.value.length >= 30) {
             toast.info('Se ha alcanzado el límite de caracteres permitidos');
         }
@@ -137,6 +143,9 @@ export default function CompanyForm() {
                                 fullWidth
                                 label="Descripción de la Compañía"
                                 name="description"
+                                multiline
+                                minRows={5}
+                                maxRows={10}
                                 value={formik.values.description}
                                 onChange={handleInputChange}
                                 error={formik.touched.description && formik.errors.description}
@@ -173,6 +182,7 @@ export default function CompanyForm() {
                                 helperText={formik.touched.primary_phone_number && formik.errors.primary_phone_number}
                                 inputProps={{
                                     maxLength: 30,
+                                    pattern: "^[0-9]*$",
                                 }}
                             />
                         </Grid>
@@ -188,6 +198,7 @@ export default function CompanyForm() {
                                 helperText={formik.touched.secondary_phone_number && formik.errors.secondary_phone_number}
                                 inputProps={{
                                     maxLength: 30,
+                                    pattern: "^[0-9]*$",
                                 }}
                             />
                         </Grid>
