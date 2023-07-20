@@ -1,215 +1,230 @@
-import { useState, useContext } from 'react';
-import Head from 'next/head';
-import { Container, Typography, Box, Grid, TextField, Button } from '@mui/material';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    Container,
+    Typography,
+    TextField,
+    Button,
+    TablePagination,
+    InputAdornment,
+} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import ManageSearchIcon from '@mui/icons-material/ManageSearch';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import InfoIcon from '@mui/icons-material/Info';
+import Link from 'next/link';
+import DeleteConfirmationDialog from '../../delete-dialog/DeleteDialog';
 import { AuthContext } from '../../../auth/JwtContext';
 
-import DashboardLayout from '../../../layouts/dashboard';
+export default function InvoiceList() {
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+    const [deleteItemId, setDeleteItemId] = useState(null);
+    const { accessToken } = useContext(AuthContext);
+    const [rows, setRows] = useState([]);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [searchTerm, setSearchTerm] = useState('');
 
-Invoice.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
 
-const validationSchema = Yup.object().shape({
-  client_name: Yup.string().required('Nombre del cliente es requerido'),
-  address: Yup.string().required('Dirección es requerida'),
-  phone: Yup.string().required('Teléfono es requerido'),
-  email: Yup.string().email('Correo electrónico inválido').required('Correo electrónico es requerido'),
-  issue_date: Yup.date().required('Fecha de emisión es requerida'),
-  expiration_date: Yup.date().required('Fecha de vencimiento es requerida'),
-  invoice_number: Yup.number().required('Número de factura es requerido'),
-  order_number: Yup.number().required('Número de orden es requerido'),
-});
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value.toLowerCase());
+        setPage(0);
+    };
 
-export default function Invoice() {
-  const { accessToken } = useContext(AuthContext); // Obtiene el accessToken del AuthContext
-  const [loading, setLoading] = useState(false);
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
 
-  const formik = useFormik({
-    initialValues: {
-      client_name: '',
-      address: '',
-      phone: '',
-      email: '',
-      issue_date: '',
-      expiration_date: '',
-      invoice_number: '',
-      order_number: '',
-    },
-    validationSchema,
-    onSubmit: async (values) => {
-      setLoading(true);
-      try {
-        await axios.post('https://control-financiero.herokuapp.com/api/v1/invoice', values,{
-          headers: {
-            Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
-          },
-        });
-        toast.success('Factura agregada correctamente');
-        formik.resetForm();
-      } catch (error) {
-        toast.error('Error al agregar la factura');
-      }
-      setLoading(false);
-    },
-  });
+    useEffect(() => {
+        fetchInvoice();
+    }, []);
 
-  const {
-    values,
-    touched,
-    errors,
-    handleChange,
-    handleBlur,
-    handleSubmit,
-  } = formik;
+    const fetchInvoice = async () => {
+        try {
+            const response = await axios.get(
+                'https://control-financiero.herokuapp.com/api/v1/invoice',
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+            setRows(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
-  return (
-    <>
-      <Head>
-        <title>Agregar Factura | FT Control Financiero</title>
-      </Head>
+    const filteredRows = rows.filter((row) =>
+        row.invoice_number.toString().toLowerCase().includes(searchTerm)
+    );
 
-      <Container maxWidth="xl">
-        <Typography variant="h3" component="h1" paragraph>
-          Agregar Factura
-        </Typography>
-      </Container>
+    const handleDeleteDialogOpen = (id) => {
+        setDeleteItemId(id);
+        setOpenDeleteDialog(true);
+    };
 
-      <ToastContainer />
+    const handleDeleteDialogClose = () => {
+        setOpenDeleteDialog(false);
+        setDeleteItemId(null);
+    };
 
-      <Container maxWidth="xl">
-        <Box
-          component="form"
-          noValidate
-          autoComplete="off"
-          sx={{ mt: 3 }}
-          onSubmit={handleSubmit}
-        >
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Nombre del cliente"
-                name="client_name"
-                value={values.client_name}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.client_name && !!errors.client_name}
-                helperText={touched.client_name && errors.client_name}
-              />
-            </Grid>
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(
+                `https://control-financiero.herokuapp.com/api/v1/invoice/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+            setRows((prevRows) => prevRows.filter((invoiceItem) => invoiceItem.id !== id));
+            handleDeleteDialogClose();
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Dirección"
-                name="address"
-                value={values.address}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.address && !!errors.address}
-                helperText={touched.address && errors.address}
-              />
-            </Grid>
+    return (
+        <>
+            <Container>
+                <Typography variant="h3" component="h1" paragraph>
+                    Lista de Facturas
+                </Typography>
 
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Teléfono"
-                name="phone"
-                value={values.phone}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.phone && !!errors.phone}
-                helperText={touched.phone && errors.phone}
-              />
-            </Grid>
+                <Button
+                    color="primary"
+                    component={Link}
+                    href="/invoice/add"
+                    size="large"
+                    sx={{ mb: 3 }}
+                    variant="contained"
+                    style={{ float: 'right' }}
+                    startIcon={<AddIcon />}
+                >
+                    Crear Facturas
+                </Button>
 
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Correo electrónico"
-                name="email"
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.email && !!errors.email}
-                helperText={touched.email && errors.email}
-              />
-            </Grid>
+                <TextField
+                    fullWidth
+                    label="Buscar"
+                    name="search"
+                    value={searchTerm}
+                    onChange={handleSearch}
+                    sx={{ mb: 3 }}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <ManageSearchIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
 
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Fecha de emisión"
-                name="issue_date"
-                type="date"
-                value={values.issue_date}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.issue_date && !!errors.issue_date}
-                helperText={touched.issue_date && errors.issue_date}
-              />
-            </Grid>
+                <TableContainer component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Fecha de emisión</TableCell>
+                                <TableCell>Fecha de expiración</TableCell>
+                                <TableCell>Número de factura</TableCell>
+                                <TableCell>Valor del dólar</TableCell>
+                                <TableCell>Total en colones</TableCell>
+                                <TableCell>Total en dólares</TableCell>
+                                <TableCell>Descripción</TableCell>
+                                <TableCell>Acciones</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {filteredRows
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((invoiceItem) => (
+                                    <TableRow key={invoiceItem.id}>
+                                        <TableCell>{invoiceItem.issue_date.split('T')[0]}</TableCell>
+                                        <TableCell>{invoiceItem.expiration_date.split('T')[0]}</TableCell>
+                                        <TableCell>{invoiceItem.invoice_number}</TableCell>
+                                        <TableCell>{invoiceItem.dollar_value}</TableCell>
+                                        <TableCell>{invoiceItem.total_colon}</TableCell>
+                                        <TableCell>{invoiceItem.total_dollar}</TableCell>
+                                        <TableCell>
+                                            <div>
+                                                <Button
+                                                    style={{ backgroundColor: 'orange' }}
+                                                    component={Link}
+                                                    href={`/invoice/edit/${invoiceItem.id}`}
+                                                    size="small"
+                                                    sx={{ mb: 2 }}
+                                                    variant="contained"
+                                                    startIcon={<EditIcon />}
+                                                >
+                                                    Editar
+                                                </Button>
+                                            </div>
+                                            <div>
+                                                <Button
+                                                    color="error"
+                                                    size="small"
+                                                    sx={{ mb: 2 }}
+                                                    variant="contained"
+                                                    onClick={() =>
+                                                        handleDeleteDialogOpen(invoiceItem.id)
+                                                    }
+                                                    startIcon={<DeleteForeverIcon />}
+                                                >
+                                                    Eliminar
+                                                </Button>
+                                            </div>
+                                            <div>
+                                                <Button
+                                                    color="info"
+                                                    size="small"
+                                                    sx={{ mb: 2, mr: 2 }}
+                                                    variant="contained"
+                                                    component={Link}
+                                                    href={`/invoice/details/${invoiceItem.id}`}
+                                                    startIcon={<InfoIcon />}
+                                                >
+                                                    Detalles
+                                                </Button>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                        </TableBody>
+                    </Table>
+                    <TablePagination
+                        rowsPerPageOptions={[5, 10, 25]}
+                        component="div"
+                        count={filteredRows.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                </TableContainer>
+            </Container>
 
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Fecha de vencimiento"
-                name="expiration_date"
-                type="date"
-                value={values.expiration_date}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.expiration_date && !!errors.expiration_date}
-                helperText={touched.expiration_date && errors.expiration_date}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Número de factura"
-                name="invoice_number"
-                type="number"
-                value={values.invoice_number}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.invoice_number && !!errors.invoice_number}
-                helperText={touched.invoice_number && errors.invoice_number}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Número de orden"
-                name="order_number"
-                type="number"
-                value={values.order_number}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.order_number && !!errors.order_number}
-                helperText={touched.order_number && errors.order_number}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={12}>
-              <Button
-                fullWidth
-                size="large"
-                type="submit"
-                variant="contained"
-                disabled={loading}
-              >
-                {loading ? 'Guardando...' : 'Guardar'}
-              </Button>
-            </Grid>
-          </Grid>
-        </Box>
-      </Container>
-    </>
-  );
+            <DeleteConfirmationDialog
+                open={openDeleteDialog}
+                onClose={handleDeleteDialogClose}
+                itemId={deleteItemId}
+                onDelete={handleDelete}
+                apiEndpoint="https://control-financiero.herokuapp.com/api/v1/invoice/"
+            />
+        </>
+    );
 }

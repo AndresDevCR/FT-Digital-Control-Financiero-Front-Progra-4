@@ -31,100 +31,128 @@ const validationSchema = Yup.object().shape({
   last_name: Yup.string()
     .required('Apellido del empleado es requerido')
     .max(30, 'El apellido debe tener como máximo 30 caracteres'),
-  password: Yup.string()
-    .required('Contraseña del usuario es requerida')
-    .max(30, 'La contraseña debe tener como máximo 30 caracteres'),
-  email: Yup.string()
-    .email('Correo del usuario es inválido')
-    .required('Correo del usuario es requerido')
-    .max(70, 'El correo debe tener como máximo 70 caracteres'),
+    email: Yup.string()
+    .required('El correo del usuario es requerido')
+    .max(70, 'El correo debe tener como máximo 70 caracteres')
+    .matches(
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      'El correo electrónico ingresado no tiene un formato válido'
+    ),
+    password: Yup.string()
+    .required('Ingrese su nueva contraseña')
+    .min(8, 'La contraseña debe tener al menos 8 caracteres')
+    .max(30, 'La contraseña debe tener como máximo 30 caracteres')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]+$/,
+      'La contraseña debe contener al menos una mayúscula, una minúscula y no puede tener caracteres especiales'
+    ),
 });
 
 export default function EditUserPage() {
   const { accessToken } = useContext(AuthContext);
   const router = useRouter();
-  const [positions, setPositions] = useState([]);
-  const [departments, setDepartments] = useState([]);
+  const [roles, setRoles] = useState([]);
+  const [companies, setCompanies] = useState([]);
+  const [applications, setApplications] = useState([]);
   const { id } = router.query; // Obtiene el ID del empleado de la URL
 
   useEffect(() => {
-    const fetchPositions = async () => {
+    const fetchRoles = async () => {
       try {
         const response = await axios.get(
-          'https://control-financiero.herokuapp.com/api/v1/position',
+          'https://control-financiero.herokuapp.com/api/v1/role',
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
           }
         );
-        setPositions(response.data);
+        setRoles(response.data);
       } catch (error) {
-        console.error('Error fetching positions:', error);
+        console.error('Error fetching roles:', error);
       }
     };
 
-    const fetchDepartments = async () => {
-      try {
-        const response = await axios.get(
-          'https://control-financiero.herokuapp.com/api/v1/department',
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        setDepartments(response.data);
-      } catch (error) {
-        console.error('Error fetching departments:', error);
-      }
-    };
-
-    fetchPositions();
-    fetchDepartments();
+    fetchRoles();
   }, [accessToken]);
 
-  const fetchUserData = async () => {
-    try {
-      const response = await axios.get(
-        `https://control-financiero.herokuapp.com/api/v1/user/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+    useEffect(() => {
+      const fetchCompany = async () => {
+        try {
+          const response = await axios.get(
+            'https://control-financiero.herokuapp.com/api/v1/company',
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+          setCompanies(response.data);
+        } catch (error) {
+          console.error('Error fetching companies:', error);
         }
-      );
-      const userData = response.data;
-      const formattedDate = userData.enrollment_date.slice(0, 10); // Extract the date part
-      formik.setValues({
-        first_name: userData.first_name,
-        last_name: userData.last_name,
-        email: userData.email,
-        password: userData.password,
-      });
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
-  };
+      };
+      fetchCompany();
+    }, [accessToken]);
 
+    useEffect(() => {
+      const fetchApplication = async () => {
+        try {
+          const response = await axios.get(
+            'https://control-financiero.herokuapp.com/api/v1/application',
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+          setApplications(response.data);
+        } catch (error) {
+          console.error('Error fetching applications:', error);
+        }
+      };
+      fetchApplication();
+    }, [accessToken]);
+
+  
   useEffect(() => {
-    if (accessToken && id) {
-      fetchUserData();
-    }
+
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          `https://control-financiero.herokuapp.com/api/v1/user/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        const userData = response.data;
+        formik.setValues({
+          first_name: userData.first_name,
+          last_name: userData.last_name,
+          email: userData.email,
+          company_id: userData.company_id,
+          role_id: userData.company_id,
+          application_id: userData.application_id,
+          company_start_date: userData.company_start_date,
+        });
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken, id]);
 
   const handleSubmit = async (values) => {
     try {
-      await axios.patch(
-        `https://control-financiero.herokuapp.com/api/v1/user/${id}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      await axios.patch(`https://control-financiero.herokuapp.com/api/v1/auth/edit/${id}`, values, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       toast.success('Usuario actualizado exitosamente');
       router.push('/dashboard/user/list');
     } catch (error) {
@@ -135,13 +163,13 @@ export default function EditUserPage() {
   const formik = useFormik({
     initialValues: {
       first_name: '',
-      last_name: '',
-      email: '',
-      password: '',
-      is_active: true,
-      company_start_date: '',
-      role_name: '',
-      company_name: '',
+        last_name: '',
+        email: '',
+        password: '',
+        company_id: 1,
+        role_id: 1,
+        application_id: 1,
+        company_start_date: '',
     },
     validationSchema,
     onSubmit: handleSubmit,
@@ -150,19 +178,14 @@ export default function EditUserPage() {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
 
-    if (name === 'first_name' && value.length >= 30) {
+    if (value.length >= 30 && name !== 'email') {
       toast.info('Se ha alcanzado el límite de caracteres permitidos');
     }
 
-    if (name === 'last_name' && value.length >= 30) {
+    if (name === 'password' && value.length >= 15) {
       toast.info('Se ha alcanzado el límite de caracteres permitidos');
     }
-
     if (name === 'email' && value.length >= 70) {
-      toast.info('Se ha alcanzado el límite de caracteres permitidos');
-    }
-
-    if (name === 'password' && value.length >= 30) {
       toast.info('Se ha alcanzado el límite de caracteres permitidos');
     }
 
@@ -180,7 +203,7 @@ export default function EditUserPage() {
       <ToastContainer />
 
       <Container>
-        <Box
+      <Box
           component="form"
           noValidate
           autoComplete="off"
@@ -239,14 +262,97 @@ export default function EditUserPage() {
             <Grid item xs={12} md={12}>
               <TextField
                 fullWidth
-                label="Contraseña"
+                label="Nueva contraseña"
                 name="password"
                 type="text"
+                value={formik.values.password}
                 onChange={handleInputChange}
                 error={formik.touched.password && formik.errors.password}
                 helperText={formik.touched.password && formik.errors.password}
                 inputProps={{
-                  maxLength: 30,
+                  maxLength: 15,
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={12}>
+              <FormControl fullWidth>
+                <InputLabel id="company-label" color="secondary">
+                  Empresa
+                </InputLabel>
+                <Select
+                  labelId="company-label"
+                  id="company_id"
+                  name="company_id"
+                  value={formik.values.company_id}
+                  onChange={formik.handleChange}
+                  error={formik.touched.company_id && formik.errors.company_id}
+                  helperText={formik.touched.company && formik.errors.company}
+                  fullWidth
+                >
+                  {companies.map((company) => (
+                    <MenuItem key={company.id} value={company.id}>
+                      {company.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12} md={12}>
+              <FormControl fullWidth>
+                <InputLabel id="role-label">Posición</InputLabel>
+                <Select
+                  labelId="role-label"
+                  id="role_id"
+                  name="role_id"
+                  value={formik.values.role_id}
+                  onChange={formik.handleChange}
+                  error={formik.touched.role_id && formik.errors.role_id}
+                  fullWidth
+                >
+                  {roles.map((role) => (
+                    <MenuItem key={role.id} value={role.id}>
+                      {role.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12} md={12}>
+              <FormControl fullWidth>
+                <InputLabel id="application-label">Aplicación</InputLabel>
+                <Select
+                  labelId="application-label"
+                  id="application_id"
+                  name="application_id"
+                  value={formik.values.application_id}
+                  onChange={formik.handleChange}
+                  error={formik.touched.application_id && formik.errors.application_id}
+                  fullWidth
+                >
+                  {applications.map((application) => (
+                    <MenuItem key={application.id} value={application.id}>
+                      {application.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Fecha de inicio en la empresa"
+                name="company_start_date"
+                type="date"
+                value={formik.values.company_start_date}
+                onChange={formik.handleChange}
+                error={formik.touched.company_start_date && formik.errors.company_start_date}
+                helperText={formik.touched.company_start_date && formik.errors.company_start_date}
+                InputLabelProps={{
+                  shrink: true,
                 }}
               />
             </Grid>
