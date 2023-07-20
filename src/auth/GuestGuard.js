@@ -21,6 +21,7 @@ export default function GuestGuard({ children }) {
   useEffect(() => {
     if (isAuthenticated) {
       push('/dashboard');
+      window.location.reload();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
