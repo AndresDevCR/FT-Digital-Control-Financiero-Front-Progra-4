@@ -1,13 +1,8 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
-// next
 import { useRouter } from 'next/router';
-// components
 import LoadingScreen from '../components/loading-screen';
-//
 import { useAuthContext } from './useAuthContext';
-
-// ----------------------------------------------------------------------
 
 GuestGuard.propTypes = {
   children: PropTypes.node,
@@ -15,20 +10,18 @@ GuestGuard.propTypes = {
 
 export default function GuestGuard({ children }) {
   const { push } = useRouter();
-
   const { isAuthenticated, isInitialized } = useAuthContext();
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isInitialized && isAuthenticated) {
       push('/dashboard');
-      window.location.reload();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated]);
+  }, [isAuthenticated, isInitialized, push]);
 
-  if (isInitialized === isAuthenticated) {
+  if (!isInitialized) {
+    // Show a loading screen until the authentication status is determined
     return <LoadingScreen />;
   }
 
-  return <> {children} </>;
+  return <>{children}</>;
 }
