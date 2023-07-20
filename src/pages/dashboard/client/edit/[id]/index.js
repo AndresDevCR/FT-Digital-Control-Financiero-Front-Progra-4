@@ -33,6 +33,7 @@ const validationSchema = Yup.object().shape({
         .required('Número de teléfono es requerido')
         .max(30, 'El nombre debe tener como máximo 30 caracteres'),
     email: Yup.string()
+    .required('El correo es requerido')
     .max(70, 'El correo debe tener como máximo 70 caracteres')
     .matches(
       /^[^\s@]+@[^\s@]+\.[^\s@]+$/,

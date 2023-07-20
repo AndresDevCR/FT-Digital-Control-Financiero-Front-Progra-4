@@ -16,22 +16,16 @@ const validationSchema = Yup.object().shape({
         .required('Descripción de la compañía es requerida')
         .max(200, 'La descripción debe tener como máximo 200 caracteres'),
     category: Yup.string()
-        .required('Categoría de la compañía es requerida')
         .max(30, 'La categoría debe tener como máximo 30 caracteres'),
     primary_phone_number: Yup.string()
-        .required('Número de teléfono es requerido')
         .max(30, 'El nombre debe tener como máximo 30 caracteres'),
     secondary_phone_number: Yup.string()
-        .required('Número de teléfono es requerido')
         .max(30, 'El nombre debe tener como máximo 30 caracteres'),
     city: Yup.string()
-        .required('Ciudad es requerida')
         .max(30, 'El nombre debe tener como máximo 30 caracteres'),
     state: Yup.string()
-        .required('Estado es requerido')
         .max(30, 'El nombre debe tener como máximo 30 caracteres'),
     country: Yup.string()
-        .required('País es requerido')
         .max(30, 'El nombre debe tener como máximo 30 caracteres'),
     is_active: Yup.boolean().required('Estado es requerido').default(true),
 
@@ -48,10 +42,10 @@ export default function CompanyForm() {
                     Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
                 },
             });
-            toast.success('Agregado correctamente al inventario');
+            toast.success('Agregado correctamente a las compañías');
             router.push('/dashboard/company/list');
         } catch (error) {
-            toast.error('Error al agregar a las aplicaciones');
+            toast.error('Error al agregar la compañía');
         }
     };
 

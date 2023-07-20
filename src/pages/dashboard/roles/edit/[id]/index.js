@@ -13,7 +13,7 @@ EditRolePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
-    .required('El nombre es obligatorio')
+    .required('El nombre del rol es obligatorio')
     .max(30, 'El nombre debe tener como máximo 30 caracteres'),
   description: Yup.string()
     .required('La descripción es obligatoria')
