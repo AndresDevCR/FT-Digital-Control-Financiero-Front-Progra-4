@@ -42,9 +42,23 @@ function Details() {
     return new Date(date).toLocaleDateString(undefined, options);
   };
 
-  const handleDownloadPDF = () => {
-    // Lógica para descargar el PDF
-    // Puedes implementarla según tus necesidades
+  const handleDownloadPDF = async () => {
+    try {
+      const response = await axios.get(`https://control-financiero.herokuapp.com/api/v1/v1/pdf/download/invoice/${id}`, {
+        responseType: 'blob', // Set the response type to blob to handle binary data
+        headers: {
+          Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
+        },
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `invoice_${id}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   if (!invoice) {
