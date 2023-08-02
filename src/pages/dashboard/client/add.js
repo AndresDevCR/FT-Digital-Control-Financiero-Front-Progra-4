@@ -4,7 +4,9 @@ import RoleBasedGuard from '../../../auth/RoleBasedGuard';
 
 add.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function add() {
-    return (
-        <ClientForm />
-    );
+  return (
+    <RoleBasedGuard roles={['administrator', 'admin', 'superadmin']} hasContent>
+      <ClientForm />
+    </RoleBasedGuard>
+  );
 }

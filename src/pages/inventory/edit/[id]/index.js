@@ -39,7 +39,7 @@ const EditInventory = () => {
       .patch(`https://control-financiero.herokuapp.com/api/v1/inventory/${id}`, values, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-        }
+        },
       })
       .then((response) => {
         console.log(response);
@@ -77,10 +77,10 @@ const EditInventory = () => {
       productName: '',
       availableQuantity: 0,
       description: '',
-      entryDate: ''
+      entryDate: '',
     },
     validationSchema,
-    onSubmit: handleSubmit
+    onSubmit: handleSubmit,
   });
 
   useEffect(() => {
@@ -98,7 +98,7 @@ const EditInventory = () => {
             productName: inventory.productName,
             availableQuantity: inventory.availableQuantity,
             description: inventory.description,
-            entryDate: inventory.entryDate
+            entryDate: inventory.entryDate,
           });
         })
         .catch((error) => {
@@ -106,11 +106,11 @@ const EditInventory = () => {
           toast.error('Error al cargar el inventario');
         });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken, id, formik.setValues]);
 
   return (
-    <>
+    <RoleBasedGuard roles={['administrator', 'admin', 'user']} hasContent>
       <Head>
         <title>Editar Inventario | FT Control Financiero</title>
       </Head>
@@ -201,13 +201,7 @@ const EditInventory = () => {
 
             {/* Botón del formulario */}
             <Grid item xs={12} md={12}>
-              <Button
-                fullWidth
-                size="large"
-                type="submit"
-                variant="contained"
-                sx={{ mt: 3 }}
-              >
+              <Button fullWidth size="large" type="submit" variant="contained" sx={{ mt: 3 }}>
                 Guardar
               </Button>
             </Grid>
@@ -223,11 +217,10 @@ const EditInventory = () => {
                 Volver a la lista de inventario
               </Button>
             </Grid>
-
           </Grid>
         </Box>
       </Container>
-    </>
+    </RoleBasedGuard>
   );
 };
 

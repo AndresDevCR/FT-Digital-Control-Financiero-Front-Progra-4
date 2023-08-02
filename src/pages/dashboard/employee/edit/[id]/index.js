@@ -180,7 +180,7 @@ export default function EditEmployeePage() {
   };
 
   return (
-    <>
+    <RoleBasedGuard roles={['administrator','admin','superadmin']} hasContent>
       <Container>
         <Typography variant="h3" component="h1" paragraph>
           Editar Empleado
@@ -357,6 +357,6 @@ export default function EditEmployeePage() {
           </Grid>
         </Box>
       </Container>
-    </>
+      </RoleBasedGuard>
   );
 }

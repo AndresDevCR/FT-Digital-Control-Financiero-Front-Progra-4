@@ -32,14 +32,14 @@ const validationSchema = Yup.object().shape({
   last_name: Yup.string()
     .required('Apellido del empleado es requerido')
     .max(30, 'El apellido debe tener como máximo 30 caracteres'),
-    email: Yup.string()
+  email: Yup.string()
     .required('El correo del usuario es requerido')
     .max(70, 'El correo debe tener como máximo 70 caracteres')
     .matches(
       /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
       'El correo electrónico ingresado no tiene un formato válido'
     ),
-    password: Yup.string()
+  password: Yup.string()
     .required('Ingrese su nueva contraseña')
     .min(8, 'La contraseña debe tener al menos 8 caracteres')
     .max(30, 'La contraseña debe tener como máximo 30 caracteres')
@@ -60,14 +60,11 @@ export default function EditUserPage() {
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const response = await axios.get(
-          'https://control-financiero.herokuapp.com/api/v1/role',
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
+        const response = await axios.get('https://control-financiero.herokuapp.com/api/v1/role', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
         setRoles(response.data);
       } catch (error) {
         console.error('Error fetching roles:', error);
@@ -77,47 +74,45 @@ export default function EditUserPage() {
     fetchRoles();
   }, [accessToken]);
 
-    useEffect(() => {
-      const fetchCompany = async () => {
-        try {
-          const response = await axios.get(
-            'https://control-financiero.herokuapp.com/api/v1/company',
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
-          setCompanies(response.data);
-        } catch (error) {
-          console.error('Error fetching companies:', error);
-        }
-      };
-      fetchCompany();
-    }, [accessToken]);
-
-    useEffect(() => {
-      const fetchApplication = async () => {
-        try {
-          const response = await axios.get(
-            'https://control-financiero.herokuapp.com/api/v1/application',
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
-          setApplications(response.data);
-        } catch (error) {
-          console.error('Error fetching applications:', error);
-        }
-      };
-      fetchApplication();
-    }, [accessToken]);
-
-  
   useEffect(() => {
+    const fetchCompany = async () => {
+      try {
+        const response = await axios.get(
+          'https://control-financiero.herokuapp.com/api/v1/company',
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        setCompanies(response.data);
+      } catch (error) {
+        console.error('Error fetching companies:', error);
+      }
+    };
+    fetchCompany();
+  }, [accessToken]);
 
+  useEffect(() => {
+    const fetchApplication = async () => {
+      try {
+        const response = await axios.get(
+          'https://control-financiero.herokuapp.com/api/v1/application',
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        setApplications(response.data);
+      } catch (error) {
+        console.error('Error fetching applications:', error);
+      }
+    };
+    fetchApplication();
+  }, [accessToken]);
+
+  useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
@@ -164,13 +159,13 @@ export default function EditUserPage() {
   const formik = useFormik({
     initialValues: {
       first_name: '',
-        last_name: '',
-        email: '',
-        password: '',
-        company_id: 1,
-        role_id: 1,
-        application_id: 1,
-        company_start_date: '',
+      last_name: '',
+      email: '',
+      password: '',
+      company_id: 1,
+      role_id: 1,
+      application_id: 1,
+      company_start_date: '',
     },
     validationSchema,
     onSubmit: handleSubmit,
@@ -194,7 +189,7 @@ export default function EditUserPage() {
   };
 
   return (
-    <>
+    <RoleBasedGuard roles={['administrator', 'admin']} hasContent>
       <Container>
         <Typography variant="h3" component="h1" paragraph>
           Editar Usuario
@@ -204,7 +199,7 @@ export default function EditUserPage() {
       <ToastContainer />
 
       <Container>
-      <Box
+        <Box
           component="form"
           noValidate
           autoComplete="off"
@@ -377,6 +372,6 @@ export default function EditUserPage() {
           </Grid>
         </Box>
       </Container>
-    </>
+    </RoleBasedGuard>
   );
 }

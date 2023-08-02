@@ -12,152 +12,139 @@ import * as Yup from 'yup';
 import DashboardLayout from '../../../../../layouts/dashboard';
 import { useSettingsContext } from '../../../../../components/settings';
 import { AuthContext } from '../../../../../auth/JwtContext';
-import RoleBasedGuard from "../../../../../auth/RoleBasedGuard";
+import RoleBasedGuard from '../../../../../auth/RoleBasedGuard';
 
 const validationSchema = Yup.object().shape({
-    enterprise_name: Yup.string()
-        .required('El nombre es obligatorio'),
+  enterprise_name: Yup.string().required('El nombre es obligatorio'),
 });
 
 const EditEnterprise = () => {
-    const { accessToken } = useContext(AuthContext);
-    const { themeStretch } = useSettingsContext();
-    const router = useRouter();
-    const { id } = router.query;
+  const { accessToken } = useContext(AuthContext);
+  const { themeStretch } = useSettingsContext();
+  const router = useRouter();
+  const { id } = router.query;
 
-    const handleSubmit = (values) => {
-        axios
-            .patch(`https://control-financiero.herokuapp.com/api/v1/enterprise/${id}`, values, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            })
-            .then((response) => {
-                console.log(response);
-                toast.success('Empresa actualizada con éxito');
-                router.push('/dashboard/enterprise/list');
-            })
-            .catch((error) => {
-                console.log(error);
-                toast.error('Error al actualizar el Empresa');
-            });
-    };
-
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-
-        if (value.length >= 30) {
-            toast.info('Se ha alcanzado el límite de caracteres permitidos');
-        }
-
-        formik.setFieldValue(name, value);
-    };
-
-    const formik = useFormik({
-        initialValues: {
-            enterprise_name:'',
+  const handleSubmit = (values) => {
+    axios
+      .patch(`https://control-financiero.herokuapp.com/api/v1/enterprise/${id}`, values, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
-        validationSchema,
-        onSubmit: handleSubmit,
-    });
+      })
+      .then((response) => {
+        console.log(response);
+        toast.success('Empresa actualizada con éxito');
+        router.push('/dashboard/enterprise/list');
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error('Error al actualizar el Empresa');
+      });
+  };
 
-    useEffect(() => {
-        if (id) {
-            // Fetch enterprise data from the API using the provided ID
-            axios
-                .get(`https://control-financiero.herokuapp.com/api/v1/enterprise/${id}`, {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                })
-                .then((response) => {
-                    const enterprise = response.data;
-                    formik.setValues({
-                        enterprise_name: enterprise.enterprise_name,
-                    });
-                })
-                .catch((error) => {
-                    console.log(error);
-                    toast.error('Error al cargar el Empresa');
-                });
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [accessToken, id, formik.setValues]);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
 
-    return (
-        <>
-            <Head>
-                <title>Editar Empresa | FT Control Financiero</title>
-            </Head>
+    if (value.length >= 30) {
+      toast.info('Se ha alcanzado el límite de caracteres permitidos');
+    }
 
-            <Container maxWidth={themeStretch ? false : 'xl'}>
-                <Typography variant="h3" component="h1" paragraph>
-                    Editar Empresa
-                </Typography>
-            </Container>
+    formik.setFieldValue(name, value);
+  };
 
-            <ToastContainer />
+  const formik = useFormik({
+    initialValues: {
+      enterprise_name: '',
+    },
+    validationSchema,
+    onSubmit: handleSubmit,
+  });
 
-            {/* Formulario de editar Empresa */}
-            <Container maxWidth={themeStretch ? false : 'xl'}>
-                <Box
-                    component="form"
-                    noValidate
-                    autoComplete="off"
-                    sx={{ mt: 3 }}
-                    onSubmit={formik.handleSubmit}
-                >
-                    <Grid container spacing={3}>
-                        <Grid item xs={12} md={12}>
-                            <TextField
-                                fullWidth
-                                label="Nombre del Empresa"
-                                name="enterprise_name"
-                                value={formik.values.enterprise_name}
-                                onChange={handleInputChange}
-                                error={
-                                    formik.touched.enterprise_name &&
-                                    formik.errors.enterprise_name
-                                }
-                                helperText={
-                                    formik.touched.enterprise_name &&
-                                    formik.errors.enterprise_name
-                                }
-                                inputProps={{
-                                    maxLength: 30,
-                                }}
-                            />
-                        </Grid>
+  useEffect(() => {
+    if (id) {
+      // Fetch enterprise data from the API using the provided ID
+      axios
+        .get(`https://control-financiero.herokuapp.com/api/v1/enterprise/${id}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then((response) => {
+          const enterprise = response.data;
+          formik.setValues({
+            enterprise_name: enterprise.enterprise_name,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error('Error al cargar el Empresa');
+        });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accessToken, id, formik.setValues]);
 
-                        {/* Botón del formulario */}
-                        <Grid item xs={12} md={12}>
-                            <Button
-                                fullWidth
-                                size="large"
-                                type="submit"
-                                variant="contained"
-                                sx={{ mt: 3 }}
-                            >
-                                Guardar
-                            </Button>
-                        </Grid>
+  return (
+    <RoleBasedGuard roles={['administrator', 'admin', 'superadmin']} hasContent>
+      <Head>
+        <title>Editar Empresa | FT Control Financiero</title>
+      </Head>
 
-                        {/* Botón para volver a la lista de Empresas */}
-                        <Grid item xs={12} md={12}>
-                            <Button
-                                fullWidth
-                                size="large"
-                                variant="outlined"
-                                onClick={() => router.push("/dashboard/enterprise/list")}
-                            >
-                                Volver a la lista de Empresas
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </Box>
-            </Container>
-        </>
-    );
+      <Container maxWidth={themeStretch ? false : 'xl'}>
+        <Typography variant="h3" component="h1" paragraph>
+          Editar Empresa
+        </Typography>
+      </Container>
+
+      <ToastContainer />
+
+      {/* Formulario de editar Empresa */}
+      <Container maxWidth={themeStretch ? false : 'xl'}>
+        <Box
+          component="form"
+          noValidate
+          autoComplete="off"
+          sx={{ mt: 3 }}
+          onSubmit={formik.handleSubmit}
+        >
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={12}>
+              <TextField
+                fullWidth
+                label="Nombre del Empresa"
+                name="enterprise_name"
+                value={formik.values.enterprise_name}
+                onChange={handleInputChange}
+                error={formik.touched.enterprise_name && formik.errors.enterprise_name}
+                helperText={formik.touched.enterprise_name && formik.errors.enterprise_name}
+                inputProps={{
+                  maxLength: 30,
+                }}
+              />
+            </Grid>
+
+            {/* Botón del formulario */}
+            <Grid item xs={12} md={12}>
+              <Button fullWidth size="large" type="submit" variant="contained" sx={{ mt: 3 }}>
+                Guardar
+              </Button>
+            </Grid>
+
+            {/* Botón para volver a la lista de Empresas */}
+            <Grid item xs={12} md={12}>
+              <Button
+                fullWidth
+                size="large"
+                variant="outlined"
+                onClick={() => router.push('/dashboard/enterprise/list')}
+              >
+                Volver a la lista de Empresas
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+      </Container>
+    </RoleBasedGuard>
+  );
 };
 
 EditEnterprise.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;

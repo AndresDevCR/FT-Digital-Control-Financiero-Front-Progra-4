@@ -27,11 +27,14 @@ function Details() {
 
   const fetchVacation = async () => {
     try {
-      const response = await axios.get(`https://control-financiero.herokuapp.com/api/v1/vacation/${id}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
-        },
-      });
+      const response = await axios.get(
+        `https://control-financiero.herokuapp.com/api/v1/vacation/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
+          },
+        }
+      );
       setVacation(response.data);
     } catch (error) {
       console.log(error);
@@ -53,7 +56,7 @@ function Details() {
   }
 
   return (
-    <>
+    <RoleBasedGuard roles={['administrator', 'admin', 'user']} hasContent>
       <Head>
         <title>Detalles de solicitud de vacaciones | FT Control Financiero</title>
       </Head>
@@ -77,7 +80,15 @@ function Details() {
           <img
             src="https://i.imgur.com/kMkFPom.png"
             alt="Foto de portada"
-            style={{ width: '100%', height: 'auto', position: 'absolute', top: 0, left: 0, zIndex: -1, borderRadius: '10px' }}
+            style={{
+              width: '100%',
+              height: 'auto',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              zIndex: -1,
+              borderRadius: '10px',
+            }}
           />
         </Box>
 
@@ -108,11 +119,7 @@ function Details() {
         </Card>
 
         <Box sx={{ mt: 3 }}>
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={() => router.back()}
-          >
+          <Button color="primary" variant="contained" onClick={() => router.back()}>
             Volver
           </Button>
           <Button
@@ -126,7 +133,7 @@ function Details() {
           </Button>
         </Box>
       </Container>
-    </>
+    </RoleBasedGuard>
   );
 }
 

@@ -1,11 +1,13 @@
-import QuotationForm from "../../components/forms/quotations/QuotationForm";
+import QuotationForm from '../../components/forms/quotations/QuotationForm';
 import DashboardLayout from '../../layouts/dashboard';
-import RoleBasedGuard from "../../auth/RoleBasedGuard";
+import RoleBasedGuard from '../../auth/RoleBasedGuard';
 
 add.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function add() {
   return (
-    <QuotationForm />
+    <RoleBasedGuard roles={['administrator', 'admin', 'user']} hasContent>
+      <QuotationForm />
+    </RoleBasedGuard>
   );
 }

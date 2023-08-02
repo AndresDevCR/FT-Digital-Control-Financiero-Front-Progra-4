@@ -176,7 +176,7 @@ export default function EditInvoiceForm() {
   }
 
   return (
-    <>
+    <RoleBasedGuard roles={['administrator', 'admin', 'user']} hasContent>
       <Container>
         <Typography variant="h3" component="h1" paragraph>
           Editar Factura
@@ -186,7 +186,7 @@ export default function EditInvoiceForm() {
       <ToastContainer />
 
       <Container>
-      <Box
+        <Box
           component="form"
           noValidate
           autoComplete="off"
@@ -194,7 +194,7 @@ export default function EditInvoiceForm() {
           onSubmit={formik.handleSubmit}
         >
           <Grid container spacing={3}>
-          <Grid item xs={12} md={12}>
+            <Grid item xs={12} md={12}>
               <FormControl fullWidth>
                 <InputLabel id="quotation_label">Cotización</InputLabel>
                 <Select
@@ -363,6 +363,6 @@ export default function EditInvoiceForm() {
           </Grid>
         </Box>
       </Container>
-    </>
+    </RoleBasedGuard>
   );
 }

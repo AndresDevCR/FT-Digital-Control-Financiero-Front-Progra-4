@@ -1,11 +1,13 @@
-import EnterpriseForm from "../../../components/tables/admin/enterprise/EnterpriseList";
+import EnterpriseForm from '../../../components/tables/admin/enterprise/EnterpriseList';
 import DashboardLayout from '../../../layouts/dashboard';
-import RoleBasedGuard from "../../../auth/RoleBasedGuard";
+import RoleBasedGuard from '../../../auth/RoleBasedGuard';
 
 add.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function add() {
   return (
-    <EnterpriseForm/>
+    <RoleBasedGuard roles={['administrator', 'admin']} hasContent>
+      <EnterpriseForm />
+    </RoleBasedGuard>
   );
 }

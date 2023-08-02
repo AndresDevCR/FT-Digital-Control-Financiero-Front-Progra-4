@@ -82,7 +82,7 @@ const ICONS = {
   supplier: <LocalShippingIcon />,
 };
 
-const roles = ['admin', 'administrator', 'superadmin'];
+const roles = ['admin', 'administrator'];
 
 
 const navConfig = [

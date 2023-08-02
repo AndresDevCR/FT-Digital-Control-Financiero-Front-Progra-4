@@ -161,7 +161,7 @@ export default function EditClientForm() {
     }
 
     return (
-        <>
+        <RoleBasedGuard roles={['administrator','admin','superadmin']} hasContent>
             <Container>
                 <Typography variant="h3" component="h1" paragraph>
                     Editar Cliente
@@ -279,6 +279,7 @@ export default function EditClientForm() {
                     </Grid>
                 </Box>
             </Container>
-        </>
+            </RoleBasedGuard>
+        
     );
 }

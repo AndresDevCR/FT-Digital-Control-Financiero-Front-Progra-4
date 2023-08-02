@@ -27,11 +27,14 @@ function Details() {
 
   const fetchProduct = async () => {
     try {
-      const response = await axios.get(`https://control-financiero.herokuapp.com/api/v1/inventory/${id}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
-        },
-      });
+      const response = await axios.get(
+        `https://control-financiero.herokuapp.com/api/v1/inventory/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
+          },
+        }
+      );
       setProduct(response.data);
     } catch (error) {
       console.log(error);
@@ -53,7 +56,7 @@ function Details() {
   }
 
   return (
-    <>
+    <RoleBasedGuard roles={['administrator', 'admin','user']} hasContent>
       <Head>
         <title>Detalles del Producto | FT Control Financiero</title>
       </Head>
@@ -77,7 +80,15 @@ function Details() {
           <img
             src="https://i.imgur.com/kMkFPom.png"
             alt="Foto de portada"
-            style={{ width: '100%', height: 'auto', position: 'absolute', top: 0, left: 0, zIndex: -1, borderRadius: '10px' }}
+            style={{
+              width: '100%',
+              height: 'auto',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              zIndex: -1,
+              borderRadius: '10px',
+            }}
           />
         </Box>
 
@@ -99,9 +110,7 @@ function Details() {
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
-                <Typography variant="subtitle1">
-                  Descripción: {product.description}
-                </Typography>
+                <Typography variant="subtitle1">Descripción: {product.description}</Typography>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle1">
@@ -113,11 +122,7 @@ function Details() {
         </Card>
 
         <Box sx={{ mt: 3 }}>
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={() => router.back()}
-          >
+          <Button color="primary" variant="contained" onClick={() => router.back()}>
             Volver
           </Button>
           <Button
@@ -131,7 +136,7 @@ function Details() {
           </Button>
         </Box>
       </Container>
-    </>
+    </RoleBasedGuard>
   );
 }
 
