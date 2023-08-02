@@ -8,6 +8,7 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import DashboardLayout from '../../../../layouts/dashboard';
 import { AuthContext } from '../../../../auth/JwtContext';
+import RoleBasedGuard from '../../../../auth/RoleBasedGuard';
 
 Details.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 

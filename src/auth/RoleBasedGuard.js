@@ -29,13 +29,13 @@ export default function RoleBasedGuard({ hasContent, roles, children }) {
       <Container component={MotionContainer} sx={{ textAlign: 'center' }}>
         <m.div variants={varBounce().in}>
           <Typography variant="h3" paragraph>
-            Permission Denied
+           Permiso Denegado
           </Typography>
         </m.div>
 
         <m.div variants={varBounce().in}>
           <Typography sx={{ color: 'text.secondary' }}>
-            You do not have permission to access this page
+            No tienes permiso para acceder a esta página
           </Typography>
         </m.div>
 

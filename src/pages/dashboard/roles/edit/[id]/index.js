@@ -8,6 +8,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { AuthContext } from '../../../../../auth/JwtContext';
 import DashboardLayout from '../../../../../layouts/dashboard';
+import RoleBasedGuard from '../../../../../auth/RoleBasedGuard';
 
 EditRolePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 

@@ -11,6 +11,7 @@ import * as Yup from 'yup';
 import DashboardLayout from '../../../../../layouts/dashboard';
 import { useSettingsContext } from '../../../../../components/settings';
 import { AuthContext } from '../../../../../auth/JwtContext';
+import RoleBasedGuard from '../../../../../auth/RoleBasedGuard';
 
 const validationSchema = Yup.object().shape({
     name: Yup.string()
@@ -102,7 +103,7 @@ const EditApplication = () => {
   }, [accessToken, id, formik.setValues]);
 
   return (
-    <>
+    <RoleBasedGuard roles={['administrator','admin','superadmin']} hasContent>
       <Head>
         <title>Editar aplicación | FT Control Financiero</title>
       </Head>
@@ -215,7 +216,7 @@ const EditApplication = () => {
           </Grid>
         </Box>
       </Container>
-    </>
+      </RoleBasedGuard>
   );
 };
 

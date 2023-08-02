@@ -1,6 +1,6 @@
 import QuotationForm from "../../components/forms/quotations/QuotationForm";
 import DashboardLayout from '../../layouts/dashboard';
-
+import RoleBasedGuard from "../../auth/RoleBasedGuard";
 
 add.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 

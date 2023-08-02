@@ -14,6 +14,7 @@ import * as Yup from 'yup';
 import DashboardLayout from '../../../../../layouts/dashboard';
 import { useSettingsContext } from '../../../../../components/settings';
 import { AuthContext } from '../../../../../auth/JwtContext';
+import RoleBasedGuard from '../../../../../auth/RoleBasedGuard';
 
 const validationSchema = Yup.object().shape({
     position_name: Yup.string()

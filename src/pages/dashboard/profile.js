@@ -6,6 +6,7 @@ import { AppBar, Box, Toolbar, Typography, Avatar, Card, CardContent } from '@mu
 import { AuthContext } from '../../auth/JwtContext';
 import { useSettingsContext } from '../../components/settings';
 import DashboardLayout from '../../layouts/dashboard';
+import RoleBasedGuard from '../../auth/RoleBasedGuard';
 
 const Profile = () => {
   const theme = useTheme();
@@ -13,6 +14,7 @@ const Profile = () => {
   const { themeStretch } = useSettingsContext();
 
   return (
+    <RoleBasedGuard roles={['administrator', 'admin', 'superadmin', 'user']} hasContent>
     <Box>
       <AppBar position="static" color="transparent" elevation={0}>
         <Toolbar>
@@ -62,6 +64,7 @@ const Profile = () => {
         </Card>
       </Box>
     </Box>
+    </RoleBasedGuard>
   );
 };
 

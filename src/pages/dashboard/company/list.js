@@ -1,3 +1,4 @@
+import RoleBasedGuard from "../../../auth/RoleBasedGuard";
 import CompanyList from "../../../components/tables/admin/company/CompanyList";
 import DashboardLayout from '../../../layouts/dashboard';
 // components
@@ -6,10 +7,10 @@ import DashboardLayout from '../../../layouts/dashboard';
 
 list.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-export default function list () {
-    
-    
+export default function list() {
     return (
-        <CompanyList/>
-    )
+        <RoleBasedGuard roles={['administrator', 'admin', 'superadmin']} hasContent>
+            <CompanyList />
+        </RoleBasedGuard>
+    );
 }

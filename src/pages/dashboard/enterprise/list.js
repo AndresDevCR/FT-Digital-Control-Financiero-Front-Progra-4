@@ -1,6 +1,6 @@
 import EnterpriseForm from "../../../components/tables/admin/enterprise/EnterpriseList";
 import DashboardLayout from '../../../layouts/dashboard';
-
+import RoleBasedGuard from "../../../auth/RoleBasedGuard";
 
 add.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 

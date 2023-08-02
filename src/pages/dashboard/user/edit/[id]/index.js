@@ -21,6 +21,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { AuthContext } from '../../../../../auth/JwtContext';
 import DashboardLayout from '../../../../../layouts/dashboard';
+import RoleBasedGuard from '../../../../../auth/RoleBasedGuard';
 
 EditUserPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
