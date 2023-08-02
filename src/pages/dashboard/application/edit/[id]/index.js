@@ -103,7 +103,7 @@ const EditApplication = () => {
   }, [accessToken, id, formik.setValues]);
 
   return (
-    <RoleBasedGuard roles={['administrator','admin','superadmin']} hasContent>
+    <RoleBasedGuard roles={['administrator','admin']} hasContent>
       <Head>
         <title>Editar aplicación | FT Control Financiero</title>
       </Head>

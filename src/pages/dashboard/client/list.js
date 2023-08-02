@@ -1,10 +1,12 @@
+import RoleBasedGuard from '../../../auth/RoleBasedGuard';
 import ClientList from '../../../components/tables/admin/client/ClientList';
 import DashboardLayout from '../../../layouts/dashboard';
 
-
 list.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function list() {
-    return (
-        <ClientList />
-    );
+  return (
+    <RoleBasedGuard roles={['administrator', 'admin', 'superadmin']} hasContent>
+      <ClientList />
+    </RoleBasedGuard>
+  );
 }

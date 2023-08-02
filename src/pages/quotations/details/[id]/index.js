@@ -27,11 +27,14 @@ function Details() {
 
   const fetchQuotation = async () => {
     try {
-      const response = await axios.get(`https://control-financiero.herokuapp.com/api/v1/quotation/${id}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
-        },
-      });
+      const response = await axios.get(
+        `https://control-financiero.herokuapp.com/api/v1/quotation/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
+          },
+        }
+      );
       setQuotation(response.data);
     } catch (error) {
       console.log(error);
@@ -43,15 +46,14 @@ function Details() {
     return new Date(date).toLocaleDateString(undefined, options);
   };
 
-  const handleDownloadPDF = () => {
-  };
+  const handleDownloadPDF = () => {};
 
   if (!quotation) {
-    return null; 
+    return null;
   }
 
   return (
-    <>
+    <RoleBasedGuard roles={['administrator', 'admin', 'user']} hasContent>
       <Head>
         <title>Detalles de la cotización | FT Control Financiero</title>
       </Head>
@@ -75,7 +77,15 @@ function Details() {
           <img
             src="https://i.imgur.com/kMkFPom.png"
             alt="Foto de portada"
-            style={{ width: '100%', height: 'auto', position: 'absolute', top: 0, left: 0, zIndex: -1, borderRadius: '10px' }}
+            style={{
+              width: '100%',
+              height: 'auto',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              zIndex: -1,
+              borderRadius: '10px',
+            }}
           />
         </Box>
 
@@ -102,19 +112,13 @@ function Details() {
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
-                <Typography variant="subtitle1">
-                  Código de orden: {quotation.po_number}
-                </Typography>
+                <Typography variant="subtitle1">Código de orden: {quotation.po_number}</Typography>
               </Grid>
               <Grid item xs={12} md={6}>
-                <Typography variant="subtitle1">
-                  Título : {quotation.quote_title}
-                </Typography>
+                <Typography variant="subtitle1">Título : {quotation.quote_title}</Typography>
               </Grid>
               <Grid item xs={12} md={6}>
-                <Typography variant="subtitle1">
-                  Descripción: {quotation.description}
-                </Typography>
+                <Typography variant="subtitle1">Descripción: {quotation.description}</Typography>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle1">
@@ -126,11 +130,7 @@ function Details() {
         </Card>
 
         <Box sx={{ mt: 3 }}>
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={() => router.back()}
-          >
+          <Button color="primary" variant="contained" onClick={() => router.back()}>
             Volver
           </Button>
           <Button
@@ -144,7 +144,7 @@ function Details() {
           </Button>
         </Box>
       </Container>
-    </>
+    </RoleBasedGuard>
   );
 }
 

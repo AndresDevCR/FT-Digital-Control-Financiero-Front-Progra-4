@@ -34,7 +34,7 @@ export default function EditRolePage() {
         },
       });
       toast.success('Rol editado correctamente');
-      router.push('/dashboard/roles/list'); 
+      router.push('/dashboard/roles/list');
     } catch (error) {
       toast.error('Error al editar el rol');
     }
@@ -63,11 +63,14 @@ export default function EditRolePage() {
     // Aquí puedes realizar una petición para obtener los datos del rol con el ID proporcionado y llenar el formulario con esos datos
     const fetchRole = async () => {
       try {
-        const response = await axios.get(`https://control-financiero.herokuapp.com/api/v1/role/${id}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        const response = await axios.get(
+          `https://control-financiero.herokuapp.com/api/v1/role/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
         const role = response.data;
         formik.setValues({
           name: role.name,
@@ -81,11 +84,11 @@ export default function EditRolePage() {
     if (id) {
       fetchRole();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken, id]);
 
   return (
-    <>
+    <RoleBasedGuard roles={['administrator', 'admin']} hasContent>
       <Container>
         <Typography variant="h3" component="h1" paragraph>
           Editar Rol
@@ -145,7 +148,7 @@ export default function EditRolePage() {
                 fullWidth
                 size="large"
                 variant="outlined"
-                onClick={() => router.push("/dashboard/roles/list")}
+                onClick={() => router.push('/dashboard/roles/list')}
               >
                 Volver a la lista de roles
               </Button>
@@ -153,7 +156,6 @@ export default function EditRolePage() {
           </Grid>
         </Box>
       </Container>
-    </>
+    </RoleBasedGuard>
   );
 }
-

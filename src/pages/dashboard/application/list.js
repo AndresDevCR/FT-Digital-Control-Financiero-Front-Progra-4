@@ -10,7 +10,7 @@ list.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function list() {
 
     return (
-        <RoleBasedGuard roles={['administrator', 'admin', 'superadmin']} hasContent>
+        <RoleBasedGuard roles={['administrator', 'admin']} hasContent>
             <ApplicationList />
         </RoleBasedGuard >
     );

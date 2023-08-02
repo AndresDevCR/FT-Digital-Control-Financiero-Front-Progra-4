@@ -1,11 +1,13 @@
-import VacationForm from "../../components/forms/vacations/VacationForm";
+import VacationForm from '../../components/forms/vacations/VacationForm';
 import DashboardLayout from '../../layouts/dashboard';
-import RoleBasedGuard from "../../auth/RoleBasedGuard";
+import RoleBasedGuard from '../../auth/RoleBasedGuard';
 
 add.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function add() {
   return (
-    <VacationForm />
+    <RoleBasedGuard roles={['administrator', 'admin', 'user']} hasContent>
+      <VacationForm />
+    </RoleBasedGuard>
   );
 }

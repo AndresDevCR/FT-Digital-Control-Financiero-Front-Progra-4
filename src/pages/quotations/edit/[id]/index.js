@@ -167,7 +167,7 @@ export default function EditQuotationForm() {
   }
 
   return (
-    <>
+    <RoleBasedGuard roles={['administrator', 'admin', 'user']} hasContent>
       <Container>
         <Typography variant="h3" component="h1" paragraph>
           Editar Cotización
@@ -369,6 +369,6 @@ export default function EditQuotationForm() {
           </Grid>
         </Box>
       </Container>
-    </>
+    </RoleBasedGuard>
   );
 }
