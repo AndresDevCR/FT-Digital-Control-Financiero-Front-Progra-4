@@ -86,7 +86,7 @@ const EditPosition = () => {
   }, [accessToken, id, formik.setValues]);
 
   return (
-    <RoleBasedGuard roles={['administrator', 'admin']} hasContent>
+    <RoleBasedGuard roles={['administrator','user', 'admin']} hasContent>
       <Head>
         <title>Editar Puesto | FT Control Financiero</title>
       </Head>

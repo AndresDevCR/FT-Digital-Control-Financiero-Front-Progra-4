@@ -84,7 +84,7 @@ const EditEnterprise = () => {
   }, [accessToken, id, formik.setValues]);
 
   return (
-    <RoleBasedGuard roles={['administrator', 'admin', 'superadmin']} hasContent>
+    <RoleBasedGuard roles={['administrator', 'user', 'admin', 'superadmin']} hasContent>
       <Head>
         <title>Editar Empresa | FT Control Financiero</title>
       </Head>

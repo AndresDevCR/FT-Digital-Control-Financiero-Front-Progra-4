@@ -84,7 +84,7 @@ const EditSupplier = () => {
   }, [accessToken, id, formik.setValues]);
 
   return (
-    <RoleBasedGuard roles={['administrator', 'admin']} hasContent>
+    <RoleBasedGuard roles={['administrator','user', 'admin']} hasContent>
       <Head>
         <title>Editar Proveedor | FT Control Financiero</title>
       </Head>

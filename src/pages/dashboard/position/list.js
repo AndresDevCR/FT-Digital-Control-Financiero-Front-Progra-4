@@ -6,7 +6,7 @@ add.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function add() {
   return (
-    <RoleBasedGuard roles={['administrator', 'admin']} hasContent>
+    <RoleBasedGuard roles={['administrator','user', 'admin']} hasContent>
       <PositionForm />
     </RoleBasedGuard>
   );

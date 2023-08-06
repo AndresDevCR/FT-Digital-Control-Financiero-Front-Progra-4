@@ -5,7 +5,7 @@ import DashboardLayout from '../../../layouts/dashboard';
 list.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function list() {
   return (
-    <RoleBasedGuard roles={['administrator', 'admin', 'superadmin']} hasContent>
+    <RoleBasedGuard roles={['administrator','user', 'admin', 'superadmin']} hasContent>
       <ClientList />
     </RoleBasedGuard>
   );
