@@ -21,9 +21,11 @@ import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import InfoIcon from '@mui/icons-material/Info';
+import { toast } from 'react-toastify';
 import Link from 'next/link';
 import DeleteConfirmationDialog from '../../delete-dialog/DeleteDialog';
 import { AuthContext } from '../../../auth/JwtContext';
+import { fDate } from '../../../utils/formatTime';
 
 export default function PaymentList() {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -99,6 +101,24 @@ export default function PaymentList() {
         }
     };
 
+    const handleNotification = async (id) => {
+        try {
+            await axios.post(
+                `https://control-financiero.herokuapp.com/api/v1/v1/notifications/payment-emails/${id}`,
+                null,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+            toast.success('Notificación enviada correctamente');
+        } catch (error) {
+            toast.error('Error al enviar notificación');
+        }
+    };
+
+
     return (
         <>
             <Container>
@@ -140,6 +160,7 @@ export default function PaymentList() {
                         <TableHead>
                             <TableRow>
                                 <TableCell>Nombre del Empleado</TableCell>
+                                <TableCell>Fecha del Pago</TableCell>
                                 <TableCell>Acciones</TableCell>
                             </TableRow>
                         </TableHead>
@@ -149,6 +170,7 @@ export default function PaymentList() {
                                 .map((paymentItem) => (
                                     <TableRow key={paymentItem.id}>
                                         <TableCell>{paymentItem.employee.employee_name}</TableCell>
+                                        <TableCell>{fDate(paymentItem.created_at)}</TableCell>
                                         <TableCell>
                                             <div>
                                                 <Button
@@ -190,6 +212,18 @@ export default function PaymentList() {
                                                     Ver Detalles
                                                 </Button>
                                             </div>
+                                            <div>
+                                                <Button
+                                                    color="primary"
+                                                    size="small"
+                                                    sx={{ mb: 2, mr: 2 }}
+                                                    variant="contained"
+                                                    onClick={() => handleNotification(`${paymentItem.id}`)}
+                                                    startIcon={<InfoIcon />}
+                                                >
+                                                    Enviar Email
+                                                </Button>
+                                            </div>
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -216,4 +250,4 @@ export default function PaymentList() {
             />
         </>
     );
-}
+};
