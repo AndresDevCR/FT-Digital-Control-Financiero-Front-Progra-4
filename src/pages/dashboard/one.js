@@ -3,11 +3,15 @@ import Head from 'next/head';
 import { Container, Typography, Grid } from '@mui/material';
 // layouts
 import Router, { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import DashboardLayout from '../../layouts/dashboard';
 // components
 import { useSettingsContext } from '../../components/settings';
 import { CardComponent } from '../../components/card/cardComponent';
 import RoleBasedGuard from '../../auth/RoleBasedGuard';
+import PieChart from '../../components/charts/pie-chart/PieChart';
+
+
 // ----------------------------------------------------------------------
 
 PageOne.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -19,30 +23,43 @@ export default function PageOne() {
   const router = useRouter();
 
 
-  
+
   return (
     <RoleBasedGuard roles={['administrator', 'user']} hasContent>
-        <Head>
-          <title>Control Financiero | Dashboard</title>
-        </Head>
+      <Head>
+        <title>Control Financiero | Dashboard</title>
+      </Head>
 
-        <Container
-          sx={{
-            py: 10,
-            maxWidth: 'container.xl',
-            margin: 'auto',
-            textAlign: 'center',
-          }}
-          maxWidth={themeStretch ? false : 'xl'}
-        >
-          <Typography variant="h3" paragraph>
-            Dashboard
-          </Typography>
-          <Typography sx={{ color: 'text.secondary' }}>
-            Bienvenido al dashboard de Control Financiero
-          </Typography>
+      <Container
+        sx={{
+          py: 10,
+          maxWidth: 'container.xl',
+          margin: 'auto',
+          textAlign: 'center',
+        }}
+        maxWidth={themeStretch ? false : 'xl'}
+      >
+        <Typography variant="h3" paragraph>
+          Dashboard
+        </Typography>
+        <Typography sx={{ color: 'text.secondary' }}>
+          Bienvenido al dashboard de Control Financiero
+        </Typography>
 
-          <Grid container spacing={5} sx={{ mt: 5, mb: 10 }} justifyContent='center'>
+        <Grid container spacing={5} sx={{ mt: 5, mb: 10 }} justifyContent='center' alignItems='center' textAlign='center' margin='auto'>
+          <Grid item xs={12} sm={6} md={4}>
+            <PieChart />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <PieChart />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <PieChart />
+          </Grid>
+        </Grid>
+
+
+          <Grid container spacing={5} sx={{ mt: 5, mb: 10 }} justifyContent='center' alignItems='center' textAlign='center' margin='auto'>
             <Grid item xs={12} sm={6} md={4}>
               <CardComponent
                 title="Pagos"
@@ -92,7 +109,7 @@ export default function PageOne() {
               />
             </Grid>
           </Grid>
-        </Container>
-      </RoleBasedGuard>
+      </Container>
+    </RoleBasedGuard>
   );
 }

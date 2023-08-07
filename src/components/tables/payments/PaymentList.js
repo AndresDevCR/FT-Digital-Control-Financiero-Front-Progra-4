@@ -55,7 +55,7 @@ export default function PaymentList() {
     const fetchPayment = async () => {
         try {
             const response = await axios.get(
-                'https://control-financiero.herokuapp.com/api/v1/payment',
+                'https://control-financiero.herokuapp.com/api/v1/payments',
                 {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
@@ -69,7 +69,7 @@ export default function PaymentList() {
     };
 
     const filteredRows = rows.filter((row) =>
-        row.employee_name.toLowerCase().includes(searchTerm)
+        row.employee.employee_name.toLowerCase().includes(searchTerm)
     );
 
     const handleDeleteDialogOpen = (id) => {
