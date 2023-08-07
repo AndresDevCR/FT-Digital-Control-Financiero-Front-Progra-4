@@ -215,12 +215,12 @@ const navConfig = [
     items: [
       {
         title: 'Control Financiero',
-        path: '',
+        path: '*',
         icon: ICONS.financecontrol,
         children: [
           {
             title: 'Finanzas',
-            path: '',
+            path: '*',
             icon: ICONS.finance,
             children: [
               {
@@ -244,8 +244,8 @@ const navConfig = [
             ],
           },
           {
-            title: 'H R',
-            path: '',
+            title: 'RRHH',
+            path: '*',
             icon: ICONS.humanresources,
             children: [
               {

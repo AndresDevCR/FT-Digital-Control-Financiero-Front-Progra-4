@@ -176,7 +176,7 @@ export default function PaymentList() {
                                                 <Button
                                                     style={{ backgroundColor: 'orange' }}
                                                     component={Link}
-                                                    href={`/payment/edit/${paymentItem.id}`}
+                                                    href={`/payments/edit/${paymentItem.id}`}
                                                     size="small"
                                                     sx={{ mb: 2 }}
                                                     variant="contained"
@@ -201,12 +201,12 @@ export default function PaymentList() {
                                             </div>
                                             <div>
                                                 <Button
-                                                    color="primary"
+                                                    color="info"
                                                     size="small"
                                                     sx={{ mb: 2, mr: 2 }}
                                                     variant="contained"
                                                     component={Link}
-                                                    href={`/payment/details/${paymentItem.id}`}
+                                                    href={`/payments/details/${paymentItem.id}`}
                                                     startIcon={<InfoIcon />}
                                                 >
                                                     Ver Detalles
