@@ -42,7 +42,7 @@ export default function ApplicationForm() {
       toast.success('Agregado correctamente a las aplicaciones');
       setTimeout(() => {
         router.push('/dashboard/application/list'); // Redireccionar a la lista de inventario
-      setTimeout(() => {
+      }, 2000); // Delay of 2 seconds
     } catch (error) {
       toast.error('Error al agregar a las aplicaciones');
     }
@@ -178,4 +178,4 @@ export default function ApplicationForm() {
       </Container>
     </>
   );
-}
+};
