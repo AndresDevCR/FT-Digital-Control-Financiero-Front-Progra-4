@@ -154,7 +154,7 @@ export default function VacationList() {
                                 <TableCell>Empleado</TableCell>
                                 <TableCell>Fecha de inicio</TableCell>
                                 <TableCell>Fecha de reingreso</TableCell>
-                                <TableCell>Estatus</TableCell>
+                                <TableCell>Estado</TableCell>
                                 <TableCell>Acciones</TableCell>
                             </TableRow>
                         </TableHead>

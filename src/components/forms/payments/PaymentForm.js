@@ -178,7 +178,7 @@ export default function PaymentForm() {
           <Grid container spacing={2}>
             <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="employee-label">Empleado</InputLabel>
+                <InputLabel id="employee-label" style={{ marginTop: '10px' }}>Empleado</InputLabel>
                 <Select
                   labelId="employee-label"
                   id="employee_id"

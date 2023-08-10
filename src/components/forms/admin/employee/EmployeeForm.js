@@ -188,7 +188,7 @@ export default function EmployeeForm() {
 
                         <Grid item xs={12} md={12}>
                             <FormControl fullWidth>
-                                <InputLabel id="position-label">Posición</InputLabel>
+                                <InputLabel id="position-label" style={{ marginTop: '10px' }}>Posición</InputLabel>
                                 <Select
                                     labelId="position-label"
                                     id="position_id"
@@ -210,7 +210,7 @@ export default function EmployeeForm() {
 
                         <Grid item xs={12} md={12}>
                             <FormControl fullWidth>
-                                <InputLabel id="department-label">Departamento</InputLabel>
+                                <InputLabel id="department-label" style={{ marginTop: '10px' }}>Departamento</InputLabel>
                                 <Select
                                     labelId="department-label"
                                     id="department_id"

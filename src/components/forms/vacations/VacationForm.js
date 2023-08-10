@@ -103,7 +103,7 @@ export default function VacationForm() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="employee-label">Empleado</InputLabel>
+                <InputLabel id="employee-label" style={{ marginTop: '10px' }}>Empleado</InputLabel>
                 <Select
                   labelId="employee-label"
                   id="employee_id"
@@ -156,7 +156,7 @@ export default function VacationForm() {
 
             <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="request-status-label">Estatus de solicitud</InputLabel>
+                <InputLabel id="request-status-label">Estado de solicitud</InputLabel>
                 <Select
                   labelId="request-status-label"
                   id="request_status"

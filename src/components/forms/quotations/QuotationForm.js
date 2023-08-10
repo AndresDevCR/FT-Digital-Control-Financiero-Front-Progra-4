@@ -140,7 +140,7 @@ export default function QuotationForm() {
         >
           <Grid item xs={12} md={12}>
             <FormControl fullWidth>
-              <InputLabel id="client-label">Cliente</InputLabel>
+              <InputLabel id="client-label" style={{ marginTop: '10px' }}>Cliente</InputLabel>
               <Select
                 labelId="client-label"
                 id="client_id"
@@ -153,7 +153,7 @@ export default function QuotationForm() {
               >
                 {clients.map((client) => (
                   <MenuItem key={client.id} value={client.id}>
-                    {client.client_name}
+                    {`${client.client_name} (${client.email})`}
                   </MenuItem>
                 ))}
               </Select>
