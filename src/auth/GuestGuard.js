@@ -23,7 +23,7 @@ export default function GuestGuard({ children }) {
     if (isAuthenticated && !hasReloaded) {
       setHasReloaded(true);
       push('/dashboard');
-      window.location.reload();
+      // window.location.reload();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, hasReloaded]);

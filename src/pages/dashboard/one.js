@@ -1,15 +1,32 @@
 // next
 import Head from 'next/head';
-import { Container, Typography, Grid } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Grid,
+  TextField,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  TablePagination,
+  InputAdornment,
+} from '@mui/material';
+import axios from 'axios';
 // layouts
 import Router, { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import DashboardLayout from '../../layouts/dashboard';
 // components
 import { useSettingsContext } from '../../components/settings';
 import { CardComponent } from '../../components/card/cardComponent';
 import RoleBasedGuard from '../../auth/RoleBasedGuard';
 import PieChart from '../../components/charts/pie-chart/PieChart';
+import { AuthContext } from '../../auth/JwtContext';
 
 
 // ----------------------------------------------------------------------
@@ -21,8 +38,60 @@ PageOne.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function PageOne() {
   const { themeStretch } = useSettingsContext();
   const router = useRouter();
+  const [rows, setRows] = useState([]);
+  const { accessToken } = useContext(AuthContext);
 
+  const [paymentDataByMonth, setPaymentDataByMonth] = useState([]);
 
+  useEffect(() => {
+    fetchPayment();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (rows.length > 0) {
+      processPaymentData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rows]);
+
+  useEffect(() => {
+    console.log('paymentDataByMonth updated:', paymentDataByMonth);
+  }, [paymentDataByMonth]);
+
+  const fetchPayment = async () => {
+    try {
+      const response = await axios.get('https://control-financiero.herokuapp.com/api/v1/payments', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      setRows(response.data);
+      processPaymentData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const processPaymentData = () => {
+    const dataByMonth = {};
+
+    rows.forEach((paymentItem) => {
+      const month = new Date(paymentItem.created_at).getMonth();
+      if (!dataByMonth[month]) {
+        dataByMonth[month] = 0;
+      }
+      dataByMonth[month] += paymentItem.total_salary;
+    });
+
+    const dataForChart = Object.keys(dataByMonth).map((month) => ({
+      month: Number(month) + 1, // +1 porque los meses son 0-indexed
+      value: dataByMonth[month],
+    }));
+
+    setPaymentDataByMonth(dataForChart);
+    console.log(paymentDataByMonth);
+  };
 
   return (
     <RoleBasedGuard roles={['administrator', 'user']} hasContent>
@@ -46,9 +115,21 @@ export default function PageOne() {
           Bienvenido al tablero de gráficos de Control Financiero
         </Typography>
 
-        <Grid container spacing={5} sx={{ mt: 5, mb: 10 }} justifyContent='center' alignItems='center' textAlign='center' margin='auto'>
+        <Grid
+          container
+          spacing={5}
+          sx={{ mt: 5, mb: 10 }}
+          justifyContent="center"
+          alignItems="center"
+          textAlign="center"
+          margin="auto"
+        >
           <Grid item xs={12} sm={6} md={4}>
-            <PieChart />
+            {paymentDataByMonth && paymentDataByMonth.length > 0 ? (
+              <PieChart data={paymentDataByMonth} />
+            ) : (
+              <Typography>Cargando datos...</Typography>
+            )}
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
             <PieChart />
@@ -57,58 +138,6 @@ export default function PageOne() {
             <PieChart />
           </Grid>
         </Grid>
-
-
-          <Grid container spacing={5} sx={{ mt: 5, mb: 10 }} justifyContent='center' alignItems='center' textAlign='center' margin='auto'>
-            <Grid item xs={12} sm={6} md={4}>
-              <CardComponent
-                title="Pagos"
-                description="Pagos de empleados"
-                image="https://inbound.actualizaweb.com/hs-fs/hubfs/20180711-actualiza-web-Aprende-como-recibir-pagos-en-tu-tienda-online/Actualiza%20Web,%20como%20aceptar%20pagos%20en%20linea.jpg?width=1382&name=Actualiza%20Web,%20como%20aceptar%20pagos%20en%20linea.jpg"
-                url="/payments/list"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <CardComponent
-                title="Inventario"
-                description="Inventario de productos"
-                image="https://concepto.de/wp-content/uploads/2015/04/inventario-e1548898364548.jpg"
-                url="/inventory/list"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <CardComponent
-                title="Vacaciones"
-                description="Vacaciones de empleados"
-                image="https://images.telediario.cr/I1E0u4Y80vYyX3TFiFX0oOR7FPM=/345x215/uploads/media/2023/05/19/estas-son-parte-del-calendario.jpg"
-                url="/vacations/list"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <CardComponent
-                title="Cotizaciones"
-                description="Cotizaciones de productos"
-                image="https://tipsynoticias.com/wp-content/uploads/2021/04/plantillas.jpeg"
-                url="/quotations/list"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <CardComponent
-                title="Facturas"
-                description="Facturas de la empresa"
-                image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9OOmpQfNNIKMUWzEXynew-27-BHyupWt6VA&usqp=CAU"
-                url="/invoice"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <CardComponent
-                title="Empleados"
-                description="Empleados de la empresa"
-                image="https://www.cucorent.com/blog/wp-content/uploads/2022/05/fortaleza-empleados.jpg"
-                url="/dashboard/employee/list"
-              />
-            </Grid>
-          </Grid>
       </Container>
     </RoleBasedGuard>
   );
