@@ -239,7 +239,7 @@ export default function UserForm() {
 
             <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="company-label" color="secondary">
+                <InputLabel id="company-label" style={{ marginTop: '10px' }}>
                   Empresa
                 </InputLabel>
                 <Select
@@ -263,7 +263,7 @@ export default function UserForm() {
 
             <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="role-label">Posición</InputLabel>
+                <InputLabel id="role-label" style={{ marginTop: '10px' }}>Posición</InputLabel>
                 <Select
                   labelId="role-label"
                   id="role_id"
@@ -284,7 +284,7 @@ export default function UserForm() {
 
             <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="application-label">Aplicación</InputLabel>
+                <InputLabel id="application-label" style={{ marginTop: '10px' }}>Aplicación</InputLabel>
                 <Select
                   labelId="application-label"
                   id="application_id"

@@ -199,7 +199,7 @@ export default function ClientForm() {
 
             <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="enterprise-label">Empresa</InputLabel>
+                <InputLabel id="enterprise-label" style={{ marginTop: '10px' }}>Empresa</InputLabel>
                 <Select
                   labelId="enterprise-label"
                   id="enterprise_id"

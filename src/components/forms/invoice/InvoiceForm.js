@@ -142,7 +142,7 @@ export default function InvoiceForm() {
           <Grid container spacing={3}>
           <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="quotation_label">Cotización</InputLabel>
+                <InputLabel id="quotation_label" style={{ marginTop: '10px' }}>Cotización</InputLabel>
                 <Select
                   labelId="quotation_label"
                   id="quotation"
@@ -163,7 +163,7 @@ export default function InvoiceForm() {
 
             <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="supplier_label">Proveedor</InputLabel>
+                <InputLabel id="supplier_label" style={{ marginTop: '10px' }}>Proveedor</InputLabel>
                 <Select
                   labelId="supplier_label"
                   id="supplier"
