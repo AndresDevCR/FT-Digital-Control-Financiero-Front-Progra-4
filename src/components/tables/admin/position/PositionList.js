@@ -20,6 +20,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import Tooltip from '@mui/material/Tooltip';
 import Link from 'next/link';
 import DeleteConfirmationDialog from '../../../delete-dialog/DeleteDialog';
 import { AuthContext } from '../../../../auth/JwtContext';
@@ -57,14 +58,11 @@ export default function PositionList() {
 
   const fetchPosition = async () => {
     try {
-      const response = await axios.get(
-        'https://control-financiero.herokuapp.com/api/v1/position',
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await axios.get('https://control-financiero.herokuapp.com/api/v1/position', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       setPosition(response.data);
       setRows(response.data);
     } catch (error) {
@@ -89,9 +87,7 @@ export default function PositionList() {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      setPosition((prevPosition) =>
-        prevPosition.filter((positionItem) => positionItem.id !== id)
-      );
+      setPosition((prevPosition) => prevPosition.filter((positionItem) => positionItem.id !== id));
       handleDeleteDialogClose();
     } catch (error) {
       console.log(error);
@@ -149,31 +145,28 @@ export default function PositionList() {
                   <TableRow key={positionItem.id}>
                     <TableCell>{positionItem.position_name}</TableCell>
                     <TableCell>
-                      <div>
+                      <Tooltip title="Editar">
                         <Button
                           style={{ backgroundColor: 'orange' }}
                           component={Link}
                           href={`/dashboard/position/edit/${positionItem.id}`}
                           size="small"
-                          sx={{ mb: 2 }}
+                          sx={{ mb: 1, mr: 1 }}
                           variant="contained"
                           startIcon={<EditIcon />}
-                        >
-                          Editar
-                        </Button>
-                      </div>
-                      <div>
+                        />
+                      </Tooltip>
+
+                      <Tooltip title="Eliminar">
                         <Button
                           color="error"
                           size="small"
-                          sx={{ mb: 2 }}
+                          sx={{ mb: 1, mr: 1 }}
                           variant="contained"
                           onClick={() => handleDeleteDialogOpen(positionItem.id)}
                           startIcon={<DeleteForeverIcon />}
-                        >
-                          Eliminar
-                        </Button>
-                      </div>
+                        />
+                      </Tooltip>
                     </TableCell>
                   </TableRow>
                 ))}

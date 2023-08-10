@@ -77,7 +77,9 @@ export default function QuotationForm() {
         },
       });
       toast.success('Cotización agregada correctamente');
-      router.push('/quotations/list'); 
+      setTimeout(() => {
+        router.push('/quotations/list');
+      }, 2000);
     } catch (error) {
       toast.error('Error al agregar la cotización');
     }
@@ -140,7 +142,9 @@ export default function QuotationForm() {
         >
           <Grid item xs={12} md={12}>
             <FormControl fullWidth>
-              <InputLabel id="client-label" style={{ marginTop: '10px' }}>Cliente</InputLabel>
+              <InputLabel id="client-label" style={{ marginTop: '10px' }}>
+                Cliente
+              </InputLabel>
               <Select
                 labelId="client-label"
                 id="client_id"
@@ -197,8 +201,14 @@ export default function QuotationForm() {
                 }}
               />
             </Grid>
-            <Grid item xs={12}md={2} container alignItems="center">
-              <Button variant="contained" color="primary" component="a" href="https://www.sucursalelectronica.com/redir/showLogin.go" target="_blank">
+            <Grid item xs={12} md={2} container alignItems="center">
+              <Button
+                variant="contained"
+                color="primary"
+                component="a"
+                href="https://www.sucursalelectronica.com/redir/showLogin.go"
+                target="_blank"
+              >
                 <CurrencyExchangeIcon />
               </Button>
             </Grid>

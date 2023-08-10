@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 // next
 import { useRouter } from 'next/router';
 // components
@@ -15,15 +15,18 @@ GuestGuard.propTypes = {
 
 export default function GuestGuard({ children }) {
   const { push } = useRouter();
+  const [hasReloaded, setHasReloaded] = useState(false);
 
   const { isAuthenticated, isInitialized } = useAuthContext();
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && !hasReloaded) {
+      setHasReloaded(true);
       push('/dashboard');
+      window.location.reload();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated]);
+  }, [isAuthenticated, hasReloaded]);
 
   if (isInitialized === isAuthenticated) {
     return <LoadingScreen />;

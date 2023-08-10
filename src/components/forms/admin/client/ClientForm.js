@@ -74,7 +74,9 @@ export default function ClientForm() {
         },
       });
       toast.success('Cliente agregado exitosamente');
-      router.push('/dashboard/client/list');
+      setTimeout(() => {
+        router.push('/dashboard/client/list');
+      }, 2000);
     } catch (error) {
       toast.error('Error al agregar cliente');
     }
@@ -104,7 +106,7 @@ export default function ClientForm() {
     }
 
     if (event.target.name === 'phone' && !/^\d+$/.test(event.target.value)) {
-        toast.error('Solo se permiten números en este campo');
+      toast.error('Solo se permiten números en este campo');
     }
 
     if (name === 'email' && value.length >= 30) {
@@ -199,7 +201,9 @@ export default function ClientForm() {
 
             <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="enterprise-label" style={{ marginTop: '10px' }}>Empresa</InputLabel>
+                <InputLabel id="enterprise-label" style={{ marginTop: '10px' }}>
+                  Empresa
+                </InputLabel>
                 <Select
                   labelId="enterprise-label"
                   id="enterprise_id"

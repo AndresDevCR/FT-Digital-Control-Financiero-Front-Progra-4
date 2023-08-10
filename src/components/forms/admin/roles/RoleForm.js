@@ -29,7 +29,9 @@ export default function RoleForm() {
         },
       });
       toast.success('Rol agregado correctamente');
-      router.push('/dashboard/roles/list'); 
+      setTimeout(() => {
+        router.push('/dashboard/roles/list');
+      }, 2000);
     } catch (error) {
       toast.error('Error al agregar el rol');
     }
@@ -111,11 +113,11 @@ export default function RoleForm() {
 
             {/* Botón para volver a la lista de roles */}
             <Grid item xs={12} md={12}>
-            <Button
+              <Button
                 fullWidth
                 size="large"
                 variant="outlined"
-                onClick={() => router.push("/dashboard/roles/list")}
+                onClick={() => router.push('/dashboard/roles/list')}
               >
                 Volver a la lista de roles
               </Button>

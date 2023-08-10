@@ -1,7 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Container, Typography, Box, Grid, TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Box,
+  Grid,
+  TextField,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SaveIcon from '@mui/icons-material/Save';
@@ -11,16 +22,14 @@ import { useRouter } from 'next/router';
 import { AuthContext } from '../../../auth/JwtContext';
 
 const validationSchema = Yup.object().shape({
-  invoice_number: Yup.string()
-    .required('Número de factura es requerido'),
+  invoice_number: Yup.string().required('Número de factura es requerido'),
   dollar_value: Yup.number()
     .required('Valor requerido')
     .max(999999, 'La cantidad debe tener como máximo 999,999'),
   total_colon: Yup.number()
     .required('Valor requerido')
     .max(999999, 'La cantidad debe tener como máximo 999,999'),
-  total_dollar: Yup.number()
-    .required('Valor requerido'),
+  total_dollar: Yup.number().required('Valor requerido'),
   issue_date: Yup.date().required('Fecha de ingreso es requerida'),
   expiration_date: Yup.date().required('Fecha de ingreso es requerida'),
 });
@@ -70,7 +79,7 @@ export default function InvoiceForm() {
 
     fetchSuppliers();
   }, [accessToken]);
-  
+
   const handleSubmit = async (values) => {
     try {
       await axios.post('https://control-financiero.herokuapp.com/api/v1/invoice', values, {
@@ -79,7 +88,9 @@ export default function InvoiceForm() {
         },
       });
       toast.success('Agregado correctamente la factura');
-      router.push('/invoice'); // Redireccionar a la lista de inventario
+      setTimeout(() => {
+        router.push('/invoice'); // Redireccionar a la lista de inventario
+      }, 2000);
     } catch (error) {
       toast.error('Error al agregar la factura');
     }
@@ -110,11 +121,11 @@ export default function InvoiceForm() {
     }
 
     if (event.target.name === 'total_colon' && event.target.value.length >= 15) {
-      event.target.value = event.target.value.slice(0, 15); 
+      event.target.value = event.target.value.slice(0, 15);
       toast.info('Se ha alcanzado el límite de números permitidos ');
     }
     if (event.target.name === 'total_dollar' && event.target.value.length >= 15) {
-      event.target.value = event.target.value.slice(0, 15); 
+      event.target.value = event.target.value.slice(0, 15);
       toast.info('Se ha alcanzado el límite de números permitidos ');
     }
 
@@ -140,9 +151,11 @@ export default function InvoiceForm() {
           onSubmit={formik.handleSubmit}
         >
           <Grid container spacing={3}>
-          <Grid item xs={12} md={12}>
+            <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="quotation_label" style={{ marginTop: '10px' }}>Cotización</InputLabel>
+                <InputLabel id="quotation_label" style={{ marginTop: '10px' }}>
+                  Cotización
+                </InputLabel>
                 <Select
                   labelId="quotation_label"
                   id="quotation"
@@ -163,7 +176,9 @@ export default function InvoiceForm() {
 
             <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="supplier_label" style={{ marginTop: '10px' }}>Proveedor</InputLabel>
+                <InputLabel id="supplier_label" style={{ marginTop: '10px' }}>
+                  Proveedor
+                </InputLabel>
                 <Select
                   labelId="supplier_label"
                   id="supplier"

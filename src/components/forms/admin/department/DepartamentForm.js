@@ -26,7 +26,9 @@ export default function DepartamentForm() {
         },
       });
       toast.success('Agregado correctamente al inventario');
-      router.push('/dashboard/department/list'); // Redireccionar a la lista de inventario
+      setTimeout(() => {
+        router.push('/dashboard/department/list'); // Redireccionar a la lista de inventario
+      }, 2000);
     } catch (error) {
       toast.error('Error al agregar a los departamentos');
     }
@@ -96,7 +98,7 @@ export default function DepartamentForm() {
                 fullWidth
                 size="large"
                 variant="outlined"
-                onClick={() => router.push("/dashboard/department/list")}
+                onClick={() => router.push('/dashboard/department/list')}
               >
                 Volver a la lista de departamentos
               </Button>
