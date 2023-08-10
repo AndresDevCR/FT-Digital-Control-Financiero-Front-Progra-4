@@ -21,7 +21,9 @@ import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EmailIcon from '@mui/icons-material/Email';
 import Tooltip from '@mui/material/Tooltip';
+import { toast } from 'react-toastify';
 import Link from 'next/link';
 import DeleteConfirmationDialog from '../../delete-dialog/DeleteDialog';
 import { AuthContext } from '../../../auth/JwtContext';
@@ -104,6 +106,23 @@ export default function VacationList() {
       handleDeleteDialogClose();
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleNotification = async (id) => {
+    try {
+      await axios.post(
+        `https://control-financiero.herokuapp.com/api/v1/v1/notifications/vacation-emails/${id}`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      toast.success('Notificación enviada correctamente');
+    } catch (error) {
+      toast.error('Error al enviar notificación');
     }
   };
 
@@ -197,6 +216,16 @@ export default function VacationList() {
                           component={Link}
                           href={`/vacations/details/${vacationItem.id}`}
                           startIcon={<InfoIcon />}
+                        />
+                      </Tooltip>
+                      <Tooltip title="Enviar Email">
+                        <Button
+                          color="primary"
+                          size="small"
+                          sx={{ mb: 1, mr: 1 }}
+                          variant="contained"
+                          onClick={() => handleNotification(`${vacationItem.id}`)}
+                          startIcon={<EmailIcon />}
                         />
                       </Tooltip>
                     </TableCell>
