@@ -40,10 +40,10 @@ export default function PageOne() {
         maxWidth={themeStretch ? false : 'xl'}
       >
         <Typography variant="h3" paragraph>
-          Dashboard
+          Gráficos
         </Typography>
         <Typography sx={{ color: 'text.secondary' }}>
-          Bienvenido al dashboard de Control Financiero
+          Bienvenido al tablero de gráficos de Control Financiero
         </Typography>
 
         <Grid container spacing={5} sx={{ mt: 5, mb: 10 }} justifyContent='center' alignItems='center' textAlign='center' margin='auto'>

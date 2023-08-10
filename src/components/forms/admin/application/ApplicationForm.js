@@ -1,7 +1,16 @@
 import React, { useContext } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Container, Typography, Box, Grid, TextField, Button, FormControlLabel, Checkbox } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Box,
+  Grid,
+  TextField,
+  Button,
+  FormControlLabel,
+  Checkbox,
+} from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
@@ -15,8 +24,7 @@ const validationSchema = Yup.object().shape({
   display_name: Yup.string()
     .required('Nombre de visualización es requerida')
     .max(30, 'El nombre de visualización debe tener como máximo 30 caracteres'),
-  description: Yup.string()
-    .max(200, 'La descripción debe tener como máximo 200 caracteres'),
+  description: Yup.string().max(200, 'La descripción debe tener como máximo 200 caracteres'),
   is_active: Yup.boolean().default(true),
 });
 
@@ -32,7 +40,9 @@ export default function ApplicationForm() {
         },
       });
       toast.success('Agregado correctamente a las aplicaciones');
-      router.push('/dashboard/application/list'); // Redireccionar a la lista de inventario
+      setTimeout(() => {
+        router.push('/dashboard/application/list'); // Redireccionar a la lista de inventario
+      setTimeout(() => {
     } catch (error) {
       toast.error('Error al agregar a las aplicaciones');
     }
@@ -55,8 +65,8 @@ export default function ApplicationForm() {
     }
 
     if (event.target.name === 'display_name' && event.target.value.length >= 30) {
-        toast.info('Se ha alcanzado el límite de caracteres permitidos');
-      }
+      toast.info('Se ha alcanzado el límite de caracteres permitidos');
+    }
 
     if (event.target.name === 'description' && event.target.value.length >= 200) {
       toast.info('Se ha alcanzado el límite de caracteres permitidos para la descripción');
@@ -158,7 +168,7 @@ export default function ApplicationForm() {
                 fullWidth
                 size="large"
                 variant="outlined"
-                onClick={() => router.push("/dashboard/application/list")}
+                onClick={() => router.push('/dashboard/application/list')}
               >
                 Volver a la lista de aplicaciones
               </Button>

@@ -36,7 +36,7 @@ const validationSchema = Yup.object().shape({
       /^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]+$/,
       'La contraseña debe contener al menos una mayúscula, una minúscula y no puede tener caracteres especiales'
     ),
-    email: Yup.string()
+  email: Yup.string()
     .required('El correo del usuario es requerido')
     .max(70, 'El correo debe tener como máximo 70 caracteres')
     .matches(
@@ -115,7 +115,9 @@ export default function UserForm() {
         },
       });
       toast.success('Empleado agregado exitosamente');
-      router.push('/dashboard/user/list');
+      setTimeout(() => {
+        router.push('/dashboard/user/list');
+      }, 2000);
     } catch (error) {
       toast.error('Error al agregar empleado');
     }
@@ -131,7 +133,7 @@ export default function UserForm() {
       company_start_date: new Date().toISOString().split('T')[0],
       role_id: 1,
       company_id: 1,
-      application_id:1, 
+      application_id: 1,
     },
     validationSchema,
     onSubmit: handleSubmit,
@@ -263,7 +265,9 @@ export default function UserForm() {
 
             <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="role-label" style={{ marginTop: '10px' }}>Posición</InputLabel>
+                <InputLabel id="role-label" style={{ marginTop: '10px' }}>
+                  Posición
+                </InputLabel>
                 <Select
                   labelId="role-label"
                   id="role_id"
@@ -284,7 +288,9 @@ export default function UserForm() {
 
             <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="application-label" style={{ marginTop: '10px' }}>Aplicación</InputLabel>
+                <InputLabel id="application-label" style={{ marginTop: '10px' }}>
+                  Aplicación
+                </InputLabel>
                 <Select
                   labelId="application-label"
                   id="application_id"

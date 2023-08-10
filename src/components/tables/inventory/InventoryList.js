@@ -20,6 +20,7 @@ import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import InfoIcon from '@mui/icons-material/Info';
+import Tooltip from '@mui/material/Tooltip';
 import Link from 'next/link';
 import DeleteConfirmationDialog from '../../delete-dialog/DeleteDialog';
 import { AuthContext } from '../../../auth/JwtContext';
@@ -145,56 +146,52 @@ export default function InventoryList() {
               </TableRow>
             </TableHead>
             <TableBody>
-            {filteredRows
+              {filteredRows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((inventoryItem) => (
-                <TableRow key={inventoryItem.id}>
-                  <TableCell>{inventoryItem.productName}</TableCell>
-                  <TableCell>{inventoryItem.availableQuantity}</TableCell>
-                  <TableCell>{inventoryItem.description}</TableCell>
-                  <TableCell>{inventoryItem.entryDate}</TableCell>
-                  <TableCell>
-                    <div>
-                      <Button
-                        style={{ backgroundColor: 'orange' }}
-                        component={Link}
-                        href={`/inventory/edit/${inventoryItem.id}`}
-                        size="small"
-                        sx={{ mb: 2 }}
-                        variant="contained"
-                        startIcon={<EditIcon />}
-                      >
-                        Editar
-                      </Button>
-                    </div>
-                    <div>
-                      <Button
-                        color="error"
-                        size="small"
-                        sx={{ mb: 2 }}
-                        variant="contained"
-                        onClick={() => handleDeleteDialogOpen(inventoryItem.id)}
-                        startIcon={<DeleteForeverIcon />}
-                      >
-                        Eliminar
-                      </Button>
-                    </div>
-                    <div>
-                      <Button
-                        color="info"
-                        size="small"
-                        sx={{ mb: 2, mr: 2 }}
-                        variant="contained"
-                        component={Link}
-                        href={`/inventory/details/${inventoryItem.id}`}
-                        startIcon={<InfoIcon />}
-                      >
-                        Ver Detalles
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+                  <TableRow key={inventoryItem.id}>
+                    <TableCell>{inventoryItem.productName}</TableCell>
+                    <TableCell>{inventoryItem.availableQuantity}</TableCell>
+                    <TableCell>{inventoryItem.description}</TableCell>
+                    <TableCell>{inventoryItem.entryDate}</TableCell>
+                    <TableCell>
+                      <Tooltip title="Editar">
+                        <Button
+                          style={{ backgroundColor: 'orange' }}
+                          component={Link}
+                          href={`/inventory/edit/${inventoryItem.id}`}
+                          size="small"
+                          sx={{ mb: 1, mr: 1 }}
+                          variant="contained"
+                          startIcon={<EditIcon />}
+                        />
+                      </Tooltip>
+
+                      <Tooltip title="Eliminar">
+                        <Button
+                          color="error"
+                          size="small"
+                          sx={{ mb: 1, mr: 1}}
+                          variant="contained"
+                          onClick={() => handleDeleteDialogOpen(inventoryItem.id)}
+                          startIcon={<DeleteForeverIcon />}
+                        />
+                      </Tooltip>
+
+                      <Tooltip title="Ver Detalles">
+                        <Button
+                          color="info"
+                          size="small"
+                          sx={{ mb: 1, mr: 1 }}
+                          variant="contained"
+                          component={Link}
+                          href={`/inventory/details/${inventoryItem.id}`}
+                          startIcon={<InfoIcon />}
+                        />
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
           <TablePagination

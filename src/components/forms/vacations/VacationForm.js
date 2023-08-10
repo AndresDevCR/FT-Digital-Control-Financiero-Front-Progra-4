@@ -59,7 +59,9 @@ export default function VacationForm() {
         },
       });
       toast.success('Vacaciones registradas exitosamente');
-      router.push('/vacations/list');
+      setTimeout(() => {
+        router.push('/vacations/list');
+      }, 2000);
     } catch (error) {
       toast.error('Error al registrar las vacaciones');
     }
@@ -103,7 +105,9 @@ export default function VacationForm() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="employee-label" style={{ marginTop: '10px' }}>Empleado</InputLabel>
+                <InputLabel id="employee-label" style={{ marginTop: '10px' }}>
+                  Empleado
+                </InputLabel>
                 <Select
                   labelId="employee-label"
                   id="employee_id"

@@ -36,7 +36,9 @@ export default function InventoryForm() {
         },
       });
       toast.success('Agregado correctamente al inventario');
-      router.push('/inventory'); // Redireccionar a la lista de inventario
+      setTimeout(() => {
+        router.push('/inventory'); // Redireccionar a la lista de inventario
+      }, 2000);
     } catch (error) {
       toast.error('Error al agregar al inventario');
     }
@@ -160,7 +162,13 @@ export default function InventoryForm() {
             </Grid>
 
             <Grid item xs={12} md={12}>
-              <Button fullWidth size="large" type="submit" variant="contained" startIcon={<SaveIcon />}>
+              <Button
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+                startIcon={<SaveIcon />}
+              >
                 Guardar
               </Button>
             </Grid>

@@ -100,7 +100,9 @@ export default function PaymentForm() {
         },
       });
       toast.success('Pago agregado correctamente');
-      router.push('/payments/list'); // Redireccionar a la lista de pagos
+      setTimeout(() => {
+        router.push('/payments/list'); // Redireccionar a la lista de pagos
+      }, 2000);
     } catch (error) {
       toast.error('Error al agregar pago');
     }
@@ -108,35 +110,36 @@ export default function PaymentForm() {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-  
+
     if (name === 'employee_id' && !/^\d+$/.test(value)) {
       toast.error('Solo se permiten números en el campo de Id de empleado');
     }
-  
+
     if (name === 'dollar' && value !== '' && !/^\d+(\.\d{1,2})?$/.test(value)) {
       toast.error(
         'El campo del tipo de cambio del dólar solo permite números enteros o decimales con hasta 2 dígitos decimales.'
       );
       return;
     }
-  
+
     // Asignar el valor predeterminado solo si el campo está vacío
-    if (['payment_advance', 'extra_time', 'medical_leave_days', 'not_payed_leave_days'].includes(name)) {
+    if (
+      ['payment_advance', 'extra_time', 'medical_leave_days', 'not_payed_leave_days'].includes(name)
+    ) {
       formik.setFieldValue(name, value === '' ? null : parseFloat(value) || 0);
     } else {
       formik.handleChange(event);
     }
   };
-  
 
   const formik = useFormik({
     initialValues: {
       employee_id: 1,
       dollar: 0,
-      payment_advance: null, 
-      extra_time: null, 
-      medical_leave_days: null, 
-      not_payed_leave_days: null, 
+      payment_advance: null,
+      extra_time: null,
+      medical_leave_days: null,
+      not_payed_leave_days: null,
       biweekly_salary: 0,
       daily_salary: 0,
       subsidy: 0,
@@ -178,7 +181,9 @@ export default function PaymentForm() {
           <Grid container spacing={2}>
             <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="employee-label" style={{ marginTop: '10px' }}>Empleado</InputLabel>
+                <InputLabel id="employee-label" style={{ marginTop: '10px' }}>
+                  Empleado
+                </InputLabel>
                 <Select
                   labelId="employee-label"
                   id="employee_id"

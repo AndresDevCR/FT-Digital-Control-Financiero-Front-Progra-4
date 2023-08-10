@@ -26,7 +26,9 @@ export default function EnterpriseForm() {
         },
       });
       toast.success('Agregado correctamente al inventario');
-      router.push('/dashboard/enterprise/list'); // Redireccionar a la lista de inventario
+      setTimeout(() => {
+        router.push('/dashboard/enterprise/list'); // Redireccionar a la lista de inventario
+      }, 2000);
     } catch (error) {
       toast.error('Error al agregar a los empresas');
     }
@@ -96,7 +98,7 @@ export default function EnterpriseForm() {
                 fullWidth
                 size="large"
                 variant="outlined"
-                onClick={() => router.push("/dashboard/enterprise/list")}
+                onClick={() => router.push('/dashboard/enterprise/list')}
               >
                 Volver a la lista de empresas
               </Button>

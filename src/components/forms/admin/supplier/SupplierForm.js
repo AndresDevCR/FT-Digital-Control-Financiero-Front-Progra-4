@@ -28,7 +28,9 @@ export default function SupplierForm() {
         },
       });
       toast.success('Agregado correctamente');
-      router.push('/dashboard/supplier/list'); // Redireccionar a la lista de proveedores
+      setTimeout(() => {
+        router.push('/dashboard/supplier/list'); // Redireccionar a la lista de proveedores
+      }, 2000);
     } catch (error) {
       toast.error('Error al agregar puesto');
     }
@@ -87,7 +89,13 @@ export default function SupplierForm() {
             </Grid>
 
             <Grid item xs={12} md={12}>
-              <Button fullWidth size="large" type="submit" variant="contained" startIcon={<SaveIcon />}>
+              <Button
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+                startIcon={<SaveIcon />}
+              >
                 Guardar
               </Button>
             </Grid>
@@ -98,7 +106,7 @@ export default function SupplierForm() {
                 fullWidth
                 size="large"
                 variant="outlined"
-                onClick={() => router.push("/dashboard/supplier/list")}
+                onClick={() => router.push('/dashboard/supplier/list')}
                 startIcon={<KeyboardBackspaceIcon />}
               >
                 Volver a la lista de proveedores
