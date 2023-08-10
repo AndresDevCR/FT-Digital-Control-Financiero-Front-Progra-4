@@ -20,6 +20,8 @@ import PriceChangeIcon from '@mui/icons-material/PriceChange';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import InventoryIcon from '@mui/icons-material/Inventory';
+import PieChartIcon from '@mui/icons-material/PieChart';
+import WidgetsIcon from '@mui/icons-material/Widgets';
 
 // routes
 import {
@@ -43,6 +45,7 @@ import {
   USER,
   PAYMENTS,
   QUOTATIONS,
+  MENU,
 } from '../../../routes/paths';
 
 // components
@@ -80,133 +83,147 @@ const ICONS = {
   humanresources: <ContactMailIcon />,
   inventory: <InventoryIcon />,
   supplier: <LocalShippingIcon />,
+  chart: <PieChartIcon />,
+  menu: <WidgetsIcon />,
 };
 
 const roles = ['admin', 'administrator'];
 
-
 const navConfig = [
+  {
+    subheader: `${roles.includes('admin') ? 'Navegación' : '*'}`,
+    items: [
+      {
+        title: 'Navegación',
+        path: '/menu',
+        icon: ICONS.menu,
+      },
+    ],
+  },
   // MANAGEMENT
   // ----------------------------------------------------------------------
   {
     subheader: `${roles.includes('admin') ? 'Administración' : ' '}`,
     items: roles.includes('admin')
       ? [
-        {
-          title: 'Administración',
-          path: '',
-          icon: ICONS.administration,
+          {
+            title: 'Administración',
+            path: '*',
+            icon: ICONS.administration,
 
-          children: [
-            {
-              title: `${roles.includes('admin') ? 'Control App' : ''}`,
-              path: PATH_DASHBOARD.user.root,
-              icon: ICONS.appcontrol,
-              children: roles.includes('admin') ? [
-                {
-                  title: 'Usuarios',
-                  path: PATH_DASHBOARD.user.root,
-                  icon: ICONS.user,
-                  children: [
-                    { title: 'Agregar Usuario', path: PATH_DASHBOARD.user.useradd },
-                    { title: 'Lista de Usuarios', path: PATH_DASHBOARD.user.userlist },
-                  ],
-                },
-                {
-                  title: 'Aplicaciones',
-                  path: APPLICATION.root,
-                  icon: ICONS.application,
-                  children: [
-                    { title: 'Agregar Aplicación', path: APPLICATION.applicationadd },
-                    { title: 'Lista de Aplicaciones', path: APPLICATION.applicationlist },
-                  ],
-                },
-                {
-                  title: 'Compañías',
-                  path: COMPANY.root,
-                  icon: ICONS.company,
-                  children: [
-                    { title: 'Agregar Compañía', path: COMPANY.companyadd },
-                    { title: 'Lista de Compañias', path: COMPANY.companylist },
-                  ],
-                },
-                {
-                  title: 'Roles',
-                  path: ROLES.root,
-                  icon: ICONS.roles,
-                  children: [
-                    { title: 'Agregar Rol', path: ROLES.rolesadd },
-                    { title: 'Lista de Roles', path: ROLES.roleslist },
-                  ],
-                },
-              ] : [],
-            },
-            {
-              title: 'Control Admin',
-              icon: ICONS.admincontrol,
-              path: PATH_DASHBOARD.user.root,
-              children: roles.includes('admin') ? [
-                {
-                  title: 'Clientes',
-                  path: CLIENT.root,
-                  icon: ICONS.client,
-                  children: [
-                    { title: 'Agregar Cliente', path: CLIENT.clientadd },
-                    { title: 'Lista de Clientes', path: CLIENT.clientlist },
-                  ],
-                },
-                {
-                  title: 'Departamento',
-                  path: DEPARTMENT.root,
-                  icon: ICONS.department,
-                  children: [
-                    { title: 'Agregar Departamento', path: DEPARTMENT.departmentadd },
-                    { title: 'Lista de Departamentos', path: DEPARTMENT.departmentlist },
-                  ],
-                },
-                {
-                  title: 'Empleados',
-                  path: EMPLOYEE.root,
-                  icon: ICONS.employee,
-                  children: [
-                    { title: 'Agregar Empleado', path: EMPLOYEE.employeeadd },
-                    { title: 'Lista de Empleados', path: EMPLOYEE.employeelist },
-                  ],
-                },
-                {
-                  title: 'Empresas',
-                  path: ENTERPRISE.root,
-                  icon: ICONS.enterprise,
-                  children: [
-                    { title: 'Agregar Empresa', path: ENTERPRISE.enterpriseadd },
-                    { title: 'Lista de Empresa', path: ENTERPRISE.enterpriselist },
-                  ],
-                },
-                {
-                  title: 'Puestos',
-                  path: POSITION.root,
-                  icon: ICONS.position,
-                  children: [
-                    { title: 'Agregar Puesto', path: POSITION.positionadd },
-                    { title: 'Lista de Puestos', path: POSITION.positionlist },
-                  ],
-                },
-                {
-                  title: 'Proveedores',
-                  path: SUPPLIER.root,
-                  icon: ICONS.supplier,
-                  children: [
-                    { title: 'Agregar Proveedor', path: SUPPLIER.supplieradd },
-                    { title: 'Lista de Proveedores', path: SUPPLIER.supplierlist },
-                  ],
-                },
-              ] : [],
-            },
-          ],
-        },
-      ]
+            children: [
+              {
+                title: `${roles.includes('admin') ? 'Control App' : '*'}`,
+                path: PATH_DASHBOARD.user.root,
+                icon: ICONS.appcontrol,
+                children: roles.includes('admin')
+                  ? [
+                      {
+                        title: 'Usuarios',
+                        path: PATH_DASHBOARD.user.root,
+                        icon: ICONS.user,
+                        children: [
+                          { title: 'Agregar Usuario', path: PATH_DASHBOARD.user.useradd },
+                          { title: 'Lista de Usuarios', path: PATH_DASHBOARD.user.userlist },
+                        ],
+                      },
+                      {
+                        title: 'Aplicaciones',
+                        path: APPLICATION.root,
+                        icon: ICONS.application,
+                        children: [
+                          { title: 'Agregar Aplicación', path: APPLICATION.applicationadd },
+                          { title: 'Lista de Aplicaciones', path: APPLICATION.applicationlist },
+                        ],
+                      },
+                      {
+                        title: 'Compañías',
+                        path: COMPANY.root,
+                        icon: ICONS.company,
+                        children: [
+                          { title: 'Agregar Compañía', path: COMPANY.companyadd },
+                          { title: 'Lista de Compañias', path: COMPANY.companylist },
+                        ],
+                      },
+                      {
+                        title: 'Roles',
+                        path: ROLES.root,
+                        icon: ICONS.roles,
+                        children: [
+                          { title: 'Agregar Rol', path: ROLES.rolesadd },
+                          { title: 'Lista de Roles', path: ROLES.roleslist },
+                        ],
+                      },
+                    ]
+                  : [],
+              },
+              {
+                title: 'Control Admin',
+                icon: ICONS.admincontrol,
+                path: '*',
+                children: roles.includes('admin')
+                  ? [
+                      {
+                        title: 'Clientes',
+                        path: CLIENT.root,
+                        icon: ICONS.client,
+                        children: [
+                          { title: 'Agregar Cliente', path: CLIENT.clientadd },
+                          { title: 'Lista de Clientes', path: CLIENT.clientlist },
+                        ],
+                      },
+                      {
+                        title: 'Departamento',
+                        path: DEPARTMENT.root,
+                        icon: ICONS.department,
+                        children: [
+                          { title: 'Agregar Departamento', path: DEPARTMENT.departmentadd },
+                          { title: 'Lista de Departamentos', path: DEPARTMENT.departmentlist },
+                        ],
+                      },
+                      {
+                        title: 'Empleados',
+                        path: EMPLOYEE.root,
+                        icon: ICONS.employee,
+                        children: [
+                          { title: 'Agregar Empleado', path: EMPLOYEE.employeeadd },
+                          { title: 'Lista de Empleados', path: EMPLOYEE.employeelist },
+                        ],
+                      },
+                      {
+                        title: 'Empresas',
+                        path: ENTERPRISE.root,
+                        icon: ICONS.enterprise,
+                        children: [
+                          { title: 'Agregar Empresa', path: ENTERPRISE.enterpriseadd },
+                          { title: 'Lista de Empresa', path: ENTERPRISE.enterpriselist },
+                        ],
+                      },
+                      {
+                        title: 'Puestos',
+                        path: POSITION.root,
+                        icon: ICONS.position,
+                        children: [
+                          { title: 'Agregar Puesto', path: POSITION.positionadd },
+                          { title: 'Lista de Puestos', path: POSITION.positionlist },
+                        ],
+                      },
+                      {
+                        title: 'Proveedores',
+                        path: SUPPLIER.root,
+                        icon: ICONS.supplier,
+                        children: [
+                          { title: 'Agregar Proveedor', path: SUPPLIER.supplieradd },
+                          { title: 'Lista de Proveedores', path: SUPPLIER.supplierlist },
+                        ],
+                      },
+                    ]
+                  : [],
+              },
+            ],
+          },
+        ]
       : [],
-
   },
   // Control Financiero
   // -----------------------------------------------------------------------
@@ -278,6 +295,11 @@ const navConfig = [
             ],
           },
         ],
+      },
+      {
+        title: 'Gráficos',
+        path: PATH_DASHBOARD.chart,
+        icon: ICONS.chart,
       },
     ],
   },

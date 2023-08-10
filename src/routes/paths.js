@@ -24,6 +24,7 @@ const ROOTS_SUPPLIER = '/dashboard/supplier';
 const ROOTS_USER = '/dashboard/user';
 const ROOTS_PAYMENTS = '/payments';
 const ROOTS_QUOTATIONS = '/quotations';
+const ROOTS_MENU = '/menu';
 
 // ----------------------------------------------------------------------
 
@@ -39,6 +40,7 @@ export const PATH_DASHBOARD = {
     userlist: path(ROOTS_DASHBOARD, '/user/list'),
     useredit: path(ROOTS_DASHBOARD, '/user/edit'),    
   },
+  chart: path(ROOTS_DASHBOARD, '/one'),
 };
 
 export const INVOICE = {
@@ -172,4 +174,9 @@ export const QUOTATIONS = {
   quotationsadd: path(ROOTS_QUOTATIONS, '/add'),
   quotationslist: path(ROOTS_QUOTATIONS, '/list'),
   quotationsedit: path(ROOTS_QUOTATIONS, '/edit'),
+};
+
+export const MENU = {
+  root: ROOTS_MENU,
+  menushow: path(ROOTS_MENU, '/show')
 };
