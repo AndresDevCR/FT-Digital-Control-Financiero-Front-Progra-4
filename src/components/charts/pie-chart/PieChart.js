@@ -11,7 +11,7 @@ const PieChart = ({ data }) => {
   }
 
   const chartData = {
-    labels: data.map(item => `Month ${item.month}`),
+    labels: data.map(item => `Mes ${item.month}`),
     datasets: [
       {
         data: data.map(item => item.value),
