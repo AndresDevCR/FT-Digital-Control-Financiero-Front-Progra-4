@@ -21,14 +21,19 @@ export default function AuthGuard({ children }) {
 
   const [requestedLocation, setRequestedLocation] = useState(null);
 
+  
+
   useEffect(() => {
     if (requestedLocation && pathname !== requestedLocation) {
       push(requestedLocation);
     }
     if (isAuthenticated) {
       setRequestedLocation(null);
+      window.location.reload();
     }
-  }, [isAuthenticated, pathname, push, requestedLocation]);
+ 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!isInitialized) {
     return <LoadingScreen />;
