@@ -1,11 +1,12 @@
 // routes
+import jwt from 'jsonwebtoken';
 import { PATH_AUTH } from '../routes/paths';
 // utils
 import axios from '../utils/axios';
 
 // ----------------------------------------------------------------------
 
-export function jwtDecode(token) {
+export const jwtDecode = (token) => {
   const base64Url = token.split('.')[1];
   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
   const jsonPayload = decodeURIComponent(
@@ -69,7 +70,27 @@ export const setSession = (accessToken) => {
     tokenExpired(exp);
   } else {
     localStorage.removeItem('accessToken');
-
     delete axios.defaults.headers.common.Authorization;
   }
 };
+
+// -----------------------------------------------------------------------
+
+export const signToken = ( id, email ) => {
+
+  if ( !process.env.JWT_SECRET_SEED ) {
+      throw new Error('No hay semilla de JWT - Revisar variables de entorno');
+  }
+
+  return jwt.sign(
+      // payload
+      { id, email },
+
+      // Seed
+      process.env.JWT_SECRET_SEED,
+
+      // Opciones
+      { expiresIn: '3d' }
+  )
+
+}

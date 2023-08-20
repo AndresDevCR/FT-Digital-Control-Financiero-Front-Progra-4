@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 // next
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 // components
 import LoadingScreen from '../components/loading-screen';
 //
@@ -28,10 +27,7 @@ export default function AuthGuard({ children }) {
     }
     if (isAuthenticated) {
       setRequestedLocation(null);
-      // recargar la página solo una vez cuando se loguea
-      
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, pathname, push, requestedLocation]);
 
   if (!isInitialized) {
