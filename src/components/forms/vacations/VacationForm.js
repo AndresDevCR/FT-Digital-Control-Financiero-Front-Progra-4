@@ -13,8 +13,7 @@ import {
   InputLabel,
   FormControl,
 } from '@mui/material';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useSnackbar } from 'notistack';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { AuthContext } from '../../../auth/JwtContext';
@@ -30,6 +29,7 @@ export default function VacationForm() {
   const { accessToken } = useContext(AuthContext);
   const router = useRouter();
   const [employees, setEmployees] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -44,26 +44,27 @@ export default function VacationForm() {
         );
         setEmployees(response.data);
       } catch (error) {
-        console.error('Error fetching employees:', error);
+        enqueueSnackbar('Error al cargar los empleados', { variant: 'error' });
       }
     };
 
     fetchEmployees();
-  }, [accessToken]);
+  }, [accessToken, enqueueSnackbar]);
 
   const handleSubmit = async (values) => {
     try {
-      await axios.post('https://control-financiero.herokuapp.com/api/v1/vacation', values, {
+      const response = await axios.post('https://control-financiero.herokuapp.com/api/v1/vacation', values, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      toast.success('Vacaciones registradas exitosamente');
-      setTimeout(() => {
-        router.push('/vacations/list');
-      }, 2000);
+      if (response.status === 201) {
+        enqueueSnackbar('Vacaciones registradas', { variant: 'success' });
+        router.push('/vacations');
+      }
+
     } catch (error) {
-      toast.error('Error al registrar las vacaciones');
+      enqueueSnackbar('Error al registrar las vacaciones', { variant: 'error' });
     }
   };
 
@@ -91,8 +92,6 @@ export default function VacationForm() {
           Agregar Vacaciones
         </Typography>
       </Container>
-
-      <ToastContainer />
 
       <Container>
         <Box
