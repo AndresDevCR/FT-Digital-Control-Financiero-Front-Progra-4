@@ -25,6 +25,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import Tooltip from '@mui/material/Tooltip';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
+import { useSnackbar } from 'notistack';
 import DeleteConfirmationDialog from '../../delete-dialog/DeleteDialog';
 import { AuthContext } from '../../../auth/JwtContext';
 
@@ -37,6 +38,7 @@ export default function VacationList() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState('');
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -81,7 +83,7 @@ export default function VacationList() {
       setVacation(response.data);
       setRows(response.data);
     } catch (error) {
-      console.log(error);
+     enqueueSnackbar('Error al cargar las solicitudes', { variant: 'error' });
     }
   };
 
@@ -105,13 +107,14 @@ export default function VacationList() {
       setVacation((prevVacation) => prevVacation.filter((vacationItem) => vacationItem.id !== id));
       handleDeleteDialogClose();
     } catch (error) {
-      console.log(error);
+      enqueueSnackbar('Error al eliminar la solicitud', { variant: 'error' });
     }
   };
 
   const handleNotification = async (id) => {
+    console.log(id);
     try {
-      await axios.post(
+      const response= await axios.post(
         `https://control-financiero.herokuapp.com/api/v1/v1/notifications/vacation-emails/${id}`,
         null,
         {
@@ -120,9 +123,12 @@ export default function VacationList() {
           },
         }
       );
-      toast.success('Notificación enviada correctamente');
+      console.log(response);
+      if (response.status === 201) {
+        enqueueSnackbar('Notificación enviada', { variant: 'success' });
+      }
     } catch (error) {
-      toast.error('Error al enviar notificación');
+      enqueueSnackbar('Error al enviar la notificación', { variant: 'error' });
     }
   };
 

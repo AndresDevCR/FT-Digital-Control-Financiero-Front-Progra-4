@@ -2,12 +2,12 @@ import React, { useContext } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Container, Typography, Box, Grid, TextField, Button } from '@mui/material';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SaveIcon from '@mui/icons-material/Save';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import { AuthContext } from '../../../auth/JwtContext';
 
 const validationSchema = Yup.object().shape({
@@ -27,20 +27,21 @@ const validationSchema = Yup.object().shape({
 export default function InventoryForm() {
   const { accessToken } = useContext(AuthContext);
   const router = useRouter();
-
+  const { enqueueSnackbar } = useSnackbar();
+  
   const handleSubmit = async (values) => {
     try {
-      await axios.post('https://control-financiero.herokuapp.com/api/v1/inventory', values, {
+     const response= await axios.post('https://control-financiero.herokuapp.com/api/v1/inventory', values, {
         headers: {
           Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
         },
       });
-      toast.success('Agregado correctamente al inventario');
-      setTimeout(() => {
-        router.push('/inventory'); // Redireccionar a la lista de inventario
-      }, 2000);
+      if (response.status === 201) {
+        enqueueSnackbar('Producto agregado al inventario', { variant: 'success' });
+        router.push('/inventory');
+      }
     } catch (error) {
-      toast.error('Error al agregar al inventario');
+      enqueueSnackbar('Error al agregar el producto al inventario', { variant: 'error' });
     }
   };
 
@@ -57,20 +58,26 @@ export default function InventoryForm() {
 
   const handleInputChange = (event) => {
     if (event.target.name === 'productName' && event.target.value.length >= 30) {
-      toast.info('Se ha alcanzado el límite de caracteres permitidos');
+      enqueueSnackbar('Se ha alcanzado el límite de caracteres permitidos para el nombre', {
+        variant: 'info',
+      });
     }
 
     if (event.target.name === 'availableQuantity' && !/^\d+$/.test(event.target.value)) {
-      toast.error('Solo se permiten números en el campo de Cantidad disponible');
+      enqueueSnackbar('Solo se permiten números enteros', { variant: 'info' });
     }
 
     if (event.target.name === 'availableQuantity' && event.target.value.length >= 7) {
       event.target.value = event.target.value.slice(0, 6); // Limitar a 6 dígitos
-      toast.info('Se ha alcanzado el límite de números permitidos ');
+      enqueueSnackbar('Se ha alcanzado el límite de dígitos permitidos para la cantidad', {
+        variant: 'info',
+      });
     }
 
     if (event.target.name === 'description' && event.target.value.length >= 200) {
-      toast.info('Se ha alcanzado el límite de caracteres permitidos para la descripción');
+      enqueueSnackbar('Se ha alcanzado el límite de caracteres permitidos para la descripción', {
+        variant: 'info',
+      });
     }
 
     formik.handleChange(event);
@@ -83,8 +90,6 @@ export default function InventoryForm() {
           Agregar Inventario
         </Typography>
       </Container>
-
-      <ToastContainer />
 
       <Container>
         <Box

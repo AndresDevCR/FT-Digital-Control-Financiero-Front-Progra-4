@@ -29,11 +29,9 @@ export default function AuthGuard({ children }) {
     }
     if (isAuthenticated) {
       setRequestedLocation(null);
-      window.location.reload();
     }
- 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
+  }, [isAuthenticated, pathname, push, requestedLocation]);
 
   if (!isInitialized) {
     return <LoadingScreen />;

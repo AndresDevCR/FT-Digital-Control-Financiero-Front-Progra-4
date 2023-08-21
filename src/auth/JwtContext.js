@@ -21,14 +21,14 @@ const reducer = (state, action) => {
       return {
         isInitialized: true,
         isAuthenticated: action.payload.isAuthenticated,
-        user: action.payload.accessToken ? action.payload.user : null,
+        user: action.payload.user,
         accessToken: action.payload.accessToken,
       };
     case 'LOGIN':
       return {
         ...state,
         isAuthenticated: true,
-        user: action.payload.accessToken ? action.payload.user : null,
+        user: action.payload.user,
         accessToken: action.payload.accessToken,
       };
     case 'LOGOUT':
@@ -60,8 +60,10 @@ export function AuthProvider({ children }) {
 
   const initialize = useCallback(async () => {
     try {
-      const accessToken = storageAvailable ? localStorage.getItem('accessToken') : '';
+      const accessToken = await storageAvailable ? localStorage.getItem('accessToken') : '';
+      
 
+      console.log("AuthProvider initialize accessToken:", accessToken);
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
@@ -72,12 +74,14 @@ export function AuthProvider({ children }) {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-
+        console.log(response);
+        
         const role = await axios.get(`/role/${response.data.role_id}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         });
+        console.log(role);
 
         const { first_name } = response.data;
         const { last_name } = response.data;
@@ -85,8 +89,7 @@ export function AuthProvider({ children }) {
         const { name } = role.data;
         const { id } = response.data;
 
-        // meter los datos en user
-        const user = {
+        const data = {
           first_name,
           last_name,
           email,
@@ -94,13 +97,11 @@ export function AuthProvider({ children }) {
           id,
         };
 
-        console.log(user);
-
         dispatch({
           type: 'INITIAL',
           payload: {
-            isAuthenticated: true,
-            user,
+            isAuthenticated: true, // should be true if user is authenticated
+            user: data,
             accessToken,
           },
         });
@@ -108,7 +109,7 @@ export function AuthProvider({ children }) {
         dispatch({
           type: 'INITIAL',
           payload: {
-            isAuthenticated: false,
+            isAuthenticated: false, // should be false if user is not authenticated
             user: null,
             accessToken: null,
           },
@@ -127,11 +128,11 @@ export function AuthProvider({ children }) {
     }
   }, [storageAvailable]);
 
-  useEffect(() => {
-    initialize();
-  }, [initialize]);
+  // useEffect(() => {
+  //   initialize();
+  //   console.log("AuthProvider initialize");
+  // }, [initialize]);
 
-  // LOGIN
   const login = useCallback(async (email, password) => {
     try {
       const response = await axios.post('/auth/login', {
@@ -142,8 +143,6 @@ export function AuthProvider({ children }) {
 
       setSession(token);
 
-      console.log('Token:', token); // Imprime el token en la consola
-
       dispatch({
         type: 'LOGIN',
         payload: {
@@ -151,52 +150,12 @@ export function AuthProvider({ children }) {
           accessToken: token,
         },
       });
-
     } catch (error) {
       console.error(error);
       throw error;
     }
   }, []);
 
-  // REGISTER
-  const register = useCallback(async (email, password, firstName, lastName) => {
-    try {
-      const response = await axios.post('/api/v1/auth', {
-        email,
-        password,
-        firstName,
-        lastName,
-      });
-      const { token, user } = response.data;
-
-      setSession(token);
-
-      dispatch({
-        type: 'LOGIN',
-        payload: {
-          user,
-          accessToken: token,
-        },
-      });
-
-      const { id: tokenID } = jwtDecode(token);
-
-      // eslint-disable-next-line no-unused-vars
-      const response2 = await axios.get(`/user/${tokenID}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-
-  }, []);
-
-  // LOGOUT
   const logout = useCallback(() => {
     setSession(null);
     dispatch({
@@ -206,11 +165,10 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     let logoutTimer;
-
+    initialize();
     const resetLogoutTimer = () => {
       clearTimeout(logoutTimer);
       logoutTimer = setTimeout(logout, 30 * 60 * 1000); // 30 minutes
-
     };
 
     if (state.isAuthenticated) {
@@ -220,7 +178,7 @@ export function AuthProvider({ children }) {
     return () => {
       clearTimeout(logoutTimer);
     };
-  }, [state.isAuthenticated, logout]);
+  }, [state.isAuthenticated, logout, initialize]);
 
   const memoizedValue = useMemo(
     () => ({
@@ -230,10 +188,9 @@ export function AuthProvider({ children }) {
       accessToken: state.accessToken,
       method: 'jwt',
       login,
-      register,
       logout,
     }),
-    [state.isInitialized, state.isAuthenticated, state.user, state.accessToken, login, register, logout]
+    [state.isInitialized, state.isAuthenticated, state.user, state.accessToken, login, logout]
   );
 
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;

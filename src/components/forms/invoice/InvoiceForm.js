@@ -13,8 +13,8 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useSnackbar } from 'notistack';
 import SaveIcon from '@mui/icons-material/Save';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import axios from 'axios';
@@ -39,6 +39,7 @@ export default function InvoiceForm() {
   const router = useRouter();
   const [quotations, setQuotations] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchQuotations = async () => {
@@ -53,12 +54,12 @@ export default function InvoiceForm() {
         );
         setQuotations(response.data);
       } catch (error) {
-        console.error('Error fetching quotations:', error);
+        enqueueSnackbar('Error al cargar cotizaciones', { variant: 'error' });
       }
     };
 
     fetchQuotations();
-  }, [accessToken]);
+  }, [accessToken, enqueueSnackbar]);
 
   useEffect(() => {
     const fetchSuppliers = async () => {
@@ -73,27 +74,30 @@ export default function InvoiceForm() {
         );
         setSuppliers(response.data);
       } catch (error) {
-        console.error('Error fetching suppliers:', error);
+        enqueueSnackbar('Error al cargar proveedores', { variant: 'error' });
       }
     };
 
     fetchSuppliers();
-  }, [accessToken]);
+  }, [accessToken, enqueueSnackbar]);
 
   const handleSubmit = async (values) => {
+    console.log(values);
     try {
-      await axios.post('https://control-financiero.herokuapp.com/api/v1/invoice', values, {
+      const response = await axios.post('https://control-financiero.herokuapp.com/api/v1/invoice', values, {
         headers: {
           Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
         },
       });
-      toast.success('Agregado correctamente la factura');
-      setTimeout(() => {
-        router.push('/invoice'); // Redireccionar a la lista de inventario
-      }, 2000);
+      console.log(response);
+      if (response.status === 201) {
+        enqueueSnackbar('Factura agregada correctamente', { variant: 'success' });
+        router.push('/invoice');
+      }
     } catch (error) {
-      toast.error('Error al agregar la factura');
+      enqueueSnackbar('Error al agregar factura', { variant: 'error' });
     }
+
   };
 
   const formik = useFormik({
@@ -113,20 +117,26 @@ export default function InvoiceForm() {
 
   const handleInputChange = (event) => {
     if (event.target.name === 'invoice_number' && event.target.value.length >= 30) {
-      toast.info('Se ha alcanzado el límite de caracteres permitidos');
+      enqueueSnackbar('Se ha alcanzado el límite de caracteres permitidos ', {
+        variant: 'info',
+      });
     }
 
     if (event.target.name === 'dollar_value' && !/^\d+$/.test(event.target.value)) {
-      toast.error('Solo se permiten números en el campo de Cantidad disponible');
+      enqueueSnackbar('Solo se permiten números', { variant: 'info' });
     }
 
     if (event.target.name === 'total_colon' && event.target.value.length >= 15) {
       event.target.value = event.target.value.slice(0, 15);
-      toast.info('Se ha alcanzado el límite de números permitidos ');
+      enqueueSnackbar('Se ha alcanzado el límite de números permitidos ', {
+        variant: 'info',
+      });
     }
     if (event.target.name === 'total_dollar' && event.target.value.length >= 15) {
       event.target.value = event.target.value.slice(0, 15);
-      toast.info('Se ha alcanzado el límite de números permitidos ');
+      enqueueSnackbar('Se ha alcanzado el límite de números permitidos ', {
+        variant: 'info',
+      });
     }
 
     formik.handleChange(event);
@@ -139,8 +149,6 @@ export default function InvoiceForm() {
           Agregar Factura
         </Typography>
       </Container>
-
-      <ToastContainer />
 
       <Container>
         <Box
