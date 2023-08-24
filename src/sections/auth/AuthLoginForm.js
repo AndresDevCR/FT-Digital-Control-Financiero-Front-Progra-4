@@ -25,8 +25,8 @@ export default function AuthLoginForm() {
   });
 
   const defaultValues = {
-    email: '',
-    password: '',
+    email: 'andres.vargas@fusiontech.pro',
+    password: 'admin12345',
   };
 
   const methods = useForm({
