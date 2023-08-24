@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import { AuthContext } from '../../../../../auth/JwtContext';
 import DashboardLayout from '../../../../../layouts/dashboard';
 import RoleBasedGuard from '../../../../../auth/RoleBasedGuard';
@@ -25,18 +26,21 @@ export default function EditRolePage() {
   const { accessToken } = useContext(AuthContext);
   const router = useRouter();
   const { id } = router.query; // Obtener el ID de la URL
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = async (values) => {
     try {
-      await axios.patch(`https://control-financiero.herokuapp.com/api/v1/role/${id}`, values, {
+      const response = await axios.patch(`https://control-financiero.herokuapp.com/api/v1/role/${id}`, values, {
         headers: {
           Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
         },
       });
-      toast.success('Rol editado correctamente');
-      router.push('/dashboard/roles/list');
+      if (response.status === 200) {
+        enqueueSnackbar('Rol editado correctamente', { variant: 'success' });
+        router.push('/dashboard/roles/list');
+      }
     } catch (error) {
-      toast.error('Error al editar el rol');
+      enqueueSnackbar('Error al editar el rol', { variant: 'error' });
     }
   };
 

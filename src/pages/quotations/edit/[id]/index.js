@@ -21,6 +21,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import { AuthContext } from '../../../../auth/JwtContext';
 import DashboardLayout from '../../../../layouts/dashboard';
 import RoleBasedGuard from '../../../../auth/RoleBasedGuard';
@@ -58,6 +59,7 @@ export default function EditQuotationForm() {
   const { id } = router.query;
   const [clients, setClients] = useState([]);
   const [quotationData, setQuotation] = useState(null);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchQuotationData = async () => {
@@ -111,15 +113,17 @@ export default function EditQuotationForm() {
 
   const handleSubmit = async (values) => {
     try {
-      await axios.patch(`https://control-financiero.herokuapp.com/api/v1/quotation/${id}`, values, {
+      const response = await axios.patch(`https://control-financiero.herokuapp.com/api/v1/quotation/${id}`, values, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      toast.success('Cotización editada exitosamente');
-      router.push('/quotations/list');
+      if (response.status === 200) {
+        enqueueSnackbar('Cotización editada exitosamente', { variant: 'success' });
+        router.push('/quotations/list');
+      }
     } catch (error) {
-      toast.error('Error al editar cotización');
+      enqueueSnackbar('Error al editar cotización', { variant: 'error' });
     }
   };
 
@@ -163,7 +167,7 @@ export default function EditQuotationForm() {
   };
 
   if (!quotationData) {
-    return <div>Loading...</div>;
+    return <div>Cargando...</div>;
   }
 
   return (
@@ -186,7 +190,7 @@ export default function EditQuotationForm() {
         >
           <Grid item xs={12} md={12}>
             <FormControl fullWidth>
-              <InputLabel id="client-label">Cliente</InputLabel>
+              <InputLabel id="client-label" style={{ marginTop: '10px' }}>Cliente</InputLabel>
               <Select
                 labelId="client-label"
                 id="client_id"

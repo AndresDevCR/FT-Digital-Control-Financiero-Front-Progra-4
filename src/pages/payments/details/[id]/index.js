@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import Head from 'next/head';
 import { Container, Typography, Box, Grid, Card, CardContent, Button } from '@mui/material';
 import axios from 'axios';
@@ -17,6 +18,7 @@ function Details() {
   const router = useRouter();
   const { id } = router.query;
   const [payment, setPayment] = useState(null);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (id) {
@@ -46,10 +48,11 @@ function Details() {
     return new Date(date).toLocaleDateString(undefined, options);
   };
 
+  
   const handleDownloadPDF = async () => {
     try {
       const response = await axios.get(
-        `https://control-financiero.herokuapp.com/api/v1/v1/pdf/download/payments/${id}`,
+        `https://control-financiero.herokuapp.com/api/v1/v1/pdf/download/payment/${id}`,
         {
           responseType: 'blob', // Set the response type to blob to handle binary data
           headers: {
@@ -57,14 +60,17 @@ function Details() {
           },
         }
       );
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `payments_${id}.pdf`);
-      document.body.appendChild(link);
-      link.click();
+      if (response.status === 200) {
+        enqueueSnackbar('Pago descargado correctamente', { variant: 'success' });
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `payments_${id}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+      }
     } catch (error) {
-      console.log(error);
+      enqueueSnackbar('Error al descargar pago', { variant: 'error' });
     }
   };
 

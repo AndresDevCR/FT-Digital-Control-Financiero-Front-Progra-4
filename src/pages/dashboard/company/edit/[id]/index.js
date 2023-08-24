@@ -1,11 +1,21 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Head from 'next/head';
-import { Container, Typography, Box, Grid, TextField, Button, FormControlLabel, Checkbox } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Box,
+  Grid,
+  TextField,
+  Button,
+  FormControlLabel,
+  Checkbox,
+} from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -18,20 +28,19 @@ const validationSchema = Yup.object().shape({
   name: Yup.string()
     .required('Nombre de la compañía es requerido')
     .max(30, 'El nombre debe tener como máximo 30 caracteres'),
-  description: Yup.string()
-    .max(200, 'La descripción debe tener como máximo 200 caracteres'),
-  category: Yup.string()
-    .max(30, 'La categoría debe tener como máximo 30 caracteres'),
-  primary_phone_number: Yup.string()
-    .max(30, 'El número de teléfono debe tener como máximo 30 caracteres'),
-  secondary_phone_number: Yup.string()
-    .max(30, 'El número de teléfono debe tener como máximo 30 caracteres'),
-  city: Yup.string()
-    .max(30, 'La ciudad debe tener como máximo 30 caracteres'),
-  state: Yup.string()
-    .max(30, 'El estado debe tener como máximo 30 caracteres'),
-  country: Yup.string()
-    .max(30, 'El país debe tener como máximo 30 caracteres'),
+  description: Yup.string().max(200, 'La descripción debe tener como máximo 200 caracteres'),
+  category: Yup.string().max(30, 'La categoría debe tener como máximo 30 caracteres'),
+  primary_phone_number: Yup.string().max(
+    30,
+    'El número de teléfono debe tener como máximo 30 caracteres'
+  ),
+  secondary_phone_number: Yup.string().max(
+    30,
+    'El número de teléfono debe tener como máximo 30 caracteres'
+  ),
+  city: Yup.string().max(30, 'La ciudad debe tener como máximo 30 caracteres'),
+  state: Yup.string().max(30, 'El estado debe tener como máximo 30 caracteres'),
+  country: Yup.string().max(30, 'El país debe tener como máximo 30 caracteres'),
   is_active: Yup.boolean().required('Estado es requerido').default(true),
 });
 
@@ -40,66 +49,66 @@ const EditCompany = () => {
   const { themeStretch } = useSettingsContext();
   const router = useRouter();
   const { id } = router.query;
+  const { enqueueSnackbar } = useSnackbar();
 
-  const handleSubmit = (values) => {
-    axios
-      .patch(`https://control-financiero.herokuapp.com/api/v1/company/${id}`, values, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
+  const handleSubmit = async (values) => {
+    try {
+      const response = await axios.patch(
+        `https://control-financiero.herokuapp.com/api/v1/company/${id}`,
+        values,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
-      })
-      .then((response) => {
-        console.log(response);
-        toast.success('Compañía actualizada con éxito');
-        setTimeout(() => {
-          router.push('/dashboard/company/list');
-        }, 100); 
-        
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error('Error al actualizar la compañía');
-      });
+      );
+      if (response.status === 200) {
+        enqueueSnackbar('Compañía actualizada con éxito', { variant: 'success' });
+        router.push('/dashboard/company/list');
+      }
+    } catch (error) {
+      enqueueSnackbar('Error al actualizar la compañía', { variant: 'error' });
+    }
   };
 
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
+    const { name, value, type, checked } = event.target;
 
     if (event.target.name === 'name' && event.target.value.length >= 30) {
-            toast.info('Se ha alcanzado el límite de caracteres permitidos');
-        }
-        if (event.target.name === 'description' && event.target.value.length >= 200) {
-            toast.info('Se ha alcanzado el límite de caracteres permitidos');
-        }
-        if (event.target.name === 'category' && event.target.value.length >= 30) {
-            toast.info('Se ha alcanzado el límite de caracteres permitidos');
-        }
-        if (event.target.name === 'primary_phone_number' && event.target.value.length >= 30) {
-            toast.info('Se ha alcanzado el límite de caracteres permitidos');
-        }
-        if (event.target.name === 'secondary_phone_number' && event.target.value.length >= 30) {
-            toast.info('Se ha alcanzado el límite de caracteres permitidos');
-        }
-        if (event.target.name === 'primary_phone_number' && !/^\d+$/.test(event.target.value)) {
-            toast.error('Solo se permiten números en este campo');
-        }
-        if (event.target.name === 'secondary_phone_number' && !/^\d+$/.test(event.target.value)) {
-            toast.error('Solo se permiten números en este campo');
-        }
-        if (event.target.name === 'city' && event.target.value.length >= 30) {
-            toast.info('Se ha alcanzado el límite de caracteres permitidos');
-        }
-        if (event.target.name === 'state' && event.target.value.length >= 30) {
-            toast.info('Se ha alcanzado el límite de caracteres permitidos');
-        }
-        if (event.target.name === 'country' && event.target.value.length >= 30) {
-            toast.info('Se ha alcanzado el límite de caracteres permitidos');
-        }
-        if (event.target.name === 'is_active' && event.target.value.length >= 30) {
-            toast.info('Se ha alcanzado el límite de caracteres permitidos');
-        }
-
-    formik.setFieldValue(name, value);
+      toast.info('Se ha alcanzado el límite de caracteres permitidos');
+    }
+    if (event.target.name === 'description' && event.target.value.length >= 200) {
+      toast.info('Se ha alcanzado el límite de caracteres permitidos');
+    }
+    if (event.target.name === 'category' && event.target.value.length >= 30) {
+      toast.info('Se ha alcanzado el límite de caracteres permitidos');
+    }
+    if (event.target.name === 'primary_phone_number' && event.target.value.length >= 30) {
+      toast.info('Se ha alcanzado el límite de caracteres permitidos');
+    }
+    if (event.target.name === 'secondary_phone_number' && event.target.value.length >= 30) {
+      toast.info('Se ha alcanzado el límite de caracteres permitidos');
+    }
+    if (event.target.name === 'primary_phone_number' && !/^\d+$/.test(event.target.value)) {
+      toast.error('Solo se permiten números en este campo');
+    }
+    if (event.target.name === 'secondary_phone_number' && !/^\d+$/.test(event.target.value)) {
+      toast.error('Solo se permiten números en este campo');
+    }
+    if (event.target.name === 'city' && event.target.value.length >= 30) {
+      toast.info('Se ha alcanzado el límite de caracteres permitidos');
+    }
+    if (event.target.name === 'state' && event.target.value.length >= 30) {
+      toast.info('Se ha alcanzado el límite de caracteres permitidos');
+    }
+    if (event.target.name === 'country' && event.target.value.length >= 30) {
+      toast.info('Se ha alcanzado el límite de caracteres permitidos');
+    }
+    if (type === 'checkbox') {
+      formik.setFieldValue(name, checked); // Actualiza el valor del checkbox
+    } else {
+      formik.handleChange(event);
+    }
   };
 
   const formik = useFormik({
@@ -230,7 +239,9 @@ const EditCompany = () => {
                 value={formik.values.primary_phone_number}
                 onChange={handleInputChange}
                 error={formik.touched.primary_phone_number && formik.errors.primary_phone_number}
-                helperText={formik.touched.primary_phone_number && formik.errors.primary_phone_number}
+                helperText={
+                  formik.touched.primary_phone_number && formik.errors.primary_phone_number
+                }
                 inputProps={{
                   maxLength: 30,
                 }}
@@ -247,8 +258,12 @@ const EditCompany = () => {
                 name="secondary_phone_number"
                 value={formik.values.secondary_phone_number}
                 onChange={handleInputChange}
-                error={formik.touched.secondary_phone_number && formik.errors.secondary_phone_number}
-                helperText={formik.touched.secondary_phone_number && formik.errors.secondary_phone_number}
+                error={
+                  formik.touched.secondary_phone_number && formik.errors.secondary_phone_number
+                }
+                helperText={
+                  formik.touched.secondary_phone_number && formik.errors.secondary_phone_number
+                }
                 inputProps={{
                   maxLength: 30,
                 }}
@@ -338,7 +353,7 @@ const EditCompany = () => {
                 fullWidth
                 size="large"
                 variant="outlined"
-                onClick={() => router.push("/dashboard/company/list")}
+                onClick={() => router.push('/dashboard/company/list')}
               >
                 Volver a la lista de compañías
               </Button>
@@ -346,7 +361,7 @@ const EditCompany = () => {
           </Grid>
         </Box>
       </Container>
-      </RoleBasedGuard>
+    </RoleBasedGuard>
   );
 };
 

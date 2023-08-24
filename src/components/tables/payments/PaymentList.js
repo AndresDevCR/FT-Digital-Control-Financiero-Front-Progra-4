@@ -85,7 +85,7 @@ export default function PaymentList() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://control-financiero.herokuapp.com/api/v1/payment/${id}`, {
+      await axios.delete(`https://control-financiero.herokuapp.com/api/v1/payments/${id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -233,7 +233,7 @@ export default function PaymentList() {
         onClose={handleDeleteDialogClose}
         itemId={deleteItemId}
         onDelete={handleDelete}
-        apiEndpoint="https://control-financiero.herokuapp.com/api/v1/payment/"
+        apiEndpoint="https://control-financiero.herokuapp.com/api/v1/payments/"
       />
     </>
   );

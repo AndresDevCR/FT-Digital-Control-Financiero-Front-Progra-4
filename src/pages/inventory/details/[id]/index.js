@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import Head from 'next/head';
 import { Container, Typography, Box, Grid, Card, CardContent, Button } from '@mui/material';
 import axios from 'axios';
@@ -17,6 +18,8 @@ function Details() {
   const router = useRouter();
   const { id } = router.query;
   const [product, setProduct] = useState(null);
+  const { enqueueSnackbar } = useSnackbar();
+
 
   useEffect(() => {
     if (id) {
@@ -46,9 +49,29 @@ function Details() {
     return new Date(date).toLocaleDateString(undefined, options);
   };
 
-  const handleDownloadPDF = () => {
-    // Lógica para descargar el PDF
-    // Puedes implementarla según tus necesidades
+  const handleDownloadPDF = async () => {
+    try {
+      const response = await axios.get(
+        `https://control-financiero.herokuapp.com/api/v1/v1/pdf/download/inventory/${id}`,
+        {
+          responseType: 'blob', // Set the response type to blob to handle binary data
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
+          },
+        }
+      );
+      if (response.status === 200) {
+        enqueueSnackbar('Inventario descargado correctamente', { variant: 'success' });
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `inventory_${id}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+      }
+    } catch (error) {
+      enqueueSnackbar('Error al descargar inventario', { variant: 'error' });
+    }
   };
 
   if (!product) {

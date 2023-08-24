@@ -20,6 +20,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import { AuthContext } from '../../../auth/JwtContext';
 
 const validationSchema = Yup.object().shape({
@@ -52,6 +53,7 @@ export default function QuotationForm() {
   const { accessToken } = useContext(AuthContext);
   const router = useRouter();
   const [clients, setClients] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -71,17 +73,17 @@ export default function QuotationForm() {
 
   const handleSubmit = async (values) => {
     try {
-      await axios.post('https://control-financiero.herokuapp.com/api/v1/quotation', values, {
+      const response= await axios.post('https://control-financiero.herokuapp.com/api/v1/quotation', values, {
         headers: {
           Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
         },
       });
-      toast.success('Cotización agregada correctamente');
-      setTimeout(() => {
+      if (response.status === 201) {
+        enqueueSnackbar('Cotización agregada correctamente', { variant: 'success' });
         router.push('/quotations/list');
-      }, 2000);
+      }
     } catch (error) {
-      toast.error('Error al agregar la cotización');
+      enqueueSnackbar('Error al agregar la cotización', { variant: 'error' });
     }
   };
 

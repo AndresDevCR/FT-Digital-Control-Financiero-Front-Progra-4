@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import {
   Container,
   Typography,
@@ -56,6 +57,7 @@ export default function EditUserPage() {
   const [companies, setCompanies] = useState([]);
   const [applications, setApplications] = useState([]);
   const { id } = router.query; // Obtiene el ID del empleado de la URL
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -144,15 +146,17 @@ export default function EditUserPage() {
 
   const handleSubmit = async (values) => {
     try {
-      await axios.patch(`https://control-financiero.herokuapp.com/api/v1/auth/edit/${id}`, values, {
+      const response= await axios.patch(`https://control-financiero.herokuapp.com/api/v1/auth/edit/${id}`, values, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      toast.success('Usuario actualizado exitosamente');
-      router.push('/dashboard/user/list');
+      if (response.status === 200) {
+        enqueueSnackbar('Usuario actualizado exitosamente', { variant: 'success' });
+        router.push('/dashboard/user/list');
+      }
     } catch (error) {
-      toast.error('Error al actualizar usuario');
+      enqueueSnackbar('Error al actualizar usuario', { variant: 'error' });
     }
   };
 
@@ -273,7 +277,7 @@ export default function EditUserPage() {
 
             <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="company-label" color="secondary">
+                <InputLabel id="company-label" color="secondary" style={{ marginTop: '10px' }}>
                   Empresa
                 </InputLabel>
                 <Select
@@ -297,7 +301,8 @@ export default function EditUserPage() {
 
             <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="role-label">Posición</InputLabel>
+                <InputLabel id="role-label" style={{ marginTop: '10px' }}>
+                  Posición</InputLabel>
                 <Select
                   labelId="role-label"
                   id="role_id"
@@ -310,27 +315,6 @@ export default function EditUserPage() {
                   {roles.map((role) => (
                     <MenuItem key={role.id} value={role.id}>
                       {role.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={12}>
-              <FormControl fullWidth>
-                <InputLabel id="application-label">Aplicación</InputLabel>
-                <Select
-                  labelId="application-label"
-                  id="application_id"
-                  name="application_id"
-                  value={formik.values.application_id}
-                  onChange={formik.handleChange}
-                  error={formik.touched.application_id && formik.errors.application_id}
-                  fullWidth
-                >
-                  {applications.map((application) => (
-                    <MenuItem key={application.id} value={application.id}>
-                      {application.name}
                     </MenuItem>
                   ))}
                 </Select>

@@ -19,6 +19,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import { AuthContext } from '../../../../auth/JwtContext';
 
 const validationSchema = Yup.object().shape({
@@ -55,6 +56,7 @@ export default function UserForm() {
   const [roles, setRoles] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [applications, setApplications] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -109,17 +111,17 @@ export default function UserForm() {
 
   const handleSubmit = async (values) => {
     try {
-      await axios.post('https://control-financiero.herokuapp.com/api/v1/auth/register', values, {
+      const response = await axios.post('https://control-financiero.herokuapp.com/api/v1/auth/register', values, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      toast.success('Empleado agregado exitosamente');
-      setTimeout(() => {
+      if (response.status === 201) {
+        enqueueSnackbar('Usuario agregado', { variant: 'success' });
         router.push('/dashboard/user/list');
-      }, 2000);
+      }
     } catch (error) {
-      toast.error('Error al agregar empleado');
+      enqueueSnackbar('Error al agregar el usuario', { variant: 'error' });
     }
   };
 

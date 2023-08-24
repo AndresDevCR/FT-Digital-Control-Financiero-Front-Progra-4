@@ -19,6 +19,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import { AuthContext } from '../../../../auth/JwtContext';
 
 const validationSchema = Yup.object().shape({
@@ -45,6 +46,7 @@ export default function ClientForm() {
   const { accessToken } = useContext(AuthContext);
   const router = useRouter();
   const [enterprises, setEnterprises] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchEnterprises = async () => {
@@ -68,17 +70,17 @@ export default function ClientForm() {
 
   const handleSubmit = async (values) => {
     try {
-      await axios.post('https://control-financiero.herokuapp.com/api/v1/client', values, {
+      const response = await axios.post('https://control-financiero.herokuapp.com/api/v1/client', values, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      toast.success('Cliente agregado exitosamente');
-      setTimeout(() => {
+      if (response.status === 201) {
+        enqueueSnackbar('Cliente agregado exitosamente', { variant: 'success' });
         router.push('/dashboard/client/list');
-      }, 2000);
+      }
     } catch (error) {
-      toast.error('Error al agregar cliente');
+      enqueueSnackbar('Error al agregar cliente', { variant: 'error' });
     }
   };
 
