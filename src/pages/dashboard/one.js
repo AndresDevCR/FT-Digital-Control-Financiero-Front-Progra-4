@@ -28,7 +28,6 @@ import RoleBasedGuard from '../../auth/RoleBasedGuard';
 import PieChart from '../../components/charts/pie-chart/PieChart';
 import { AuthContext } from '../../auth/JwtContext';
 
-
 // ----------------------------------------------------------------------
 
 PageOne.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -39,9 +38,13 @@ export default function PageOne() {
   const { themeStretch } = useSettingsContext();
   const router = useRouter();
   const [rows, setRows] = useState([]);
+  const [quotationRows, setQuotationRows] = useState([]);
+  const [invoiceRows, setInvoiceRows] = useState([]);
   const { accessToken } = useContext(AuthContext);
 
   const [paymentDataByMonth, setPaymentDataByMonth] = useState([]);
+  const [invoiceDataByMonth, setInvoiceDataByMonth] = useState([]);
+  const [quotationDataByMonth, setQuotationDataByMonth] = useState([]);
 
   useEffect(() => {
     fetchPayment();
@@ -93,6 +96,111 @@ export default function PageOne() {
     console.log(paymentDataByMonth);
   };
 
+  useEffect(() => {
+    fetchQuotations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (quotationRows.length > 0) {
+      processQuotationData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [quotationRows]);
+
+  useEffect(() => {
+    console.log('quotationDataByMonth updated:', quotationDataByMonth);
+  }, [quotationDataByMonth]);
+
+  // quotation data
+  const fetchQuotations = async () => {
+    try {
+      const response = await axios.get(
+        'https://control-financiero.herokuapp.com/api/v1/quotation',
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      setQuotationRows(response.data);
+      processQuotationData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const processQuotationData = () => {
+    const dataByMonth = {};
+
+    quotationRows.forEach((quotationItem) => {
+      const month = new Date(quotationItem.created_at).getMonth();
+      if (!dataByMonth[month]) {
+        dataByMonth[month] = 0;
+      }
+      dataByMonth[month] += quotationItem.total_payment;
+    });
+
+    const dataForChart = Object.keys(dataByMonth).map((month) => ({
+      month: Number(month) + 1,
+      value: dataByMonth[month],
+    }));
+
+    setQuotationDataByMonth(dataForChart);
+    console.log(quotationDataByMonth);
+  };
+
+  // invoice data
+  useEffect(() => {
+    fetchInvoices();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (invoiceRows.length > 0) {
+      processInvoiceData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [invoiceRows]);
+
+  useEffect(() => {
+    console.log('invoiceDataByMonth updated:', invoiceDataByMonth);
+  }, [invoiceDataByMonth]);
+
+  const fetchInvoices = async () => {
+    try {
+      const response = await axios.get('https://control-financiero.herokuapp.com/api/v1/invoice', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      setInvoiceRows(response.data);
+      processInvoiceData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const processInvoiceData = () => {
+    const dataByMonth = {};
+
+    invoiceRows.forEach((invoiceItem) => {
+      const month = new Date(invoiceItem.created_at).getMonth();
+      if (!dataByMonth[month]) {
+        dataByMonth[month] = 0;
+      }
+      dataByMonth[month] += invoiceItem.total_colon;
+    });
+
+    const dataForChart = Object.keys(dataByMonth).map((month) => ({
+      month: Number(month) + 1,
+      value: dataByMonth[month],
+    }));
+
+    setInvoiceDataByMonth(dataForChart);
+    console.log(invoiceDataByMonth);
+  };
+
   return (
     <RoleBasedGuard roles={['administrator', 'user']} hasContent>
       <Head>
@@ -125,6 +233,9 @@ export default function PageOne() {
           margin="auto"
         >
           <Grid item xs={12} sm={6} md={4}>
+            <Typography variant="h6" gutterBottom>
+              Gráfico total de pagos mensuales
+            </Typography>
             {paymentDataByMonth && paymentDataByMonth.length > 0 ? (
               <PieChart data={paymentDataByMonth} />
             ) : (
@@ -132,10 +243,24 @@ export default function PageOne() {
             )}
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
-            <PieChart />
+          <Typography variant="h6" gutterBottom>
+              Gráfico total de cotizaciones mensuales
+            </Typography>
+            {quotationDataByMonth && quotationDataByMonth.length > 0 ? (
+              <PieChart data={quotationDataByMonth} />
+            ) : (
+              <Typography>Cargando datos...</Typography>
+            )}
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
-            <PieChart />
+          <Typography variant="h6" gutterBottom>
+              Gráfico total de facturas mensuales
+            </Typography>
+            {invoiceDataByMonth && invoiceDataByMonth.length > 0 ? (
+              <PieChart data={invoiceDataByMonth} />
+            ) : (
+              <Typography>Cargando datos...</Typography>
+            )}
           </Grid>
         </Grid>
       </Container>
