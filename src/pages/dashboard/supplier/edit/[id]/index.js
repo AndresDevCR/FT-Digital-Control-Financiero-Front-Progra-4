@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,23 +24,23 @@ const EditSupplier = () => {
   const { themeStretch } = useSettingsContext();
   const router = useRouter();
   const { id } = router.query;
+  const { enqueueSnackbar } = useSnackbar();
 
-  const handleSubmit = (values) => {
-    axios
+  const handleSubmit = async (values) => {
+    try {
+    const response = await axios
       .patch(`https://control-financiero.herokuapp.com/api/v1/supplier/${id}`, values, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      })
-      .then((response) => {
-        console.log(response);
-        toast.success('Proveedor actualizado con éxito');
-        router.push('/dashboard/supplier/list');
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error('Error al actualizar el proveedor');
       });
+      if (response.status === 200) {
+        enqueueSnackbar('Proveedor actualizado con éxito', { variant: 'success' });
+        router.push('/dashboard/supplier/list');
+      }
+    } catch (error) {
+      enqueueSnackbar('Error al actualizar el proveedor', { variant: 'error' });
+    }
   };
 
   const handleInputChange = (event) => {

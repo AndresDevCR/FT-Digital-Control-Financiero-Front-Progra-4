@@ -19,6 +19,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import { AuthContext } from '../../../auth/JwtContext';
 
@@ -72,6 +73,7 @@ export default function PaymentForm() {
   const { accessToken } = useContext(AuthContext);
   const router = useRouter();
   const [employees, setEmployees] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -94,17 +96,18 @@ export default function PaymentForm() {
 
   const handleSubmit = async (values) => {
     try {
-      await axios.post('https://control-financiero.herokuapp.com/api/v1/payments', values, {
+      const response = await axios.post('https://control-financiero.herokuapp.com/api/v1/payments', values, {
         headers: {
           Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
         },
       });
-      toast.success('Pago agregado correctamente');
-      setTimeout(() => {
-        router.push('/payments/list'); // Redireccionar a la lista de pagos
-      }, 2000);
+      
+      if (response.status === 201) {
+        enqueueSnackbar('Pago agregado correctamente', { variant: 'success' });
+        router.push('/payments/list'); 
+      }
     } catch (error) {
-      toast.error('Error al agregar pago');
+      enqueueSnackbar('Error al agregar pago', { variant: 'error' });
     }
   };
 

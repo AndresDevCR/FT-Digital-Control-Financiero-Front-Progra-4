@@ -40,6 +40,7 @@ export default function InvoiceForm() {
   const [quotations, setQuotations] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
+  const [selectedQuotationTotalPayment, setSelectedQuotationTotalPayment] = useState('');
 
   useEffect(() => {
     const fetchQuotations = async () => {
@@ -84,11 +85,15 @@ export default function InvoiceForm() {
   const handleSubmit = async (values) => {
     console.log(values);
     try {
-      const response = await axios.post('https://control-financiero.herokuapp.com/api/v1/invoice', values, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
-        },
-      });
+      const response = await axios.post(
+        'https://control-financiero.herokuapp.com/api/v1/invoice',
+        values,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
+          },
+        }
+      );
       console.log(response);
       if (response.status === 201) {
         enqueueSnackbar('Factura agregada correctamente', { variant: 'success' });
@@ -97,7 +102,6 @@ export default function InvoiceForm() {
     } catch (error) {
       enqueueSnackbar('Error al agregar factura', { variant: 'error' });
     }
-
   };
 
   const formik = useFormik({
@@ -169,7 +173,15 @@ export default function InvoiceForm() {
                   id="quotation"
                   name="quotation_id"
                   value={formik.values.quotation_id}
-                  onChange={formik.handleChange}
+                  onChange={(event) => {
+                    formik.handleChange(event);
+                    const selectedQuotation = quotations.find(
+                      (quotation) => quotation.id === event.target.value
+                    );
+                    setSelectedQuotationTotalPayment(
+                      selectedQuotation ? selectedQuotation.total_payment : ''
+                    );
+                  }}
                   error={formik.touched.quotation_id && formik.errors.quotation_id}
                   fullWidth
                 >
@@ -281,7 +293,7 @@ export default function InvoiceForm() {
                 label="Total en colones"
                 name="total_colon"
                 type="number"
-                value={formik.values.total_colon}
+                value={selectedQuotationTotalPayment}
                 onChange={handleInputChange}
                 error={formik.touched.total_colon && formik.errors.total_colon}
                 helperText={formik.touched.total_colon && formik.errors.total_colon}

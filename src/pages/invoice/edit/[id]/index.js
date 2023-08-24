@@ -21,6 +21,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import { AuthContext } from '../../../../auth/JwtContext';
 import DashboardLayout from '../../../../layouts/dashboard';
 import RoleBasedGuard from '../../../../auth/RoleBasedGuard';
@@ -28,14 +29,20 @@ import RoleBasedGuard from '../../../../auth/RoleBasedGuard';
 EditInvoiceForm.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const validationSchema = Yup.object().shape({
-  invoice_number: Yup.string().required('Número de factura es requerido'),
+  invoice_number: Yup.string()
+    .required('Número de factura es requerido')
+    .matches(/^\d+$/, 'Solo se permiten números en el número de factura'),
   dollar_value: Yup.number()
     .required('Valor requerido')
+    .typeError('Solo se permiten números en el valor')
     .max(999999, 'La cantidad debe tener como máximo 999,999'),
   total_colon: Yup.number()
     .required('Valor requerido')
-    .max(999999, 'La cantidad debe tener como máximo 999,999'),
-  total_dollar: Yup.number().required('Valor requerido'),
+    .typeError('Solo se permiten números en el valor')
+    .max(99999999999, 'La cantidad debe tener como máximo 999,999'),
+  total_dollar: Yup.number()
+    .required('Valor requerido')
+    .typeError('Solo se permiten números en el valor'),
   issue_date: Yup.date().required('Fecha de ingreso es requerida'),
   expiration_date: Yup.date().required('Fecha de ingreso es requerida'),
 });
@@ -46,6 +53,7 @@ export default function EditInvoiceForm() {
   const [quotations, setQuotations] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [invoiceData, setInvoice] = useState(null);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchInvoiceData = async () => {
@@ -121,15 +129,21 @@ export default function EditInvoiceForm() {
 
   const handleSubmit = async (values) => {
     try {
-      await axios.patch(`https://control-financiero.herokuapp.com/api/v1/invoice/${id}`, values, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      toast.success('Factura editada exitosamente');
-      router.push('/invoice/list');
+      const response = await axios.patch(
+        `https://control-financiero.herokuapp.com/api/v1/invoice/${id}`,
+        values,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        enqueueSnackbar('Factura editada exitosamente', { variant: 'success' });
+        router.push('/invoice/list');
+      }
     } catch (error) {
-      toast.error('Error al editar factura');
+      enqueueSnackbar('Error al editar factura', { variant: 'error' });
     }
   };
 

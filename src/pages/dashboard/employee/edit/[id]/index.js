@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import {
   Container,
   Typography,
@@ -57,6 +58,7 @@ export default function EditEmployeePage() {
   const [positions, setPositions] = useState([]);
   const [departments, setDepartments] = useState([]);
   const { id } = router.query; // Obtiene el ID del empleado de la URL
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchPositions = async () => {
@@ -131,15 +133,17 @@ export default function EditEmployeePage() {
 
   const handleSubmit = async (values) => {
     try {
-      await axios.patch(`https://control-financiero.herokuapp.com/api/v1/employee/${id}`, values, {
+      const response = await axios.patch(`https://control-financiero.herokuapp.com/api/v1/employee/${id}`, values, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      toast.success('Empleado actualizado exitosamente');
-      router.push('/dashboard/employee/list');
+      if (response.status === 200) {
+        enqueueSnackbar('Empleado actualizado exitosamente', { variant: 'success' });
+        router.push('/dashboard/employee/list');
+      }
     } catch (error) {
-      toast.error('Error al actualizar empleado');
+      enqueueSnackbar('Error al actualizar empleado', { variant: 'error' });
     }
   };
 
@@ -232,7 +236,7 @@ export default function EditEmployeePage() {
 
             <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="position-label">Posición</InputLabel>
+                <InputLabel id="position-label" style={{ marginTop: '10px' }}>Posición</InputLabel>
                 <Select
                   labelId="position-label"
                   id="position_id"
@@ -254,7 +258,7 @@ export default function EditEmployeePage() {
 
             <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="department-label">Departamento</InputLabel>
+                <InputLabel id="department-label" style={{ marginTop: '10px' }}>Departamento</InputLabel>
                 <Select
                   labelId="department-label"
                   id="department_id"

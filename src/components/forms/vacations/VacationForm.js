@@ -159,7 +159,7 @@ export default function VacationForm() {
 
             <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="request-status-label">Estado de solicitud</InputLabel>
+                <InputLabel id="request-status-label" style={{ marginTop: '10px' }}>Estado de solicitud</InputLabel>
                 <Select
                   labelId="request-status-label"
                   id="request_status"

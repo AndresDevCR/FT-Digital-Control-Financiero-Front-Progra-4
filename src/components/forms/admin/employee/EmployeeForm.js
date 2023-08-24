@@ -17,6 +17,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import { AuthContext } from '../../../../auth/JwtContext';
 
 const validationSchema = Yup.object().shape({
@@ -49,6 +50,7 @@ export default function EmployeeForm() {
   const router = useRouter();
   const [positions, setPositions] = useState([]);
   const [departments, setDepartments] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchPositions = async () => {
@@ -89,17 +91,17 @@ export default function EmployeeForm() {
 
   const handleSubmit = async (values) => {
     try {
-      await axios.post('https://control-financiero.herokuapp.com/api/v1/employee', values, {
+      const response= await axios.post('https://control-financiero.herokuapp.com/api/v1/employee', values, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      toast.success('Empleado agregado exitosamente');
-      setTimeout(() => {
+      if (response.status === 201) {
+        enqueueSnackbar('Empleado agregado exitosamente', { variant: 'success' });
         router.push('/dashboard/employee/list');
-      }, 2000);
+      }
     } catch (error) {
-      toast.error('Error al agregar empleado');
+      enqueueSnackbar('Error al agregar empleado', { variant: 'error' });
     }
   };
 

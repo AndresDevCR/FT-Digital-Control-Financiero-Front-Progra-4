@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import { useSnackbar } from 'notistack';
 import {
   Table,
   TableBody,
@@ -21,6 +22,7 @@ import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import InfoIcon from '@mui/icons-material/Info';
+import EmailIcon from '@mui/icons-material/Email';
 import Tooltip from '@mui/material/Tooltip';
 import Link from 'next/link';
 import DeleteConfirmationDialog from '../../delete-dialog/DeleteDialog';
@@ -34,6 +36,8 @@ export default function InvoiceList() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState('');
+  const { enqueueSnackbar } = useSnackbar();
+
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -91,6 +95,27 @@ export default function InvoiceList() {
       handleDeleteDialogClose();
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleNotification = async (id) => {
+    console.log(id);
+    try {
+      const response= await axios.post(
+        `https://control-financiero.herokuapp.com/api/v1/v1/notifications/invoice-emails/${id}`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      console.log(response);
+      if (response.status === 201) {
+        enqueueSnackbar('Notificación enviada', { variant: 'success' });
+      }
+    } catch (error) {
+      enqueueSnackbar('Error al enviar la notificación', { variant: 'error' });
     }
   };
 
@@ -187,6 +212,16 @@ export default function InvoiceList() {
                           component={Link}
                           href={`/invoice/details/${invoiceItem.id}`}
                           startIcon={<InfoIcon />}
+                        />
+                      </Tooltip>
+                      <Tooltip title="Enviar Email">
+                        <Button
+                          color="primary"
+                          size="small"
+                          sx={{ mb: 1, mr: 1 }}
+                          variant="contained"
+                          onClick={() => handleNotification(`${invoiceItem.id}`)}
+                          startIcon={<EmailIcon />}
                         />
                       </Tooltip>
                     </TableCell>

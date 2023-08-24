@@ -1,10 +1,20 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Head from 'next/head';
-import { Container, Typography, Box, Grid, TextField, Button, FormControlLabel, Checkbox } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Box,
+  Grid,
+  TextField,
+  Button,
+  FormControlLabel,
+  Checkbox,
+} from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -14,39 +24,41 @@ import { AuthContext } from '../../../../../auth/JwtContext';
 import RoleBasedGuard from '../../../../../auth/RoleBasedGuard';
 
 const validationSchema = Yup.object().shape({
-    name: Yup.string()
-      .required('Nombre de aplicación es requerido')
-      .max(30, 'El nombre debe tener como máximo 30 caracteres'),
-    display_name: Yup.string()
-      .required('Nombre de visualización es requerida')
-      .max(30, 'El nombre de visualización debe tener como máximo 30 caracteres'),
-    description: Yup.string()
-      .max(200, 'La descripción debe tener como máximo 200 caracteres'),
-    is_active: Yup.boolean().default(true),
-  });
+  name: Yup.string()
+    .required('Nombre de aplicación es requerido')
+    .max(30, 'El nombre debe tener como máximo 30 caracteres'),
+  display_name: Yup.string()
+    .required('Nombre de visualización es requerida')
+    .max(30, 'El nombre de visualización debe tener como máximo 30 caracteres'),
+  description: Yup.string().max(200, 'La descripción debe tener como máximo 200 caracteres'),
+  is_active: Yup.boolean().default(true),
+});
 
 const EditApplication = () => {
   const { accessToken } = useContext(AuthContext);
   const { themeStretch } = useSettingsContext();
   const router = useRouter();
   const { id } = router.query;
+  const { enqueueSnackbar } = useSnackbar();
 
-  const handleSubmit = (values) => {
-    axios
-      .patch(`https://control-financiero.herokuapp.com/api/v1/application/${id}`, values, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
+  const handleSubmit = async (values) => {
+    try {
+      const response = await axios.patch(
+        `https://control-financiero.herokuapp.com/api/v1/application/${id}`,
+        values,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
-      })
-      .then((response) => {
-        console.log(response);
-        toast.success('aplicación actualizado con éxito');
+      );
+      if (response.status === 200) {
+        enqueueSnackbar('Aplicación actualizado con éxito', { variant: 'success' });
         router.push('/dashboard/application/list');
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error('Error al actualizar la aplicación');
-      });
+      }
+    } catch (error) {
+      enqueueSnackbar('Error al actualizar la aplicación', { variant: 'error' });
+    }
   };
 
   const handleInputChange = (event) => {
@@ -55,8 +67,8 @@ const EditApplication = () => {
     }
 
     if (event.target.name === 'display_name' && event.target.value.length >= 30) {
-        toast.info('Se ha alcanzado el límite de caracteres permitidos');
-      }
+      toast.info('Se ha alcanzado el límite de caracteres permitidos');
+    }
 
     if (event.target.name === 'description' && event.target.value.length >= 200) {
       toast.info('Se ha alcanzado el límite de caracteres permitidos para la descripción');
@@ -91,7 +103,7 @@ const EditApplication = () => {
             name: application.name,
             display_name: application.display_name,
             description: application.description,
-            is_active: application.is_active
+            is_active: application.is_active,
           });
         })
         .catch((error) => {
@@ -99,11 +111,11 @@ const EditApplication = () => {
           toast.error('Error al cargar el inventario');
         });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken, id, formik.setValues]);
 
   return (
-    <RoleBasedGuard roles={['administrator','admin']} hasContent>
+    <RoleBasedGuard roles={['administrator', 'admin']} hasContent>
       <Head>
         <title>Editar aplicación | FT Control Financiero</title>
       </Head>
@@ -190,13 +202,7 @@ const EditApplication = () => {
 
             {/* Botón del formulario */}
             <Grid item xs={12} md={12}>
-              <Button
-                fullWidth
-                size="large"
-                type="submit"
-                variant="contained"
-                sx={{ mt: 3 }}
-              >
+              <Button fullWidth size="large" type="submit" variant="contained" sx={{ mt: 3 }}>
                 Guardar
               </Button>
             </Grid>
@@ -207,16 +213,15 @@ const EditApplication = () => {
                 fullWidth
                 size="large"
                 variant="outlined"
-                onClick={() => router.push("/dashboard/application/list")}
+                onClick={() => router.push('/dashboard/application/list')}
               >
                 Volver a la lista de aplicaciones
               </Button>
             </Grid>
-
           </Grid>
         </Box>
       </Container>
-      </RoleBasedGuard>
+    </RoleBasedGuard>
   );
 };
 

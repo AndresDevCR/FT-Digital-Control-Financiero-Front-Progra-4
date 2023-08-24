@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import { AuthContext } from '../../../../auth/JwtContext';
 
 const validationSchema = Yup.object().shape({
@@ -20,20 +21,21 @@ const validationSchema = Yup.object().shape({
 export default function RoleForm() {
   const { accessToken } = useContext(AuthContext);
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = async (values) => {
     try {
-      await axios.post('https://control-financiero.herokuapp.com/api/v1/role', values, {
+      const response= await axios.post('https://control-financiero.herokuapp.com/api/v1/role', values, {
         headers: {
           Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
         },
       });
-      toast.success('Rol agregado correctamente');
-      setTimeout(() => {
+      if (response.status === 201) {
+        enqueueSnackbar('Rol agregado correctamente', { variant: 'success' });
         router.push('/dashboard/roles/list');
-      }, 2000);
+      }
     } catch (error) {
-      toast.error('Error al agregar el rol');
+      enqueueSnackbar('Error al agregar el rol', { variant: 'error' });
     }
   };
 

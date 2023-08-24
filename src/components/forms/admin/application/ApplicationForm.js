@@ -15,6 +15,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import { AuthContext } from '../../../../auth/JwtContext';
 
 const validationSchema = Yup.object().shape({
@@ -31,20 +32,21 @@ const validationSchema = Yup.object().shape({
 export default function ApplicationForm() {
   const { accessToken } = useContext(AuthContext);
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = async (values) => {
     try {
-      await axios.post('https://control-financiero.herokuapp.com/api/v1/application', values, {
+      const response= await axios.post('https://control-financiero.herokuapp.com/api/v1/application', values, {
         headers: {
           Authorization: `Bearer ${accessToken}`, // Incluye el token de autenticación en el encabezado
         },
       });
-      toast.success('Agregado correctamente a las aplicaciones');
-      setTimeout(() => {
-        router.push('/dashboard/application/list'); // Redireccionar a la lista de inventario
-      }, 2000); // Delay of 2 seconds
+      if (response.status === 201) {
+        enqueueSnackbar('Agregado correctamente a las aplicaciones', { variant: 'success' });
+        router.push('/dashboard/application/list');
+      }
     } catch (error) {
-      toast.error('Error al agregar a las aplicaciones');
+      enqueueSnackbar('Error al agregar a las aplicaciones', { variant: 'error' });
     }
   };
 

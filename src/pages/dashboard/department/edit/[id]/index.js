@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,24 +25,24 @@ const EditDepartment = () => {
     const { themeStretch } = useSettingsContext();
     const router = useRouter();
     const { id } = router.query;
+    const { enqueueSnackbar } = useSnackbar();
 
-    const handleSubmit = (values) => {
-        axios
+    const handleSubmit = async (values) => {
+        try {
+        const response = await axios
             .patch(`https://control-financiero.herokuapp.com/api/v1/department/${id}`, values, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
-            })
-            .then((response) => {
-                console.log(response);
-                toast.success('Departamento actualizado con éxito');
-                router.push('/dashboard/department/list');
-            })
-            .catch((error) => {
-                console.log(error);
-                toast.error('Error al actualizar el departamento');
             });
-    };
+            if (response.status === 200) {
+                enqueueSnackbar('Departamento actualizado con éxito', { variant: 'success' });
+                router.push('/dashboard/department/list');
+              }
+            } catch (error) {
+              enqueueSnackbar('Error al actualizar el departamento', { variant: 'error' });
+            }
+          };
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;

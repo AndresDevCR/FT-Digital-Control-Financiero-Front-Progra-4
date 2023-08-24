@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -33,23 +34,23 @@ const EditInventory = () => {
   const { themeStretch } = useSettingsContext();
   const router = useRouter();
   const { id } = router.query;
+  const { enqueueSnackbar } = useSnackbar();
 
-  const handleSubmit = (values) => {
-    axios
+  const handleSubmit = async (values) => {
+    try {
+      const response = await axios
       .patch(`https://control-financiero.herokuapp.com/api/v1/inventory/${id}`, values, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      })
-      .then((response) => {
-        console.log(response);
-        toast.success('Inventario actualizado con éxito');
-        router.push('/inventory');
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error('Error al actualizar el inventario');
       });
+      if (response.status === 200) {
+        enqueueSnackbar('Inventario actualizado con éxito', { variant: 'success' });
+        router.push('/inventory');
+      }
+    } catch (error) {
+      enqueueSnackbar('Error al actualizar el inventario', { variant: 'error' });
+    }
   };
 
   const handleInputChange = (event) => {

@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import {
   Container,
   Typography,
@@ -36,6 +37,7 @@ export default function EditVacationPage() {
   const router = useRouter();
   const [employees, setEmployees] = useState([]);
   const { id } = router.query; // Obtiene el ID de la vacación de la URL
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -90,15 +92,17 @@ export default function EditVacationPage() {
 
   const handleSubmit = async (values) => {
     try {
-      await axios.patch(`https://control-financiero.herokuapp.com/api/v1/vacation/${id}`, values, {
+      const response = await axios.patch(`https://control-financiero.herokuapp.com/api/v1/vacation/${id}`, values, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      toast.success('Vacaciones actualizadas exitosamente');
-      router.push('/vacations/list');
+      if (response.status === 200) {
+        enqueueSnackbar('Vacaciones actualizadas exitosamente', { variant: 'success' });
+        router.push('/vacations/list');
+      }
     } catch (error) {
-      toast.error('Error al actualizar las vacaciones');
+      enqueueSnackbar('Error al actualizar las vacaciones', { variant: 'error' });
     }
   };
 
@@ -140,7 +144,9 @@ export default function EditVacationPage() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={12}>
               <FormControl fullWidth>
-                <InputLabel id="employee-label">Empleado</InputLabel>
+                <InputLabel id="employee-label" style={{ marginTop: '10px' }}>
+                  Empleado
+                </InputLabel>
                 <Select
                   labelId="employee-label"
                   id="employee_id"
@@ -192,18 +198,24 @@ export default function EditVacationPage() {
             </Grid>
 
             <Grid item xs={12} md={12}>
-              <TextField
-                fullWidth
-                label="Estado de solicitud"
-                name="request_status"
-                value={formik.values.request_status}
-                onChange={formik.handleChange}
-                error={formik.touched.request_status && formik.errors.request_status}
-                helperText={formik.touched.request_status && formik.errors.request_status}
-                inputProps={{
-                  maxLength: 30,
-                }}
-              />
+              <FormControl fullWidth>
+                <InputLabel id="request-status-label" style={{ marginTop: '10px' }}>
+                  Estado de solicitud
+                </InputLabel>
+                <Select
+                  labelId="request-status-label"
+                  id="request_status"
+                  name="request_status"
+                  value={formik.values.request_status}
+                  onChange={formik.handleChange}
+                  error={formik.touched.request_status && formik.errors.request_status}
+                  fullWidth
+                >
+                  <MenuItem value="En Progreso">En Progreso</MenuItem>
+                  <MenuItem value="Rechazada">Rechazada</MenuItem>
+                  <MenuItem value="Aprobada">Aprobada</MenuItem>
+                </Select>
+              </FormControl>
             </Grid>
 
             <Grid item xs={12} md={12}>

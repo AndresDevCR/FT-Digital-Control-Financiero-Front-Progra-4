@@ -20,6 +20,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import { AuthContext } from '../../../../../auth/JwtContext';
 import DashboardLayout from '../../../../../layouts/dashboard';
 import RoleBasedGuard from '../../../../../auth/RoleBasedGuard';
@@ -51,6 +52,7 @@ export default function EditClientForm() {
     const { id } = router.query;
     const [enterprises, setEnterprises] = useState([]);
     const [clientData, setClientData] = useState(null);
+    const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
         const fetchClientData = async () => {
@@ -103,7 +105,7 @@ export default function EditClientForm() {
 
     const handleSubmit = async (values) => {
         try {
-            await axios.patch(
+            const response = await axios.patch(
                 `https://control-financiero.herokuapp.com/api/v1/client/${id}`,
                 values,
                 {
@@ -112,12 +114,14 @@ export default function EditClientForm() {
                     },
                 }
             );
-            toast.success('Cliente editado exitosamente');
-            router.push('/dashboard/client/list');
-        } catch (error) {
-            toast.error('Error al editar cliente');
-        }
-    };
+            if (response.status === 200) {
+                enqueueSnackbar('Cliente editado exitosamente', { variant: 'success' });
+                router.push('/dashboard/client/list');
+              }
+            } catch (error) {
+              enqueueSnackbar('Error al editar cliente', { variant: 'error' });
+            }
+          };
 
     const formik = useFormik({
         initialValues: {
@@ -241,7 +245,7 @@ export default function EditClientForm() {
 
                         <Grid item xs={12} md={12}>
                             <FormControl fullWidth>
-                                <InputLabel id="enterprise-label">Empresa</InputLabel>
+                                <InputLabel id="enterprise-label" style={{ marginTop: '10px' }}>Empresa</InputLabel>
                                 <Select
                                     labelId="enterprise-label"
                                     id="enterprise_id"
