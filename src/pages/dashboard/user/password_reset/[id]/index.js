@@ -27,19 +27,6 @@ import RoleBasedGuard from '../../../../../auth/RoleBasedGuard';
 EditUserPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const validationSchema = Yup.object().shape({
-  first_name: Yup.string()
-    .required('Nombre del usuario es requerido')
-    .max(30, 'El nombre debe tener como máximo 30 caracteres'),
-  last_name: Yup.string()
-    .required('Apellido del empleado es requerido')
-    .max(30, 'El apellido debe tener como máximo 30 caracteres'),
-  email: Yup.string()
-    .required('El correo del usuario es requerido')
-    .max(70, 'El correo debe tener como máximo 70 caracteres')
-    .matches(
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-      'El correo electrónico ingresado no tiene un formato válido'
-    ),
   password: Yup.string()
     .required('Ingrese su nueva contraseña')
     .min(8, 'La contraseña debe tener al menos 8 caracteres')
@@ -196,7 +183,7 @@ export default function EditUserPage() {
     <RoleBasedGuard roles={['administrator', 'admin']} hasContent>
       <Container>
         <Typography variant="h3" component="h1" paragraph>
-          Editar Usuario
+          Cambiar contraseña
         </Typography>
       </Container>
 
@@ -211,120 +198,11 @@ export default function EditUserPage() {
           onSubmit={formik.handleSubmit}
         >
           <Grid container spacing={3}>
-            <Grid item xs={12} md={12}>
-              <TextField
-                fullWidth
-                label="Nombre del usuario"
-                name="first_name"
-                type="text"
-                value={formik.values.first_name}
-                onChange={handleInputChange}
-                error={formik.touched.first_name && formik.errors.first_name}
-                helperText={formik.touched.first_name && formik.errors.first_name}
-                inputProps={{
-                  maxLength: 30,
-                }}
-              />
-            </Grid>
 
             <Grid item xs={12} md={12}>
               <TextField
                 fullWidth
-                label="Apellido del usuario"
-                name="last_name"
-                type="text"
-                value={formik.values.last_name}
-                onChange={handleInputChange}
-                error={formik.touched.last_name && formik.errors.last_name}
-                helperText={formik.touched.last_name && formik.errors.last_name}
-                inputProps={{
-                  maxLength: 30,
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={12}>
-              <TextField
-                fullWidth
-                label="Correo del usuario"
-                name="email"
-                type="email"
-                value={formik.values.email}
-                onChange={handleInputChange}
-                error={formik.touched.email && formik.errors.email}
-                helperText={formik.touched.email && formik.errors.email}
-                inputProps={{
-                  maxLength: 70,
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={12}>
-              <FormControl fullWidth>
-                <InputLabel id="company-label" color="secondary" style={{ marginTop: '10px' }}>
-                  Empresa
-                </InputLabel>
-                <Select
-                  labelId="company-label"
-                  id="company_id"
-                  name="company_id"
-                  value={formik.values.company_id}
-                  onChange={formik.handleChange}
-                  error={formik.touched.company_id && formik.errors.company_id}
-                  helperText={formik.touched.company && formik.errors.company}
-                  fullWidth
-                >
-                  {companies.map((company) => (
-                    <MenuItem key={company.id} value={company.id}>
-                      {company.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={12}>
-              <FormControl fullWidth>
-                <InputLabel id="role-label" style={{ marginTop: '10px' }}>
-                  Posición</InputLabel>
-                <Select
-                  labelId="role-label"
-                  id="role_id"
-                  name="role_id"
-                  value={formik.values.role_id}
-                  onChange={formik.handleChange}
-                  error={formik.touched.role_id && formik.errors.role_id}
-                  fullWidth
-                >
-                  {roles.map((role) => (
-                    <MenuItem key={role.id} value={role.id}>
-                      {role.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Fecha de inicio en la empresa"
-                name="company_start_date"
-                type="date"
-                value={formik.values.company_start_date}
-                onChange={formik.handleChange}
-                error={formik.touched.company_start_date && formik.errors.company_start_date}
-                helperText={formik.touched.company_start_date && formik.errors.company_start_date}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={12}>
-              <TextField
-                fullWidth
-                label="Confirme la contraseña del usuario para actualizar los datos"
+                label="Nueva contraseña"
                 name="password"
                 type="text"
                 value={formik.values.password}
@@ -336,6 +214,7 @@ export default function EditUserPage() {
                 }}
               />
             </Grid>
+
 
             <Grid item xs={12} md={12}>
               <Button fullWidth size="large" type="submit" variant="contained">
