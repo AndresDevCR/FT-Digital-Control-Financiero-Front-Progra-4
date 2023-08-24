@@ -94,7 +94,7 @@ export default function PageOne() {
   };
 
   return (
-    <RoleBasedGuard roles={['administrator', 'user']} hasContent>
+    <>
       <Head>
         <title>Control Financiero | Dashboard</title>
       </Head>
@@ -139,6 +139,6 @@ export default function PageOne() {
           </Grid>
         </Grid>
       </Container>
-    </RoleBasedGuard>
+    </>
   );
 }
