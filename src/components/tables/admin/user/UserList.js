@@ -21,6 +21,7 @@ import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import EditIcon from '@mui/icons-material/Edit';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import LockResetIcon from '@mui/icons-material/LockReset';
 import Link from 'next/link';
 import DeleteConfirmationDialog from '../../../delete-dialog/DeleteDialog';
 import { AuthContext } from '../../../../auth/JwtContext';
@@ -170,6 +171,18 @@ export default function UserList() {
                           sx={{ mb: 1, mr: 1 }}
                           variant="contained"
                           startIcon={<EditIcon />}
+                        />
+                      </Tooltip>
+
+                      <Tooltip title="Cambiar contraseña">
+                        <Button
+                          style={{ backgroundColor: 'lightblue' }}
+                          component={Link}
+                          href={`/dashboard/user/password_reset/${userItem.id}`}
+                          size="small"
+                          sx={{ mb: 1, mr: 1 }}
+                          variant="contained"
+                          startIcon={<LockResetIcon />}
                         />
                       </Tooltip>
 

@@ -158,7 +158,7 @@ export default function EditVacationPage() {
                 >
                   {employees.map((employee) => (
                     <MenuItem key={employee.id} value={employee.id}>
-                      {employee.employee_name}
+                      {`${employee.employee_name} (${employee.email})`}
                     </MenuItem>
                   ))}
                 </Select>
